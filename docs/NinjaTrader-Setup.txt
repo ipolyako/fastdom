@@ -1,0 +1,31 @@
+FastDOM Beta - optional NinjaTrader 8 integration
+
+The bridge source mentioned below ships with the FastDOM Beta installer in
+integrations\NinjaTrader. It is not included in this documentation repository.
+
+NinjaTrader is installed separately and must run on the same PC. Connect your
+own account/data feed with the required market-depth entitlement. FastDOM does
+not include NinjaTrader, a brokerage account, or a market-data subscription.
+
+1. Locate NinjaTrader's actual user-data folder (normally Documents\NinjaTrader 8;
+   Documents may be redirected to OneDrive). Close NinjaTrader before updating
+   an existing bridge. Back up the existing bridge source if present.
+2. Copy the accompanying FastDomNinjaTraderBridge.cs into bin\Custom\AddOns
+   inside that user-data folder. Do not copy the whole FastDOM installation.
+3. Open NinjaTrader > New > NinjaScript Editor and press F5 to compile.
+   Resolve compilation errors before proceeding, then restart NinjaTrader.
+4. Open http://127.0.0.1:9110/fastdom/health and verify accepted is true.
+   If the listener cannot start, inspect NinjaTrader's Log tab for the error.
+5. In FastDOM Configuration > Brokers, configure NinjaTrader for your account.
+   Fresh Beta defaults allow only Sim101 and Playback101. Live-account access
+   is disabled. Review account and risk settings before deliberately enabling it.
+6. Review InstrumentMap in %LOCALAPPDATA%\FastDOM\Beta\ninjatrader.json while
+   FastDOM is closed. No contract mappings are supplied in a fresh Beta install.
+   Map each futures root to the exact current NinjaTrader contract you intend
+   to use. Review mappings at rollover; never reuse an expired example contract.
+7. Restart FastDOM after configuration changes. Verify the selected account,
+   exact contract, connection status, advancing quotes and required depth.
+
+NINJA MD changes the data feed only; the selected trading account still owns
+orders. Leave it off unless you have configured and connected this bridge.
+Validate in Simulation without submitting live orders during setup.
