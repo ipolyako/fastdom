@@ -1,5 +1,20 @@
 # Release notes
 
+## Beta 20261028-095331-d39a0689 - October 28, 2026
+
+- Preserve confirmed fills when stale working updates or snapshots arrive, across Schwab, Alpaca and NinjaTrader.
+- Keep Watch membership manual; positions and orders no longer re-add explicitly removed symbols.
+- Enforce 41 exact safety regression cases and all 546 trading-workflow cases on every canonical publish. Missing, skipped, duplicate or failed cases block the build's release gate.
+- Cover typing isolation, cancellation races, failed synchronization/recovery and synthetic Alpaca payload replay.
+
+Beta: 2,473 tests passed. Developer: 2,493 passed. Independent review completed. No live orders used for QA. Native paper acceptance and clean-machine onboarding remain unverified; automated tests do not guarantee broker cancellation. Installer mechanics are unchanged from the previously tested installer.
+
+Unsigned Windows x64 installer: 116,407,582 bytes. SHA-256: `84b24a35b1193c01bc75088d9631f8ef1a52ee1eb8372334b0ff226960881969`.
+
+[Official download and checksum](https://fastdom.decoglobal.us/download) | [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/)
+
+Close Beta and run the new installer to update. Saved settings and activation remain separate; installed applications do not update automatically.
+
 ## Beta 20261028-090613-135c93ad — October 28, 2026
 
 - **Trading hotkeys:** typing in text-entry controls, including Shift/Ctrl combinations, cannot dispatch trading shortcuts. Market Desk and Trading Partner no longer forward trading hotkeys.

@@ -84,9 +84,9 @@ This early Beta is **unsigned**. Windows may display an unknown-publisher warnin
 
 ## Current release
 
-**Beta 20261028-090613-135c93ad** — October 28, 2026.
+**Beta 20261028-095331-d39a0689** — October 28, 2026.
 
-This safety update blocks trading hotkeys while typing and isolates the read-only research windows from trading shortcuts. Cancellation acknowledgements remain explicitly unconfirmed, pending orders stay visible, and pending-cancel orders cannot be amended. The [official download page](https://fastdom.decoglobal.us/download) provides the installer and checksum. See the [changelog](CHANGELOG.md).
+Confirmed fills are preserved when stale working updates or snapshots arrive from Schwab, Alpaca or NinjaTrader. Watch membership is manual: positions and orders no longer add symbols back automatically after you remove them. Every release now requires 41 named safety regression cases plus all 546 trading-workflow cases. This build passed 2,473 Beta and 2,493 Developer tests, with independent review. Tests cover keyboard isolation, cancellation races, failed synchronization and recovery, and synthetic broker payload replay. Native broker acceptance remains separate; automated checks do not guarantee cancellation. The [official download page](https://fastdom.decoglobal.us/download) provides the installer and checksum. See the [changelog](CHANGELOG.md).
 
 Existing saved settings are preserved by updates. Review your NinjaTrader account and exact contract mappings before connecting; installing an update does not reset your preferences.
 
