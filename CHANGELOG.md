@@ -1,5 +1,15 @@
 # Release notes
 
+## Beta 20261028-090613-135c93ad — October 28, 2026
+
+- **Trading hotkeys:** typing in text-entry controls, including Shift/Ctrl combinations, cannot dispatch trading shortcuts. Market Desk and Trading Partner no longer forward trading hotkeys.
+- **Cancellation status:** request acknowledgements are not cancellation confirmation. Pending cancellations remain visible; orders can still fill. Broker-confirmed fills are reported as fills.
+- **Pending order actions:** chart moves, trailing updates and replacement requests are blocked for pending-cancel orders. Shift-drag preserves the original pending selection instead of moving other stops.
+
+Installer SHA-256: `23e66899aad1cd2da294b2c0831de8322f510a1ac0f7fa52fc19e226d3ff81ad`. Unsigned Windows x64 installer, 116,409,230 bytes.
+
+[Official download and checksum](https://fastdom.decoglobal.us/download) · [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/). Beta: 2,439 tests passed; Developer: 2,459 passed, including all 546 required trading cases. Independent source/evidence review completed. No live orders were used for testing. Clean-machine onboarding and native broker acceptance remain unverified; automated checks do not guarantee broker cancellation. Installer mechanics are unchanged and their tests were not rerun for this application-only release. Close Beta and run the installer to update; saved settings remain separate.
+
 ## Beta 20261027-191122-9dcec7c0 — October 27, 2026
 
 - **Workflow responsiveness:** background account refresh reduces submission waits. Stale or invalidated account data still requires refresh. The DOM can seed from available streamed prices; cached chart history can draw while fresh history loads. Watchlist history prefetch is paused in NinjaTrader mode.

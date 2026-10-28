@@ -84,9 +84,9 @@ This early Beta is **unsigned**. Windows may display an unknown-publisher warnin
 
 ## Current release
 
-**Beta 20261027-191122-9dcec7c0** — October 27, 2026.
+**Beta 20261028-090613-135c93ad** — October 28, 2026.
 
-This release reduces account-refresh waits and improves cached chart and DOM switching. It adds chart Risk-limit resizing with visible funds-cap explanations, Account Details, persistent watchlist sorting, and Schwab OCO stop-fill parsing fixes. The [official download page](https://fastdom.decoglobal.us/download) provides the installer and checksum. See the [changelog](CHANGELOG.md).
+This safety update blocks trading hotkeys while typing and isolates the read-only research windows from trading shortcuts. Cancellation acknowledgements remain explicitly unconfirmed, pending orders stay visible, and pending-cancel orders cannot be amended. The [official download page](https://fastdom.decoglobal.us/download) provides the installer and checksum. See the [changelog](CHANGELOG.md).
 
 Existing saved settings are preserved by updates. Review your NinjaTrader account and exact contract mappings before connecting; installing an update does not reset your preferences.
 
