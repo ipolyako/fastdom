@@ -99,3 +99,11 @@ Use **Issues** for reproducible bugs and feature requests, and **Discussions**, 
 If FastDOM is useful to you, star this repository and share the official download page with other traders.
 
 Copyright 2026 DECO GLOBAL SERVICES, INC. All rights reserved. Free Beta availability does not make FastDOM open source or grant rights to its application source code. Beta access may be restricted or discontinued. FastDOM does not promise trading returns.
+
+## Use the AI plan you already have
+
+FastDOM’s Codex-powered trading tools can use your existing eligible ChatGPT plan through Codex CLI. Sign in with your own account—no separate OpenAI API key is required when using subscription access. This uses your included Codex allowance instead of separate usage-based API billing.
+
+You control when to request analysis, which supported model to select, and whether to enable active position management. Trading tools remain available without AI. Requests consume your plan allowance; model access and usage limits apply. API-key authentication, if chosen, is billed separately. Hosted Ask FastDOM support chat is a separate service. Local CLI execution still sends AI requests to the provider.
+
+See [official Codex authentication documentation](https://learn.chatgpt.com/docs/auth). Claude integration is not currently advertised as available.
