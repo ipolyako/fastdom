@@ -107,3 +107,8 @@ FastDOM’s Codex-powered trading tools can use your existing eligible ChatGPT p
 You control when to request analysis, which supported model to select, and whether to enable active position management. Trading tools remain available without AI. Requests consume your plan allowance; model access and usage limits apply. API-key authentication, if chosen, is billed separately. Hosted Ask FastDOM support chat is a separate service. Local CLI execution still sends AI requests to the provider.
 
 See [official Codex authentication documentation](https://learn.chatgpt.com/docs/auth). Claude integration is not currently advertised as available.
+
+
+### Install Codex for FastDOM
+
+[Download Codex desktop (now part of the ChatGPT desktop app)](https://chatgpt.com/download/) or use the [official CLI installation instructions](https://developers.openai.com/codex/cli/). FastDOM needs a working, signed-in Codex CLI in the same Windows environment. Supported desktop installations can supply the CLI, but installing the desktop app alone is not proof that it is available. Use **Check again** in AI setup, then explicitly retry the desired AI action. FastDOM does not install software, sign in, or start analysis automatically. Ordinary trading remains available without AI.
