@@ -1,8 +1,8 @@
 # FastDOM
 
-**Discuss the idea. Size the trade. Execute. Manage the position.**
+**Next-generation trading. Built for active traders.**
 
-FastDOM is a free Windows trading terminal for **Schwab, NinjaTrader, and Alpaca**, combining AI trade discussions, active AI position management, fast order-entry workflows, and configurable risk- and dollar-sized hot buttons in one desktop workspace.
+FastDOM is a next-generation Windows trading platform for active traders, available as a free Beta for **Schwab, NinjaTrader, and Alpaca**. It brings integrated AI tools, risk-based trading, and fast chart and Depth of Market (DOM) order entry into one workspace. Analyze a setup, size a trade by dollar risk or trade amount, and place or manage orders directly on your chart or price ladder.
 
 Talk through a thesis with AI, choose your intended risk or trade amount, and act from the chart, DOM, or a configured keyboard shortcut. When you explicitly enable **Manage** for an existing position, AI can propose supported protection changes through FastDOM's validation and execution controls.
 
