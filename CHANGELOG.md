@@ -1,5 +1,24 @@
 # Release notes
 
+## Beta 20261029-160802-998b3762 — October 29, 2026
+
+- Position Manager receives the trading session and existing synthetic stop. Existing protection is preserved or tightened; regular-session native stops are not counted as active after-hours protection.
+- New supported extended-hours protection uses an app-managed synthetic stop and limit targets. Verified existing native stop levels transfer to local monitoring at close, including during AI waits and review pauses. Existing orders remain; existing targets are not automatically converted to extended-hours orders.
+- Fresh position, quote and order checks guard partial fills, changed exposure, duplicate protection and uncertain acknowledgements. Explicit disarm cannot resurrect an older stop.
+- Scheduled equity holidays and early closes are included.
+
+Verification: 104 focused regression tests, 2,820 Beta tests and 2,840 Developer tests passed, including 546 required trading-workflow and 41 safety cases. Independent source/focused review approved the repair. Isolated installer install/update/uninstall verified all 635 installed file hashes; overwrite guards passed. No live orders were sent for this repair's QA.
+
+Not yet verified: native Schwab after-hours execution, on-screen session-transition acceptance, and clean-machine onboarding. Synthetic stops need FastDOM running and fresh quotes and do not survive shutdown. Limit exits can remain unfilled. Exceptional exchange closures require calendar updates.
+
+Correction to the earlier release's limitation: native Schwab spread replacement was verified on the earlier same-day Developer build (seven accepted replacements and broker working readbacks). That evidence does not validate this after-hours repair or replace tests of later guards.
+
+Unsigned Windows x64 installer: 116,568,286 bytes.
+SHA-256: `1c85515869e62c7dc1fc70acdbb8333b55c771e7128f59d8ef1d843285a2bc97`.
+
+[Official download and checksum](https://fastdom.decoglobal.us/download) · [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/).
+Close Beta and run the installer to update. Settings remain separate.
+
 ## Beta 20261029-134259-b247e78c — October 29, 2026
 
 - Options Trader: spread builder, payoff analysis, scanning and advisory AI review, with indicative after-hours research kept separate from fresh execution quotes.
