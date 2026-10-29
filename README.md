@@ -70,7 +70,7 @@ Screenshots illustrate the interface and historical market data. They are not pe
 
 The installer is for **Windows x64** and includes the .NET runtime. Default SQLite storage does not require Python, Java, or a Derby server. Market-depth and executed-flow tools depend on the upstream data available to your account. Broker/data charges may apply; no broker endorsement is implied.
 
-Chart AI features require your own installed, signed-in Codex CLI. Hosted Ask FastDOM support chat does not require local Codex. Offline Help requires neither AI access nor an internet connection.
+Chart AI features use your selected provider: your own installed, signed-in Codex CLI or Claude Code CLI. Hosted Ask FastDOM support chat does not require local Codex. Offline Help requires neither AI access nor an internet connection.
 
 ## Install and explore
 
@@ -84,9 +84,9 @@ This early Beta is **unsigned**. Windows may display an unknown-publisher warnin
 
 ## Current release
 
-**Beta 20261028-095331-d39a0689** — October 28, 2026.
+**Beta 20261029-134259-b247e78c** — October 29, 2026.
 
-Confirmed fills are preserved when stale working updates or snapshots arrive from Schwab, Alpaca or NinjaTrader. Watch membership is manual: positions and orders no longer add symbols back automatically after you remove them. Every release now requires 41 named safety regression cases plus all 546 trading-workflow cases. This build passed 2,473 Beta and 2,493 Developer tests, with independent review. Tests cover keyboard isolation, cancellation races, failed synchronization and recovery, and synthetic broker payload replay. Native broker acceptance remains separate; automated checks do not guarantee cancellation. The [official download page](https://fastdom.decoglobal.us/download) provides the installer and checksum. See the [changelog](CHANGELOG.md).
+Options Trader, stay-open spread repricing with order-state and risk safeguards, Codex/Claude provider selection, and separate Market Desk daily watchlists. Passed 2,796 Beta and 2,816 Developer tests plus isolated installer checks. Native Schwab spread replacement and clean-machine onboarding remain unverified. See the [changelog](CHANGELOG.md), [official download](https://fastdom.decoglobal.us/download), and [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/).
 
 Existing saved settings are preserved by updates. Review your NinjaTrader account and exact contract mappings before connecting; installing an update does not reset your preferences.
 
@@ -106,7 +106,7 @@ FastDOM’s Codex-powered trading tools can use your existing eligible ChatGPT p
 
 You control when to request analysis, which supported model to select, and whether to enable active position management. Trading tools remain available without AI. Requests consume your plan allowance; model access and usage limits apply. API-key authentication, if chosen, is billed separately. Hosted Ask FastDOM support chat is a separate service. Local CLI execution still sends AI requests to the provider.
 
-See [official Codex authentication documentation](https://learn.chatgpt.com/docs/auth). Claude integration is not currently advertised as available.
+See [official Codex authentication documentation](https://learn.chatgpt.com/docs/auth). Claude Code is also selectable in Configuration; it requires your own working, signed-in Claude Code CLI.
 
 
 ### Install Codex for FastDOM
