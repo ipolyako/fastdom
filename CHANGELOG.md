@@ -1,5 +1,21 @@
 # Release notes
 
+## Beta 20261029-134259-b247e78c — October 29, 2026
+
+- Options Trader: spread builder, payoff analysis, scanning and advisory AI review, with indicative after-hours research kept separate from fresh execution quotes.
+- Spread price changes stay open and show results. Pending/partial/terminal orders and duplicate changes are guarded; ambiguous broker outcomes require reconciliation. Late responses preserve terminal states.
+- Reverse calendars, diagonals and unsupported structures no longer receive a misleading premium-only risk estimate.
+- Select Codex or Claude Code in Configuration using your own installed, signed-in CLI. Market Desk can create a separate saved daily watchlist.
+- Includes Alpaca held-OCO visibility/status fixes, whole-cent OCO pricing, ORB display repairs, manual Watch membership, and keyboard/cancellation safeguards.
+
+Verification: 2,796 Beta and 2,816 Developer tests passed, including 546 trading-workflow and 41 safety cases. Independent review covered the spread repairs. Isolated installer install/update/uninstall and overwrite guards passed. Native Schwab spread replacement and clean-machine onboarding remain unverified; automated tests are not native broker acceptance.
+
+Unsigned Windows x64 installer: 116,555,185 bytes.
+SHA-256: `cb3edf8a5055e1bf3781eca03182eb584b3c3e018236320b362c9fe5f880e1f1`.
+
+[Official download and checksum](https://fastdom.decoglobal.us/download) · [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/).
+Close Beta and run the installer to update. Settings remain separate.
+
 ## Beta 20261028-095331-d39a0689 - October 28, 2026
 
 - Preserve confirmed fills when stale working updates or snapshots arrive, across Schwab, Alpaca and NinjaTrader.
