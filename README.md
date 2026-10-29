@@ -84,9 +84,9 @@ This early Beta is **unsigned**. Windows may display an unknown-publisher warnin
 
 ## Current release
 
-**Beta 20261029-134259-b247e78c** — October 29, 2026.
+**Beta 20261029-160802-998b3762** — October 29, 2026.
 
-Options Trader, stay-open spread repricing with order-state and risk safeguards, Codex/Claude provider selection, and separate Market Desk daily watchlists. Passed 2,796 Beta and 2,816 Developer tests plus isolated installer checks. Native Schwab spread replacement and clean-machine onboarding remain unverified. See the [changelog](CHANGELOG.md), [official download](https://fastdom.decoglobal.us/download), and [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/).
+After-hours Position Manager safety: session-aware protection, existing synthetic-stop recognition, session-boundary handoff, and fresh exposure/quote/order checks. Passed 104 focused regressions, 2,820 Beta and 2,840 Developer tests plus isolated installer checks. Synthetic stops require FastDOM running and fresh quotes; limit exits can remain unfilled. Native after-hours execution, on-screen session transitions and clean-machine onboarding remain unverified. Earlier native Schwab spread replacement was verified separately. See the [changelog](CHANGELOG.md), [official download](https://fastdom.decoglobal.us/download), and [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/).
 
 Existing saved settings are preserved by updates. Review your NinjaTrader account and exact contract mappings before connecting; installing an update does not reset your preferences.
 
