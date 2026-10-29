@@ -1,5 +1,29 @@
 # Release notes
 
+## Beta 20261029-172909-482196fa — October 29, 2026
+
+Protection lifecycle fixes:
+
+- Validate position side and account before cancelling competing protection; recheck exposure after cancellation.
+- Side-specific cancellation disarms pending synthetic intent. Explicit re-arm can recover a verified cancelled or rejected exit with residual exposure; uncertain outcomes remain held.
+- Serialize bracket placement and synthetic exits. Preserve a valid stop crossing during management work and stop remaining target submissions once a trigger is claimed.
+- Reject delayed, stale, future-dated, crossed or missing executable quotes before effects.
+- Use the shared holiday and early-close calendar for brackets and Stop BE. Revalidate manager quotes and position lifecycle after intervening waits.
+
+Verification: fresh full gates passed 2,834 Beta and 2,854 Developer tests, including all 546 required trading-workflow and 41 safety cases. Independent source/evidence review approved the repairs. Eight bounded Alpaca paper long/short create, cancel, re-arm and manually triggered exit cases passed, with native broker/app order-state comparisons and flat cleanup. Tests used actual Schwab REST quotes and deterministic management proposals; they did not validate AI decision generation or physical chart markers. The initial stale-quote attempt remains recorded as incomplete with verified cleanup.
+
+Limitations: Schwab protection lifecycle, native partial-fill races, on-screen session transitions and clean-machine onboarding remain unverified. The separate owner-operated Schwab one-share entry/exit is not protection acceptance. Synthetic stops require FastDOM running and fresh quotes, do not survive shutdown, and limit exits can remain unfilled. Independent bid/ask field timestamps are unavailable. Unexpected exchange closures require calendar updates.
+
+The installer is unsigned. Close Beta and run the installer to update; settings and activation remain separate. Unchanged installer mechanics reuse same-day isolated install/update/uninstall/hash/guard checks; packaging and public bytes are verified for this build.
+
+Installer: FastDOM-Beta-20261029-172909-482196fa-Setup-UNSIGNED.exe
+
+SHA-256: `cf0d55d210fda20f4f802b6babeddbfbb3ad88f72de626f4f627ae48c10d28f4`
+
+Size: 116,570,085 bytes.
+
+[Official download](https://fastdom.decoglobal.us/download) · [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/)
+
 ## Beta 20261029-160802-998b3762 — October 29, 2026
 
 - Position Manager receives the trading session and existing synthetic stop. Existing protection is preserved or tightened; regular-session native stops are not counted as active after-hours protection.
