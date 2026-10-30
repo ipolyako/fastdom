@@ -1,5 +1,28 @@
 # Release notes
 
+## Beta 20261030-093817-685bdeac — October 30, 2026
+
+Schwab stop-replacement and Stop BE fixes:
+
+- Confirm a replacement's concrete native order ID, working status and requested terms before reporting success. An HTTP acknowledgement alone is insufficient.
+- Report rejected, cancelled, mismatched, executed or unconfirmed replacements honestly. Do not automatically retry or recreate protection when the outcome is uncertain.
+- Preserve terminal states and confirmed fills when late replacement responses, exceptions or stale snapshots arrive.
+- Check fresh executable bid/ask quotes before regular-session Schwab Stop BE changes. Stop further tranche changes after a failure and warn that remaining protection needs checking.
+
+Verification: 2,858 Beta and 2,878 Developer tests passed, including all 546 required trading-workflow and 41 safety cases. Regression includes a sanitized native Schwab rejection sequence. Independent source/evidence review completed. The Developer build was installed and its Schwab connection, positions, execution history and advancing quotes checked. No live orders were submitted by this repair's QA.
+
+Limits: the repaired replacement path has not been accepted with a new live Schwab trade. Stop BE checks the supplied quote throughout the batch but does not fetch a new quote per tranche; market movement can still cause rejection. Unknown outcomes do not trigger automatic reconstruction of protection. Clean-machine onboarding remains unverified. Synthetic stops still require FastDOM running and fresh quotes.
+
+Unsigned Windows x64 installer. Close Beta and run the installer to update; settings and activation remain separate. Installer mechanics are unchanged; isolated install/update/uninstall/hash and folder/process-guard evidence from October 29 is reused. Packaging and downloadable bytes are checked for this build.
+
+Installer: FastDOM-Beta-20261030-093817-685bdeac-Setup-UNSIGNED.exe
+
+SHA-256: `1970aa372e306937cae05d4a09df88c80de51be10bcd74c258fdbf45435d8980`
+
+Size: 116,572,728 bytes.
+
+[Official download](https://fastdom.decoglobal.us/download) · [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/)
+
 ## Beta 20261029-172909-482196fa — October 29, 2026
 
 Protection lifecycle fixes:
