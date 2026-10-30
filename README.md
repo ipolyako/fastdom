@@ -84,9 +84,9 @@ This early Beta is **unsigned**. Windows may display an unknown-publisher warnin
 
 ## Current release
 
-**Beta 20261029-172909-482196fa** — October 29, 2026.
+**Beta 20261030-093817-685bdeac** — October 30, 2026.
 
-Protection lifecycle safeguards: position ownership checks before cancellation, explicit recovery from verified cancelled/rejected exits, serialized brackets and synthetic triggers, latched crossings, stricter executable quotes, and shared holiday/early-close handling. Fresh gates passed 2,834 Beta and 2,854 Developer tests. Eight bounded Alpaca paper protection cases passed with native/app order-state reconciliation. Schwab protection lifecycle, physical session-transition acceptance and clean-machine onboarding remain unverified. Synthetic stops require FastDOM running and fresh quotes; they do not survive shutdown, and limit exits can remain unfilled. See the [changelog](CHANGELOG.md), [official download](https://fastdom.decoglobal.us/download), and [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/).
+Schwab stop replacements now require native working-state and term confirmation before success is reported. Stop BE checks fresh executable quotes and stops further tranche changes after a failure. Confirmed fills and terminal states survive late responses. Passed 2,858 Beta and 2,878 Developer tests, including all 546 required trading-workflow and 41 safety cases; independently reviewed. New live Schwab replacement acceptance and clean-machine onboarding remain unverified. See the [changelog](CHANGELOG.md), [official download](https://fastdom.decoglobal.us/download), and [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/).
 
 Existing saved settings are preserved by updates. Review your NinjaTrader account and exact contract mappings before connecting; installing an update does not reset your preferences.
 
