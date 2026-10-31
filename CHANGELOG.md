@@ -1,5 +1,25 @@
 # Release notes
 
+## Beta 20261031-165748-0e29da47 — October 31, 2026
+
+- Market Movers now tries the selected broker's native APIs first: Schwab movers and Alpaca gainers/losers/most-actives. Unsupported, empty, failed or timed-out native requests use the existing fallback, with the source and reason displayed. NINJA MD keeps discovery on the primary broker.
+- FAST < $30 becomes Momentum Scan with Min price, Max price and Apply. Defaults to $1–$30; positive sub-dollar ranges are supported. Other filters remain visible: +5%, 100K shares, $500K dollar volume, spread no more than 2% when available. The range survives Refresh and resets on reopening the window.
+- Risk-sized script entries reject missing or invalid risk/stop inputs and unavailable executable-side quotes instead of falling back to the selected share quantity. A rejected zero-size risk entry stops subsequent script commands. Existing custom scripts need an explicit valid STOP; updates preserve saved customizations.
+
+Verification: 3,084 Developer and 3,064 Beta automated tests passed, including 700 exact trading-workflow and 41 safety cases. Independent source/evidence reviews completed. Published controls were checked with synthetic data; no real or paper orders were placed. The package and downloadable bytes are verified separately.
+
+Limits: native API authentication/entitlements and new native order/fill acceptance were not exercised by this release. Ranked discovery lists are not a whole-market scan or exact reproduction of broker rankings. Alpaca uses native SIP rankings with IEX enrichment; missing volume excludes momentum candidates. Clean-machine onboarding remains unverified. Synthetic stops require FastDOM running and fresh quotes.
+
+Unsigned Windows x64 Beta. Close Beta and run the installer to update; saved settings and activation remain separate. Review custom risk scripts before using them. FastDOM does not guarantee fills or maximum loss.
+
+Installer: FastDOM-Beta-20261031-165748-0e29da47-Setup-UNSIGNED.exe
+
+SHA-256: `d572e1620b77a37de70afd759249a93a5e0c7b7e4055aa5fe0b486b12c2ee1bd`
+
+Size: 116,589,542 bytes.
+
+[Official download](https://fastdom.decoglobal.us/download) · [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/) · [Momentum Scan guide](https://github.com/ipolyako/fastdom/blob/main/docs/market-movers.md)
+
 ## Beta 20261030-093817-685bdeac — October 30, 2026
 
 Schwab stop-replacement and Stop BE fixes:
