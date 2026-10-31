@@ -80,9 +80,11 @@ This early Beta is **unsigned**. Windows may display an unknown-publisher warnin
 
 ## Current release
 
-**Beta 20261030-093817-685bdeac** — October 30, 2026.
+**Beta 20261031-165748-0e29da47** — October 31, 2026.
 
-Schwab stop replacements now require native working-state and term confirmation before success is reported. Stop BE checks fresh executable quotes and stops further tranche changes after a failure. Confirmed fills and terminal states survive late responses. Passed 2,858 Beta and 2,878 Developer tests, including all 546 required trading-workflow and 41 safety cases; independently reviewed. New live Schwab replacement acceptance and clean-machine onboarding remain unverified. See the [changelog](CHANGELOG.md), [official download](https://fastdom.decoglobal.us/download), and [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/).
+Market Movers now prefers Schwab and Alpaca native discovery, with labeled fallback. Momentum Scan adds editable Min/Max prices and visible filters. Risk-sized script entries reject invalid or missing stop/risk inputs instead of using the selected share size. Saved customizations are preserved; custom risk scripts need an explicit valid STOP.
+
+Passed 3,064 Beta and 3,084 Developer tests, including all 700 required trading-workflow and 41 safety cases; independently reviewed. Native entitlements, new broker order/fill acceptance and clean-machine onboarding remain unverified. See the [changelog](CHANGELOG.md), [Momentum Scan guide](docs/market-movers.md), [official download](https://fastdom.decoglobal.us/download), and [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/).
 
 Existing saved settings are preserved by updates. Review your NinjaTrader account and exact contract mappings before connecting; installing an update does not reset your preferences.
 
