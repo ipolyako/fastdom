@@ -1,34 +1,32 @@
 # FastDOM
 
-**Next-generation trading. Built for active traders.**
+FastDOM is a Windows trading application I’m building for **Schwab, NinjaTrader, and Alpaca**. It combines chart and Depth of Market (DOM) order entry, risk-based sizing, and optional Codex or Claude tools. The beta is free to try, and I’m looking for feedback on usability and reliability.
 
-FastDOM is a next-generation Windows trading platform for active traders, available as a free Beta for **Schwab, NinjaTrader, and Alpaca**. It brings integrated AI tools, risk-based trading, and fast chart and Depth of Market (DOM) order entry into one workspace. Analyze a setup, size a trade by dollar risk or trade amount, and place or manage orders directly on your chart or price ladder.
+The AI tools can help review a trade idea or available market data. **Manage** is different: when explicitly enabled for an existing position, it can propose protection changes through the app’s validation and execution controls.
 
-Talk through a thesis with AI, choose your intended risk or trade amount, and act from the chart, DOM, or a configured keyboard shortcut. When you explicitly enable **Manage** for an existing position, AI can propose supported protection changes through FastDOM's validation and execution controls.
+[Beta download](https://fastdom.decoglobal.us/download) · [Getting started](docs/getting-started.md) · [User manual](docs/manual.md) · [Known limitations](docs/known-limitations.md) · [Training videos](https://fastdom.decoglobal.us/training)
 
-**[Download the free Beta](https://fastdom.decoglobal.us/download)** · **[Explore the website](https://fastdom.decoglobal.us)** · **[Watch the training videos](https://fastdom.decoglobal.us/training)** · **[Getting started](docs/getting-started.md)** · **[Known limitations](docs/known-limitations.md)**
+## Features
 
-## What you can do
-
-| Capability | Your workflow |
+| Capability | Description |
 | --- | --- |
 | **Discuss trade ideas with AI** | Use Trading Partner to question a long/short thesis, consider invalidation, compare alternatives, and discuss managing an existing position. Use Market Desk for broader research and watch planning. |
 | **Active AI trade management** | Explicitly enable Manage on an open position to review current evidence and propose supported protection adjustments. Accepted actions pass through order validation, risk checks, and broker verification. |
-| **Fast execution workflow** | Enter and manage orders from the chart or DOM, with configurable hot buttons and keyboard shortcuts for frequent actions. Keep order entry, cancellation, scale-outs, and protection controls close at hand. |
+| **Chart and DOM order entry** | Enter and manage orders from the chart or DOM, with configurable hot buttons and keyboard shortcuts for frequent actions. |
 | **Trade by dollar risk** | Set a risk budget and stop reference; Risk Buy/Sell calculates quantity from the entry-to-stop distance and relevant instrument value. |
 | **Trade a specific amount** | Configure dollar-amount hot buttons to calculate an order size from your intended trade value, or use fixed quantities and size presets. |
 | **Automatic session handling** | Risk/Secure equity workflows adapt supported regular/extended-hours handling; virtual stops provide app-managed OCO-style protection when needed. |
 | **Protection that follows position changes** | With reconciliation enabled, existing stops and targets resize from broker-confirmed additions and reductions. |
 | **Order-flow context** | Explore footprint and liquidity heatmap views when your feed supplies compatible depth and execution data. |
-| **A workspace that fits you** | Configure buttons, shortcuts, indicators, and layouts; review orders and positions alongside the chart. |
+| **Workspace configuration** | Configure buttons, shortcuts, indicators, and layouts; review orders and positions alongside the chart. |
 
 **Dollar risk and trade amount are different:** a $100 risk budget describes intended loss to the stop; a $5,000 trade amount describes intended position value. Actual fills, rounding, instrument multipliers, fees, gaps, and slippage affect the result. Neither is a guaranteed maximum loss or exact fill value.
 
 AI discussions in Partner and Desk are advisory. **Manage is execution-capable**, requires an existing position and explicit activation, and disengages when flat. Execution speed depends on the broker, network, and market; no latency or fill-quality guarantee is claimed.
 
-[Explore AI, sizing, and execution workflows →](docs/ai-and-execution.md)
+[AI, sizing, and execution documentation](docs/ai-and-execution.md)
 
-## Build out the rest of your desk
+## Other tools
 
 - **Watch:** compare up to 24 symbols in a tiled chart wall.
 - **Market Pulse:** align volatility, resting-book imbalance, and executed-trade delta across time.
@@ -37,13 +35,11 @@ AI discussions in Partner and Desk are advisory. **Manage is execution-capable**
 - **Margin monitor:** explore maintenance headroom and adverse-move sizing scenarios as planning estimates.
 - **Performance and Learn:** review execution-based results, then discuss available trade evidence with AI.
 
-## Coming from thinkorswim or DAS?
+## Workflow comparison
 
-FastDOM brings familiar chart, ladder, and hotkey workflows together with its AI conversation, risk/amount sizing, and explicitly enabled position management. The pitch is the complete workflow in a free Beta workspace.
+The [workflow comparison with thinkorswim and DAS](docs/platform-comparison.md) describes differences and links to sources. It does not claim measured speed or fill-quality advantages.
 
-thinkorswim and DAS also offer capable order-entry tools. Read the [sourced workflow comparison](docs/platform-comparison.md) to see the distinctions without untested speed claims.
-
-## See the tools
+## Screenshots
 
 ### Footprint
 
@@ -68,7 +64,7 @@ The installer is for **Windows x64** and includes the .NET runtime. Default SQLi
 
 Chart AI features use your selected provider: your own installed, signed-in Codex CLI or Claude Code CLI. Hosted Ask FastDOM support chat does not require either local CLI. Offline Help requires neither AI access nor an internet connection.
 
-## Install and explore
+## Installation
 
 1. Download the installer from the [official download page](https://fastdom.decoglobal.us/download).
 2. Compare its SHA-256 with the checksum on that page.
@@ -92,11 +88,7 @@ Use **Issues** for reproducible bugs and feature requests, and **Discussions**, 
 
 **Never post account numbers, balances, positions, credentials, tokens, databases, activation files, or unredacted screenshots.** For private support, contact [support@decoglobal.us](mailto:support@decoglobal.us). See [SUPPORT.md](SUPPORT.md).
 
-If FastDOM is useful to you, star this repository and share the official download page with other traders.
-
-Copyright 2026 DECO GLOBAL SERVICES, INC. All rights reserved. Free Beta availability does not make FastDOM open source or grant rights to its application source code. Beta access may be restricted or discontinued. FastDOM does not promise trading returns.
-
-## Use the AI plan you already have
+## AI access
 
 FastDOM’s Codex-powered trading tools can use your existing eligible ChatGPT plan through Codex CLI. Sign in with your own account—no separate OpenAI API key is required when using subscription access. This uses your included Codex allowance instead of separate usage-based API billing.
 
@@ -110,3 +102,9 @@ See [official Codex authentication documentation](https://learn.chatgpt.com/docs
 Choose **Configuration > General > AI PROVIDER**, install the selected CLI, and sign in under the same Windows user. Codex uses `codex login`; Claude Code uses `claude auth login`. Existing CLI sign-in is reused. Validate installation, then explicitly retry the AI action. FastDOM does not install the CLI or sign you in automatically.
 
 [Download Codex desktop](https://chatgpt.com/download/) · [Codex CLI instructions](https://developers.openai.com/codex/cli/) · [Claude Code instructions](https://code.claude.com/docs/en/setup) · [Full provider guide](docs/ai-providers.md)
+
+## Availability and licensing
+
+The beta is free to try. This repository contains documentation and release information; the application source is not published under an open-source license. Beta access may be restricted or discontinued. FastDOM does not promise trading returns.
+
+Copyright 2026 DECO GLOBAL SERVICES, INC. All rights reserved.
