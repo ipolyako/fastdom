@@ -8,10 +8,6 @@ Talk through a thesis with AI, choose your intended risk or trade amount, and ac
 
 **[Download the free Beta](https://fastdom.decoglobal.us/download)** · **[Explore the website](https://fastdom.decoglobal.us)** · **[Watch the training videos](https://fastdom.decoglobal.us/training)** · **[Getting started](docs/getting-started.md)** · **[Known limitations](docs/known-limitations.md)**
 
-Published by **DECO GLOBAL SERVICES, INC.**
-
-> FastDOM is proprietary software, currently available as a free Beta. This public repository contains documentation, screenshots, release information, and issue tracking. The application source code is not published here.
-
 ## What you can do
 
 | Capability | Your workflow |
