@@ -32,7 +32,7 @@ See the dedicated [Alpaca setup guide](alpaca.md) for the connection checklist a
 
 ## Optional AI
 
-Chart Codex features require your own installed, signed-in Codex CLI and provider access. Ask FastDOM support chat can use hosted AI instead. Select the provider in chat. Do not enter credentials or authorization codes into any AI prompt.
+Chart AI uses your selected OpenAI Codex or Anthropic Claude Code CLI, installed and signed in with your own account. Choose it in Configuration > General > AI PROVIDER. Ask FastDOM support chat can use hosted AI instead. Select the provider in chat. Do not enter credentials or authorization codes into any AI prompt.
 
 ## Settings and updates
 
@@ -41,3 +41,6 @@ Settings and activation are stored in `%LOCALAPPDATA%\FastDOM\Beta`, separately 
 Close Beta before running a new installer. Updates preserve saved settings; uninstall also retains them. Automatic updates are not implemented. Recheck broker identity, contract mappings, data freshness, and risk settings after an update.
 
 No profitability or live-trading acceptance is implied by successful installation. Read [known limitations](known-limitations.md) and the in-app Help before connecting a live account.
+
+
+See [Codex and Claude Code setup](ai-providers.md) and the [complete user manual](manual.md) for authentication, model selection, usage limits, hosted support and provider-switch behavior.
