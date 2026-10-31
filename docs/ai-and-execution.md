@@ -56,6 +56,9 @@ Position size follows broker-confirmed fills. With protection reconciliation ena
 
 ## AI setup
 
-Chart AI, Trading Partner, and Market Desk require your installed, signed-in Codex CLI and provider access. Ask FastDOM support chat can use hosted AI instead. Hosted support chat is a separate help feature; it does not provide active position management.
+Chart AI, Trading Partner, and Market Desk use your selected OpenAI Codex or Anthropic Claude Code CLI, installed and signed in with your own account. Select the provider in Configuration > General. Ask FastDOM support chat can use hosted AI instead. Hosted support chat is a separate help feature; it does not provide active position management.
 
 [Return to the showcase](../README.md) · [Getting started](getting-started.md)
+
+
+See [Codex and Claude Code setup](ai-providers.md) and the [complete user manual](manual.md) for authentication, model selection, usage limits, hosted support and provider-switch behavior.
