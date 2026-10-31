@@ -1,5 +1,24 @@
 # Release notes
 
+## Beta 20261031-172834-20ac0e43 — October 31, 2026
+
+- Updated offline Help, public documentation and hosted Ask FastDOM knowledge for Codex and Claude Code, current Momentum Scan controls and risk-script input requirements.
+- Provider-specific setup and troubleshooting; Partner and Market Desk refresh their model/path controls on the next request after switching providers. Learn resolves a compatible model.
+- AI requests retain their provider through readiness and response processing. Active Manage keeps its original provider/path/model until disengaged and restarted; order validation and protection rules are unchanged.
+- Hosted Ask FastDOM remains a separate service. Local CLI means cloud inference through your own account, not offline models. Provider allowances, authentication and terms apply.
+
+Verification: 3,069 Beta and 3,089 Developer tests passed, including 700 trading-workflow and 41 safety cases; 134 focused AI checks and 26 hosted-support tests. Independent source review completed. No live or paper orders were submitted. Native provider inference and clean-PC onboarding remain unverified. Unchanged installer mechanics reuse the earlier October 31 installation/update/removal and guard checks; this exact package and installer hashes were verified separately.
+
+Unsigned Windows x64 Beta. Close Beta and run the installer; saved settings and activation remain separate. Synthetic stops require FastDOM running and fresh quotes.
+
+Installer: FastDOM-Beta-20261031-172834-20ac0e43-Setup-UNSIGNED.exe
+SHA-256: `0ad8d7613488ba452fdd54f04e9e9c7fb0c7afe5b2f6934fcffbbb478dcc9433`
+Size: 116,590,967 bytes.
+
+[Official download](https://fastdom.decoglobal.us/download) · [AI setup guide](https://fastdom.decoglobal.us/ai-providers.html) · [Complete manual](https://github.com/ipolyako/fastdom/blob/main/docs/manual.md)
+
+
+
 ## Beta 20261031-170828-3f40354e — October 31, 2026
 
 - Market Movers now tries the selected broker's native APIs first: Schwab movers and Alpaca gainers/losers/most-actives. Unsupported, empty, failed or timed-out native requests use the existing fallback, with the source and reason displayed. NINJA MD keeps discovery on the primary broker.
