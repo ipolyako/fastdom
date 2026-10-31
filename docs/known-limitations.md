@@ -9,7 +9,10 @@
 - Broker authorization, account eligibility, data entitlements, and third-party service availability are separate from FastDOM activation.
 - NinjaTrader requires a separately installed and running NinjaTrader 8 environment and matching bridge. Configure futures contracts explicitly and review them at rollover.
 - Optional automatic Schwab sign-in depends on a compatible local browser and may require manual identity verification. Manual browser authorization remains available.
-- Chart AI depends on the user's own Codex setup. Hosted support chat depends on FastDOM's service. Neither is a guarantee of trading accuracy or returns.
+- Chart AI depends on the user's own Codex or Claude Code setup. Hosted support chat depends on FastDOM's service. Neither is a guarantee of trading accuracy or returns.
 - Legacy Morning Scanner and unfinished archive capabilities are excluded from the default Beta feature profile. Retired Phantom/Ghost Candle features are not included.
 
 Please report reproducible problems using the issue templates. Share sensitive diagnostics privately, never in a public GitHub issue.
+
+
+See [Codex and Claude Code setup](ai-providers.md) and the [complete user manual](manual.md) for authentication, model selection, usage limits, hosted support and provider-switch behavior.
