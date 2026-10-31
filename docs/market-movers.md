@@ -4,7 +4,7 @@ Open Market Movers & Scanner to discover symbols without changing your trading b
 
 ## Where results come from
 
-FastDOM first tries the selected broker's native discovery APIs: Schwab NYSE/NASDAQ movers, or Alpaca gainers, losers and most-active stocks. Using NINJA MD keeps discovery on the primary broker. If native discovery is unsupported, unavailable, empty or times out, FastDOM uses its existing fallback. The Source line names the successful source and explains fallback.
+FastDOM first tries the selected broker's native discovery APIs: Schwab equity movers, or Alpaca gainers, losers and most-active stocks. Using NINJA MD keeps discovery on the primary broker. If native discovery is unsupported, unavailable, empty or times out, FastDOM uses its existing fallback. The Source line names the successful source and explains fallback.
 
 These are limited ranked lists, not an exhaustive market search. Alpaca requests up to 50 gainers, 50 losers and 100 active stocks. Its native rankings use SIP; missing fields are enriched from IEX snapshots. Missing volume excludes a symbol from Momentum Scan. Until market open, Alpaca movers can describe the previous market day. Displayed data can be delayed or cached.
 
