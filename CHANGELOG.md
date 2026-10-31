@@ -1,6 +1,29 @@
 # Release notes
 
-## Beta 20261031-165748-0e29da47 — October 31, 2026
+## Beta 20261031-170828-3f40354e — October 31, 2026
+
+- Market Movers now tries the selected broker's native APIs first: Schwab movers and Alpaca gainers/losers/most-actives. Unsupported, empty, failed or timed-out native requests use the existing fallback, with the source and reason displayed. NINJA MD keeps discovery on the primary broker.
+- Schwab discovery retains its established sequential-request workaround and equity-universe selector to avoid repeated cached responses.
+- FAST < $30 becomes Momentum Scan with Min price, Max price and Apply. Defaults to $1–$30; positive sub-dollar ranges are supported. Other filters remain visible: +5%, 100K shares, $500K dollar volume, spread no more than 2% when available. The range survives Refresh and resets on reopening the window.
+- Risk-sized script entries reject missing or invalid risk/stop inputs and unavailable executable-side quotes instead of falling back to the selected share quantity. A rejected zero-size risk entry stops subsequent script commands. Existing custom scripts need an explicit valid STOP; updates preserve saved customizations.
+
+Verification: 3,085 Developer and 3,065 Beta automated tests passed, including 700 exact trading-workflow and 41 safety cases. Independent source/evidence reviews completed. Published controls were checked with synthetic data; no real or paper orders were placed. The package and downloadable bytes are verified separately.
+
+Limits: native API authentication/entitlements and new native order/fill acceptance were not exercised by this release. Ranked discovery lists are not a whole-market scan or exact reproduction of broker rankings. Alpaca uses native SIP rankings with IEX enrichment; missing volume excludes momentum candidates. Clean-machine onboarding remains unverified. Synthetic stops require FastDOM running and fresh quotes.
+
+Unsigned Windows x64 Beta. Close Beta and run the installer to update; saved settings and activation remain separate. Review custom risk scripts before using them. FastDOM does not guarantee fills or maximum loss.
+
+Installer: FastDOM-Beta-20261031-170828-3f40354e-Setup-UNSIGNED.exe
+
+SHA-256: `d1c193846b73576c1f7de5254eb80993ec97d23d53ed63a58a4f983220bd33bb`
+
+Size: 116,589,448 bytes.
+
+[Official download](https://fastdom.decoglobal.us/download) · [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/) · [Momentum Scan guide](https://github.com/ipolyako/fastdom/blob/main/docs/market-movers.md)
+
+## Beta 20261031-165748-0e29da47 — October 31, 2026 (superseded)
+
+Superseded the same day by 20261031-170828-3f40354e, which restores Schwab’s original sequential movers requests and equity-universe selector.
 
 - Market Movers now tries the selected broker's native APIs first: Schwab movers and Alpaca gainers/losers/most-actives. Unsupported, empty, failed or timed-out native requests use the existing fallback, with the source and reason displayed. NINJA MD keeps discovery on the primary broker.
 - FAST < $30 becomes Momentum Scan with Min price, Max price and Apply. Defaults to $1–$30; positive sub-dollar ranges are supported. Other filters remain visible: +5%, 100K shares, $500K dollar volume, spread no more than 2% when available. The range survives Refresh and resets on reopening the window.
