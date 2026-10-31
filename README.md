@@ -66,7 +66,7 @@ Screenshots illustrate the interface and historical market data. They are not pe
 
 The installer is for **Windows x64** and includes the .NET runtime. Default SQLite storage does not require Python, Java, or a Derby server. Market-depth and executed-flow tools depend on the upstream data available to your account. Broker/data charges may apply; no broker endorsement is implied.
 
-Chart AI features use your selected provider: your own installed, signed-in Codex CLI or Claude Code CLI. Hosted Ask FastDOM support chat does not require local Codex. Offline Help requires neither AI access nor an internet connection.
+Chart AI features use your selected provider: your own installed, signed-in Codex CLI or Claude Code CLI. Hosted Ask FastDOM support chat does not require either local CLI. Offline Help requires neither AI access nor an internet connection.
 
 ## Install and explore
 
@@ -80,13 +80,11 @@ This early Beta is **unsigned**. Windows may display an unknown-publisher warnin
 
 ## Current release
 
-**Beta 20261031-170828-3f40354e** — October 31, 2026.
+**Beta 20261031-172834-20ac0e43** — October 31, 2026.
 
-Market Movers now prefers Schwab and Alpaca native discovery, with labeled fallback. Schwab retains its sequential-request compatibility safeguard. Momentum Scan adds editable Min/Max prices and visible filters. Risk-sized script entries reject invalid or missing stop/risk inputs instead of using the selected share size. Saved customizations are preserved; custom risk scripts need an explicit valid STOP.
+Codex and Claude provider switching, setup guidance and documentation are aligned across AI features. Active Manage retains its provider until disengaged. Offline Help and hosted support knowledge include the current Momentum Scan and risk-script rules.
 
-Passed 3,065 Beta and 3,085 Developer tests, including all 700 required trading-workflow and 41 safety cases; independently reviewed. Native entitlements, new broker order/fill acceptance and clean-machine onboarding remain unverified. See the [changelog](CHANGELOG.md), [Momentum Scan guide](docs/market-movers.md), [official download](https://fastdom.decoglobal.us/download), and [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/).
-
-Existing saved settings are preserved by updates. Review your NinjaTrader account and exact contract mappings before connecting; installing an update does not reset your preferences.
+Passed 3,069 Beta and 3,089 Developer tests, including 700 trading-workflow and 41 safety cases. Native provider inference and clean-machine acceptance remain unverified. See the [changelog](CHANGELOG.md), [AI provider guide](docs/ai-providers.md), [complete manual](docs/manual.md), [official download](https://fastdom.decoglobal.us/download), and [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/).
 
 ## Feedback and support
 
@@ -107,6 +105,8 @@ You control when to request analysis, which supported model to select, and wheth
 See [official Codex authentication documentation](https://learn.chatgpt.com/docs/auth). Claude Code is also selectable in Configuration; it requires your own working, signed-in Claude Code CLI.
 
 
-### Install Codex for FastDOM
+### Set up Codex or Claude Code
 
-[Download Codex desktop (now part of the ChatGPT desktop app)](https://chatgpt.com/download/) or use the [official CLI installation instructions](https://developers.openai.com/codex/cli/). FastDOM needs a working, signed-in Codex CLI in the same Windows environment. Supported desktop installations can supply the CLI, but installing the desktop app alone is not proof that it is available. Use **Check again** in AI setup, then explicitly retry the desired AI action. FastDOM does not install software, sign in, or start analysis automatically. Ordinary trading remains available without AI.
+Choose **Configuration > General > AI PROVIDER**, install the selected CLI, and sign in under the same Windows user. Codex uses `codex login`; Claude Code uses `claude auth login`. Existing CLI sign-in is reused. Validate installation, then explicitly retry the AI action. FastDOM does not install the CLI or sign you in automatically.
+
+[Download Codex desktop](https://chatgpt.com/download/) · [Codex CLI instructions](https://developers.openai.com/codex/cli/) · [Claude Code instructions](https://code.claude.com/docs/en/setup) · [Full provider guide](docs/ai-providers.md)
