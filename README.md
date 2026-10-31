@@ -1,6 +1,6 @@
 # FastDOM
 
-FastDOM is a Windows trading application I’m building for **Schwab, NinjaTrader, and Alpaca**. It combines chart and Depth of Market (DOM) order entry, risk-based sizing, and optional Codex or Claude tools. The beta is free to try, and I’m looking for feedback on usability and reliability.
+FastDOM is a free Windows trading application I’m building for **Schwab, NinjaTrader, and Alpaca**. It combines chart and Depth of Market (DOM) order entry, risk-based sizing, and optional Codex or Claude tools. It’s currently in beta, and I’m looking for feedback on usability and reliability.
 
 The AI tools can help review a trade idea or available market data. **Manage** is different: when explicitly enabled for an existing position, it can propose protection changes through the app’s validation and execution controls.
 
@@ -105,6 +105,6 @@ Choose **Configuration > General > AI PROVIDER**, install the selected CLI, and 
 
 ## Availability and licensing
 
-The beta is free to try. This repository contains documentation and release information; the application source is not published under an open-source license. Beta access may be restricted or discontinued. FastDOM does not promise trading returns.
+FastDOM is free. There is currently no paid version or FastDOM subscription. This repository contains documentation and release information; the application source is not published under an open-source license. Beta access may be restricted or discontinued. FastDOM does not promise trading returns.
 
 Copyright 2026 DECO GLOBAL SERVICES, INC. All rights reserved.
