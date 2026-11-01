@@ -76,11 +76,11 @@ This early Beta is **unsigned**. Windows may display an unknown-publisher warnin
 
 ## Current release
 
-**Beta 20261101-143121-4e7c1c09** — November 1, 2026.
+**Beta 20261101-165644-99f44760** — November 1, 2026.
 
-Trading and Market Data now each show authorization status, renewal date and expiry date. Status refreshes after saving changed application details. Recovery discovers a newly failed Data authorization after Trading renewal and continues the required steps in the same flow.
+Improves Schwab sign-in when the confirmation redirect is slow, without repeating the click or resubmitting credentials. Identity verification remains user-controlled. Clean-PC acceptance of this installer is pending.
 
-Passed 3,091 Beta and 3,111 Developer tests, including 700 trading-workflow and 41 safety cases. Live expired-key renewal and clean-PC acceptance of this update remain unverified. See the [changelog](CHANGELOG.md), [complete manual](docs/manual.md), [official download](https://fastdom.decoglobal.us/download), and [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/).
+See the [changelog](CHANGELOG.md), [official download](https://fastdom.decoglobal.us/download), [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/), and [disclaimer](https://fastdom.decoglobal.us/disclaimer).
 
 ## Feedback and support
 
