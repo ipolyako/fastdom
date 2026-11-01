@@ -1,5 +1,22 @@
 # Release notes
 
+## Beta 20261101-082038-0924b1ee — November 1, 2026
+
+- Schwab automatic authorization now shows the same explanatory Trading Key and Data Key introduction screens as the manual flow.
+- The informed-consent modal is accepted before the still-present terms controls, matching Schwab's current page order.
+- A new **Trust / repair sign-in browser** action opens FastDOM's exact persistent sign-in profile as a normal browser. On a new PC, or after Schwab device trust is lost, complete manual login and two-factor verification, close that browser, and retry automatic authorization once.
+- HTTP 403 and the visible “Login is temporarily unavailable” page stop automatic submission and enter the guided repair path. FastDOM does not automate two-factor verification or retry rejected credentials.
+
+Verification: 3,081 Beta tests passed, including 700 trading-workflow and 41 safety cases. Focused Schwab authentication tests passed 65/65. Installer install/update/uninstall and destination guards passed. The owner is the independent release reviewer. Native clean-machine Schwab authorization remains pending on the owner's second PC; no orders were submitted.
+
+Unsigned Windows x64 Beta. Close Beta and run the installer; saved settings and activation remain separate.
+
+Installer: FastDOM-Beta-20261101-082038-0924b1ee-Setup-UNSIGNED.exe  
+SHA-256: `0115f9d1bd2163a489688eaab58d02e999f0634ff62a0acd5f972b8104470d64`  
+Size: 116,596,917 bytes.
+
+[Official download](https://fastdom.decoglobal.us/download) · [Complete manual](https://github.com/ipolyako/fastdom/blob/main/docs/manual.md)
+
 ## Beta 20261031-172834-20ac0e43 — October 31, 2026
 
 - Updated offline Help, public documentation and hosted Ask FastDOM knowledge for Codex and Claude Code, current Momentum Scan controls and risk-script input requirements.
