@@ -1,17 +1,20 @@
 # Release notes
 
-### Schwab renewal update — November 1, 2026
+## Beta 20261101-143121-4e7c1c09 — November 1, 2026
 
-Availability: implemented and locally deployed in the Developer build; pending the next public Beta. The current public Beta is 20261101-093020-f08b0c8f.
+- Trading and Market Data each show their own authorization status, renewal date and expiry date. Status refreshes when application details are saved. Green describes the matching local authorization window, not a live connectivity check.
+- Schwab recovery rechecks both applicable authorizations after each renewal, so a newly discovered Data-key failure joins the same flow. Completed steps are retained on retry. Main-window recovery reconnects on completion/close; Configuration recovery retains its existing reconnect behavior.
+- Includes the earlier dedicated-profile trust repair and sign-in retention changes. Manual two-factor verification remains user-controlled.
 
-Each Trading and Market Data application has its own red/green authorization status, Renewed date, and Expires date in local time. Green means the saved authorization matches the saved application details and is inside the locally calculated seven-day refresh window. It does not verify live connectivity or detect revocation at Schwab. These dates describe authorization tokens, not the developer Client ID or secret. Red means reconnect is required or the stored status cannot be verified.
+Verification: 3,091 Beta and 3,111 Developer automated tests passed, including 700 trading-workflow and 41 safety cases. Live expired-key renewal and clean-PC acceptance of this update remain unverified. No broker orders were submitted. Unchanged installer mechanics reuse the November 1 install/update/removal and guard checks; this package and public download are verified separately.
 
-Automatic recovery rechecks Trading and the applicable Schwab Data authorization before sign-in and after each successful renewal. A newly discovered Data-key failure joins the same recovery flow; completed keys are not repeated on retry. When NinjaTrader supplies market data, this check respects that preference. Keep the recovery window open for all required key approvals, then close it after completion so FastDOM reconnects. A healthy Data authorization does not require another browser approval.
+Unsigned Windows x64 Beta. Close Beta and run the installer; settings and activation remain separate.
 
-If the current public Beta renews Trading but does not offer Data, reopen Reconnect to Schwab or use Connect market data in application setup. Verify the correct account, positions, chart history and advancing quotes afterward; account access alone does not establish market-data connectivity. No test order is needed.
+- Installer: `FastDOM-Beta-20261101-143121-4e7c1c09-Setup-UNSIGNED.exe`
+- SHA-256: `8654c04dd1a27e09a7bd7599a251b120fdf969d7fb892e49bc1c01041fdc4e46`
+- Size: 116,603,364 bytes.
 
-Developer verification: 3,109 automated tests passed, including second-key discovery and retry coverage. Live expired-key renewal and clean-PC acceptance of this update remain unverified.
-
+[Official download](https://fastdom.decoglobal.us/download) · [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/)
 
 ## Beta 20261101-093020-f08b0c8f — November 1, 2026
 
