@@ -1,5 +1,21 @@
 # Release notes
 
+## Beta 20261101-090512-8ee666bb — November 1, 2026
+
+- On a new Windows installation, **Remember sign-in securely for this Windows user** now starts selected. The choice remains visible and can be cleared before sign-in. Credentials are protected by Windows for that user and machine; they are not transferred between PCs.
+- **Trust / repair sign-in browser** now opens FastDOM's dedicated profile in a clean window with restored extensions and DevTools disabled. This avoids extension or restored DevTools state interfering with manual device-trust recovery while preserving the same FastDOM profile.
+- The recovery sequence remains: complete manual Schwab login and two-factor verification, close the repair browser, then retry automatic authorization once. FastDOM does not automate 2FA or retry rejected credentials.
+
+Verification: 3,081 Beta and 3,101 Developer tests passed, including 700 trading-workflow and 41 safety cases. Focused Schwab authentication tests passed 69/69. Installer install/update/uninstall and destination guards passed. Native device-trust recovery on the reporting clean PC remains the acceptance step; no orders were submitted.
+
+Unsigned Windows x64 Beta. Close Beta and run the installer; saved settings and activation remain separate.
+
+- Installer: `FastDOM-Beta-20261101-090512-8ee666bb-Setup-UNSIGNED.exe`
+- SHA-256: `8ca5f1f5357a433bfbe158c9f56b029f9efc0f120ef66bccd4ab475ca9eb85dc`
+- Size: 116,597,087 bytes.
+
+[Official download](https://fastdom.decoglobal.us/download) · [Complete manual](https://github.com/ipolyako/fastdom/blob/main/docs/manual.md)
+
 ## Beta 20261101-082038-0924b1ee — November 1, 2026
 
 - Schwab automatic authorization now shows the same explanatory Trading Key and Data Key introduction screens as the manual flow.

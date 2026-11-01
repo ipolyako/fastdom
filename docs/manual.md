@@ -1,3 +1,6 @@
+Warning: truncated output (original token count: 31707)
+Total output lines: 1050
+
 # Start here | Welcome and first-session checklist
 FastDOM combines order entry, charting, market depth, tape, options context, archives, and optional AI tools in a Windows desktop application. This guide describes the current shared Developer/Beta code. Availability depends on your build, broker, permissions, data subscriptions, and configured services. A visible control does not prove its data source is connected.
 
@@ -158,9 +161,9 @@ Open Configuration > Brokers > Reconnect to Schwab when authorization needs atte
 Trading and market data have independent OAuth approvals. The introduction page identifies the Trading Key first. After its approval, the next introduction identifies the Market Data Key. Continue manually or let the introduction's countdown advance. This is a second permission grant, not necessarily a failure of the first login. Finish both.
 
 ## Automatic sign-in
-The remember option stores brokerage sign-in details securely for this Windows user. Automatic sign-in attempts recognized forms and approval steps. Identity verification, account selection, a changed Schwab page, or a rejected password can still need your intervention. Do not confuse these brokerage fields with developer API credentials. Saving a password does not permanently authorize either API application.
+The remember option stores brokerage sign-in details securely for this Windows user. It starts selected on a new installation and remains a visible opt-out: clear it before sign-in if you do not want retention. Windows-protected credentials are scoped to that Windows user and machine, so enter them once on each PC. Automatic sign-in attempts recognized forms and approval steps. Identity verification, account selection, a changed Schwab page, or a rejected password can still need your intervention. Do not confuse these brokerage fields with developer API credentials. Saving a password does not permanently authorize either API application.
 
-On a new PC, Schwab may require the browser profile to establish device trust. Complete identity verification in the visible automatic browser when Schwab offers it. If Schwab instead reports **Login is temporarily unavailable** or blocks the request, FastDOM stops without submitting the credentials again and opens the same dedicated profile without automation. Sign in manually there, complete any 2FA, reach your Schwab account, and close that browser. Then select **Try automatic sign-in** again. You can start the same recovery at any time with **Trust / repair sign-in browser**. This profile is stored outside the application folder and is preserved across FastDOM updates; FastDOM never copies your normal Chrome profile or the Token Renewal profile.
+On a new PC, Schwab may require the browser profile to establish device trust. Complete identity verification in the visible automatic browser when Schwab offers it. If Schwab instead reports **Login is temporarily unavailable** or blocks the request, FastDOM stops without submitting the credentials again and opens the same dedicated profile without automation, restored extensions, or DevTools. Sign in manually there, complete any 2FA, reach your Schwab account, and close that browser. Then select **Try automatic sign-in** again. You can start the same recovery at any time with **Trust / repair sign-in browser**. This profile is stored outside the application folder and is preserved across FastDOM updates; FastDOM never copies your normal Chrome profile or the Token Renewal profile.
 
 ## If you close the browser
 A system browser may reuse an existing process or tab; FastDOM cannot always reliably detect that you closed only the authorization tab. An application status saying "opening" or "complete approval there" may therefore outlast the tab. Cancel the pending attempt in FastDOM and start a new one rather than assuming the account is connected. If the UI remains stuck, record the step and status for support.
@@ -484,68 +487,7 @@ Volume-weighted average price summarizes traded price weighted by volume within 
 The center is a moving average and the envelope reflects dispersion over the configured period and multiplier. Wider bands indicate greater recent variation; narrower bands indicate less. Touching an outer band alone does not establish reversal. The default label is 20,2, but settings can change it.
 
 ## ATR gadget
-ATR measures typical true range, including gaps, over its input series. Enabling ATR exposes a movable timeframe picker. FastDOM projects ATR High/Low from yesterday's close for the selected timeframe. These are volatility-based distances, not guaranteed daily boundaries. A daily ATR and a five-minute ATR measure different horizons. Read the selected timeframe and source before comparing levels.
-
-# Indicators | Prior OHLC, premarket, opening range, and Location
-These features organize price by session and nearby reference levels. They do not independently submit orders.
-
-## Prev OHLC and Pre Mkt H/L
-Prior-session open, high, low, and close provide historical reference prices. Premarket high/low describe the configured premarket session's extremes. The calculation needs the appropriate historical session, not just today's visible candles. If source data is absent, do not substitute an arbitrary visible bar for yesterday's session.
-
-## ORB 15/30/60
-Opening-range boxes begin at 08:30 Central Time and cover 15, 30, or 60 minutes for the supported regular-session convention. Until a range completes, its developing high/low can change. A later break of the range is a price event, not proof of a profitable breakout. Futures overnight ranges and equity regular-session ranges are different concepts.
-
-## Location chip
-Location compares price with enabled anchors such as previous-session levels, premarket levels, and VWAP. It indicates whether price is at a reference and estimates room in ticks to the next level above/below. It respects each contributing level's display toggle, so switching an anchor off can change the result.
-
-NO LOCATION means the feature has no qualifying nearby anchor; it is not missing account authentication. Green/red room coloring compares space with the approximate round-turn cost wall. It is a contextual estimate, not a promise that a trade clears costs or reaches the next level. Move the chip if it obscures the plot.
-
-Practical workflow: load enough history, enable only the references you use, verify their session labels, and compare current location with both next levels. Do not confuse a chart's historical crosshair value with the current market price.
-
-# Indicators | Camarilla levels and Camarilla Plays
-Camarilla projects intraday reference levels from the prior regular-session high, low, and close. FastDOM prefers its dedicated prior-RTH calculation and can fall back to available prior-daily data. The legend identifies RTH or prior-daily so you can see the source.
-
-## Reading the levels
-R levels are upper references; S levels are lower references. The chart emphasizes R3/R4/R6, S3/S4/S6, and CP. CP is the central pivot. BC and TC define the central pivot range (CPR), shown as a band where visible. Price tags identify a level and its value. Levels outside the visible price range may not be drawn.
-
-The context label classifies CPR width relative to the prior range as "trend day (narrow CPR)" or "range day (wide CPR)." These labels describe a heuristic expectation, not a known outcome for the current day. A narrow range does not guarantee trending price.
-
-## Camarilla Plays study
-Enable Camarilla first, then Camarilla Plays. The study looks for documented fades: price tags an R3/R4 or S3/S4 reference and closes back across it, with B/S order-flow tilt supporting the direction. The visual shows the entry-to-target area toward CP and marks target/stop outcomes.
-
-The Alerts option adds a sound/activity message when a qualifying setup first appears live, with deduplication per session/level. It does not submit an order. This is a visual study; its edge did not pass the project's validation. Historical shaded successes must not be treated as a validated trading strategy.
-
-## Setup and troubleshooting
-Use a symbol with prior-session history, Refresh, and inspect the source label. If values differ from another platform, compare session boundaries, close definition, daily/RTH source, and included history before assuming arithmetic is wrong. The caption shares the indicator legend so it does not overwrite EMA text.
-
-# Indicators | Higher-timeframe support/resistance and trendlines
-Show 1H Levels, Show 4H Levels, and Show Daily Levels use independently fetched higher-timeframe bars, even when the visible chart is on a shorter timeframe. They derive structure from swing fractals and prior-period references. Changing the visible chart timeframe does not simply relabel its candles as higher-timeframe data.
-
-## Support/resistance zones
-Zones are bands rather than exact guaranteed turning prices. Their displayed role can change as price crosses/retests them. Multiple nearby zones may overlap; highlighted or selected subsets emphasize relevant structure. A chart zoom can reveal or hide zones because rendering considers the visible price range.
-
-Confirmed swings require subsequent bars. A level that becomes known later must not be interpreted as if it had been available at its original turning candle. Missing higher-timeframe history can leave these overlays empty while the main chart still works.
-
-## Trendlines 5m + 1H
-This feature projects support/resistance from confirmed swing anchors in five-minute and one-hour series. Lines are visual context and can become stale or invalidated. A projected line is not a scheduled order price. The legend counts the relevant displayed families.
-
-Check Trend optionally asks the selected AI model to review completed-candle anchors. It is display-only and does not execute a trend-following trade. If the AI provider is unavailable or the review fails, inspect the activity result; retained existing lines are not evidence of a newly successful AI review.
-
-Recommended setup: enable one higher-timeframe family first, identify its source, then add another only if it helps distinguish immediate and broader structure. Too many enabled overlays can obscure candles even when every calculation is correct.
-
-# Indicators | MACD, RSI, Vortex, and Chop Detector
-These indicators summarize momentum or market condition. Their panels and traffic lights are observations, not broker instructions.
-
-## MACD
-MACD compares fast and slow exponential averages. Its signal line smooths that difference; the histogram shows their separation. Standard defaults are 12/26/9 and the gear changes supported periods/style. A positive MACD is not the same statement as a rising histogram. Crossovers in a sideways market can repeatedly reverse.
-
-## RSI
-The RSI panel uses Wilder RSI, conventionally a 14-period measure, with configurable overbought/oversold thresholds commonly shown as 70/30. An extreme reading describes recent directional imbalance, not a guarantee of immediate reversal. Strong trends can remain extreme. The RSI panel is separate from RSI × Book, which additionally requires resting-book data.
-
-## Vortex
-VI+ and VI− compare directional movement over the configured period, with a 1.0 reference. Crossovers can suggest a change in trend structure, but frequent crossings can also indicate chop. The chart uses cyan/red lines. This overlay is display-only and does not create orders or standalone alerts.
-
-## Chop Detector
+ATR measures typical true range, including gaps, over its input series. Enabling ATR exposes a movable timeframe picker. FastDOM projects ATR High/Low from yesterday's close for the selected timeframe. These are volatility-based distances, not guaranteed daily boundaries. A daily ATR and a five-minute ATR measure different horizons. Read the selected timeframe and source before comparin…1707 tokens truncated…p Detector
 The traffic light represents the current chop/whipsaw danger estimate: green means lower indicated danger, yellow caution, and red higher danger. Green does not mean a trade is safe or has positive expectancy. Read it together with volatility, spread, trend structure, and the timeframe used.
 
 If an oscillator differs from another platform, compare warm-up history, input prices, period, smoothing method, and session inclusion. A short history can produce a different initial value even when later values converge.
