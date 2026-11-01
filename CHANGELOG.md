@@ -1,5 +1,20 @@
 # Release notes
 
+## Beta 20261101-165644-99f44760 — November 1, 2026
+
+- Schwab sign-in now waits for an already-started redirect when it takes longer than the browser action timeout. It does not click again or resubmit credentials during that wait.
+- Callback validation and cancellation remain enforced. This addresses a reproduced intermittent failure at confirmation; it does not bypass Schwab identity verification or guarantee that every sign-in will succeed.
+
+24 focused browser regressions, 3,095 Beta tests and 3,115 Developer tests passed, including 700 trading-workflow and 41 safety cases. Independent review completed. The Developer build restarted connected to Schwab with account data populated. No test orders were submitted. Delayed redirects were tested with synthetic browser responses; clean-PC acceptance of this new installer remains for the owner to perform. Installer mechanics are unchanged; prior November 1 install/update/removal and guard evidence is reused.
+
+Free, unsigned Windows x64 Beta. Close Beta before installing; saved settings remain separate. Start new installations in Simulation.
+
+- Installer: `FastDOM-Beta-20261101-165644-99f44760-Setup-UNSIGNED.exe`
+- SHA-256: `173ba9571ecc86d3677b0e1169ecd5d69c77c970c6102b499cc8cb83fbe779f7`
+- Size: 116,603,946 bytes.
+
+[Official download](https://fastdom.decoglobal.us/download) · [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/) · [Disclaimer](https://fastdom.decoglobal.us/disclaimer)
+
 ## Beta 20261101-143121-4e7c1c09 — November 1, 2026
 
 - Trading and Market Data each show their own authorization status, renewal date and expiry date. Status refreshes when application details are saved. Green describes the matching local authorization window, not a live connectivity check.
