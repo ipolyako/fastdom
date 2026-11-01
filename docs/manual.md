@@ -990,3 +990,16 @@ Keep or copy the returned **FD- support ID** and include it when contacting supp
 
 **Analyze in Ask FastDOM** opens a separate chat with this report attached; press Send to request analysis. The selected AI provider receives the report text and at most the last 100 retained events, not the reply email or screenshot. Local AI still uses cloud processing. The assistant can explain observations, hypotheses and missing evidence. It cannot trade or change settings. A historical report, UI marker or accepted request does not establish a current broker fill or working order; verify broker state. Contact support for unresolved issues, using the support ID.
 
+
+
+### Schwab renewal update — November 1, 2026
+
+Availability: implemented and locally deployed in the Developer build; pending the next public Beta. The current public Beta is 20261101-093020-f08b0c8f.
+
+Each Trading and Market Data application has its own red/green authorization status, Renewed date, and Expires date in local time. Green means the saved authorization matches the saved application details and is inside the locally calculated seven-day refresh window. It does not verify live connectivity or detect revocation at Schwab. These dates describe authorization tokens, not the developer Client ID or secret. Red means reconnect is required or the stored status cannot be verified.
+
+Automatic recovery rechecks Trading and the applicable Schwab Data authorization before sign-in and after each successful renewal. A newly discovered Data-key failure joins the same recovery flow; completed keys are not repeated on retry. When NinjaTrader supplies market data, this check respects that preference. Keep the recovery window open for all required key approvals, then close it after completion so FastDOM reconnects. A healthy Data authorization does not require another browser approval.
+
+If the current public Beta renews Trading but does not offer Data, reopen Reconnect to Schwab or use Connect market data in application setup. Verify the correct account, positions, chart history and advancing quotes afterward; account access alone does not establish market-data connectivity. No test order is needed.
+
+Developer verification: 3,109 automated tests passed, including second-key discovery and retry coverage. Live expired-key renewal and clean-PC acceptance of this update remain unverified.
