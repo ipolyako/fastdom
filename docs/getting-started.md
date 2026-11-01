@@ -14,7 +14,7 @@ Use **More > Help** for the detailed, searchable offline guide. Explore simulate
 
 Open **Configuration > Brokers > Set up Schwab applications**. Supply your own approved Accounts and Trading Production and Market Data Production application credentials. Register the callback shown by setup in both applications and complete both browser authorizations.
 
-Manual authorization opens your default browser. Optional automatic sign-in requires installed Playwright Chromium or Microsoft Edge; browser binaries are not bundled. No developer TokenRenewal task or shared browser profile is required.
+Manual authorization opens your default browser. Automatic sign-in uses FastDOM's own persistent Chromium profile, with Microsoft Edge as a fallback. If Schwab returns HTTP 403 or shows **Login is temporarily unavailable**, select **Trust / repair sign-in browser**, complete manual login and two-factor verification in that normal browser, close it, and retry automatic authorization once. FastDOM does not automate two-factor verification or retry rejected credentials. No developer TokenRenewal task or shared browser profile is required.
 
 ### NinjaTrader
 
