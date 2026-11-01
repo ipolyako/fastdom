@@ -160,6 +160,8 @@ Trading and market data have independent OAuth approvals. The introduction page 
 ## Automatic sign-in
 The remember option stores brokerage sign-in details securely for this Windows user. Automatic sign-in attempts recognized forms and approval steps. Identity verification, account selection, a changed Schwab page, or a rejected password can still need your intervention. Do not confuse these brokerage fields with developer API credentials. Saving a password does not permanently authorize either API application.
 
+On a new PC, Schwab may require the browser profile to establish device trust. Complete identity verification in the visible automatic browser when Schwab offers it. If Schwab instead reports **Login is temporarily unavailable** or blocks the request, FastDOM stops without submitting the credentials again and opens the same dedicated profile without automation. Sign in manually there, complete any 2FA, reach your Schwab account, and close that browser. Then select **Try automatic sign-in** again. You can start the same recovery at any time with **Trust / repair sign-in browser**. This profile is stored outside the application folder and is preserved across FastDOM updates; FastDOM never copies your normal Chrome profile or the Token Renewal profile.
+
 ## If you close the browser
 A system browser may reuse an existing process or tab; FastDOM cannot always reliably detect that you closed only the authorization tab. An application status saying "opening" or "complete approval there" may therefore outlast the tab. Cancel the pending attempt in FastDOM and start a new one rather than assuming the account is connected. If the UI remains stuck, record the step and status for support.
 
@@ -1045,3 +1047,4 @@ Keep or copy the returned **FD- support ID** and include it when contacting supp
 ## Analyze the report in Ask FastDOM
 
 **Analyze in Ask FastDOM** opens a separate chat with this report attached; press Send to request analysis. The selected AI provider receives the report text and at most the last 100 retained events, not the reply email or screenshot. Local AI still uses cloud processing. The assistant can explain observations, hypotheses and missing evidence. It cannot trade or change settings. A historical report, UI marker or accepted request does not establish a current broker fill or working order; verify broker state. Contact support for unresolved issues, using the support ID.
+
