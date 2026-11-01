@@ -1,5 +1,20 @@
 # Release notes
 
+## Beta 20261101-093020-f08b0c8f — November 1, 2026
+
+- **Trust / repair sign-in browser** now uses Schwab's normal client sign-in page instead of opening the internal SWS gateway route directly. This fixes the blank Schwab shell that could appear when the repair action was opened a second time.
+- The same dedicated FastDOM browser profile is retained. Extensions and DevTools remain disabled for the repair window; manual login and two-factor verification remain user-controlled.
+
+Verification: 3,082 Beta and 3,102 Developer tests passed, including 700 trading-workflow and 41 safety cases. Focused Schwab authentication tests passed 64/64, including two consecutive production-path repair launches. Installer install/update/uninstall and destination guards passed. No broker or order test was run.
+
+Unsigned Windows x64 Beta. Close Beta and run the installer; saved settings and activation remain separate.
+
+- Installer: `FastDOM-Beta-20261101-093020-f08b0c8f-Setup-UNSIGNED.exe`
+- SHA-256: `52a2e27f5a77fc8c0b17d0856de786ff504621c6137269ed09985f60edb4841b`
+- Size: 116,597,107 bytes.
+
+[Official download](https://fastdom.decoglobal.us/download) · [Complete manual](https://github.com/ipolyako/fastdom/blob/main/docs/manual.md)
+
 ## Beta 20261101-090512-8ee666bb — November 1, 2026
 
 - On a new Windows installation, **Remember sign-in securely for this Windows user** now starts selected. The choice remains visible and can be cleared before sign-in. Credentials are protected by Windows for that user and machine; they are not transferred between PCs.
