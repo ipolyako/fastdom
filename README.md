@@ -76,11 +76,11 @@ This early Beta is **unsigned**. Windows may display an unknown-publisher warnin
 
 ## Current release
 
-**Beta 20261101-093020-f08b0c8f** — November 1, 2026.
+**Beta 20261101-143121-4e7c1c09** — November 1, 2026.
 
-On a new PC, Schwab sign-in retention starts selected with a visible opt-out. Credentials are protected for the current Windows user and must be entered once on each PC. **Trust / repair sign-in browser** opens FastDOM's dedicated profile on Schwab's normal client sign-in page, without restored extensions or DevTools. This fixes the blank page that could appear when Trust / repair was opened again. Manual login and two-factor verification remain user-controlled; FastDOM does not retry rejected credentials.
+Trading and Market Data now each show authorization status, renewal date and expiry date. Status refreshes after saving changed application details. Recovery discovers a newly failed Data authorization after Trading renewal and continues the required steps in the same flow.
 
-Passed 3,081 Beta tests and 3,101 Developer tests, including 700 trading-workflow and 41 safety cases, plus 69 focused authentication checks. Installer lifecycle and guard checks passed. Clean-machine Schwab acceptance remains pending. See the [changelog](CHANGELOG.md), [complete manual](docs/manual.md), [official download](https://fastdom.decoglobal.us/download), and [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/).
+Passed 3,091 Beta and 3,111 Developer tests, including 700 trading-workflow and 41 safety cases. Live expired-key renewal and clean-PC acceptance of this update remain unverified. See the [changelog](CHANGELOG.md), [complete manual](docs/manual.md), [official download](https://fastdom.decoglobal.us/download), and [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/).
 
 ## Feedback and support
 
