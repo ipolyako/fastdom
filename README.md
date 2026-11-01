@@ -76,11 +76,11 @@ This early Beta is **unsigned**. Windows may display an unknown-publisher warnin
 
 ## Current release
 
-**Beta 20261031-172834-20ac0e43** — October 31, 2026.
+**Beta 20261101-082038-0924b1ee** — November 1, 2026.
 
-Codex and Claude provider switching, setup guidance and documentation are aligned across AI features. Active Manage retains its provider until disengaged. Offline Help and hosted support knowledge include the current Momentum Scan and risk-script rules.
+Schwab onboarding now explains the separate Trading and Data authorizations, accepts the informed-consent step correctly, and includes a guided **Trust / repair sign-in browser** path for a new PC or a profile that has lost Schwab device trust. Manual login and two-factor verification remain user-controlled; FastDOM does not retry rejected credentials.
 
-Passed 3,069 Beta and 3,089 Developer tests, including 700 trading-workflow and 41 safety cases. Native provider inference and clean-machine acceptance remain unverified. See the [changelog](CHANGELOG.md), [AI provider guide](docs/ai-providers.md), [complete manual](docs/manual.md), [official download](https://fastdom.decoglobal.us/download), and [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/).
+Passed 3,081 Beta tests, including 700 trading-workflow and 41 safety cases. Installer lifecycle and guard checks passed. The owner is the independent release reviewer. Clean-machine Schwab acceptance remains pending. See the [changelog](CHANGELOG.md), [complete manual](docs/manual.md), [official download](https://fastdom.decoglobal.us/download), and [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/).
 
 ## Feedback and support
 
