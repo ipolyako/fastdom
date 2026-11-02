@@ -1,6 +1,3 @@
-Warning: truncated output (original token count: 31707)
-Total output lines: 1050
-
 # Start here | Welcome and first-session checklist
 FastDOM combines order entry, charting, market depth, tape, options context, archives, and optional AI tools in a Windows desktop application. This guide describes the current shared Developer/Beta code. Availability depends on your build, broker, permissions, data subscriptions, and configured services. A visible control does not prove its data source is connected.
 
@@ -98,6 +95,8 @@ The two registered callback fields must each equal the URL above, including HTTP
 
 This is an actual FastDOM screen captured with an empty local profile. Use your own keys in the blank fields. Show values reveals protected fields for review; hide them again before sharing a screen. Browser setup uses local SQLite storage. If Connect is unavailable and the window says Derby, follow your installation's storage setup before proceeding; changing storage does not migrate existing archives.
 
+Each application card reports its own authorization status. Green **Current** means the saved authorization matches that card's keys and remains inside Schwab's seven-day refresh window. Red identifies a missing, expired, unreadable, or key-mismatched authorization. **Renewed** and **Expires** are shown in your local time; reconnect that application before its displayed expiration. The two dates are independent because trading and market data use separate Schwab applications.
+
 ## 7. Authorize trading, then market data
 From the setup window, click **Connect trading**. Complete Schwab sign-in, identity checks, and account consent in your browser. Wait for FastDOM to confirm the result. Next click **Connect market data** and complete that authorization too.
 
@@ -110,6 +109,20 @@ The introductory page identifies the **Trading Key** or **Market Data Key** abou
 Keep FastDOM open while authorizing. If you close the browser before finishing, the default browser cannot reliably tell FastDOM that you closed a tab. Cancel the pending connection in FastDOM or wait for its timeout, then retry the incomplete key. Do not create new keys simply because you closed a tab.
 
 ## 8. Verify both halves without placing an order
+
+### Schwab renewal update — November 1, 2026
+
+Availability: included in the November 1 Schwab renewal-status Beta update and the Developer build. See the public download page for the current build identifier.
+
+Each Trading and Market Data application has its own red/green authorization status, Renewed date, and Expires date in local time. Green means the saved authorization matches the saved application details and is inside the locally calculated seven-day refresh window. It does not verify live connectivity or detect revocation at Schwab. These dates describe authorization tokens, not the developer Client ID or secret. Red means reconnect is required or the stored status cannot be verified.
+
+Automatic recovery rechecks Trading and the applicable Schwab Data authorization before sign-in and after each successful renewal. A newly discovered Data-key failure joins the same recovery flow; completed keys are not repeated on retry. When NinjaTrader supplies market data, this check respects that preference. Keep the recovery window open for all required key approvals, then close it after completion so FastDOM reconnects. A healthy Data authorization does not require another browser approval.
+
+If an older Beta renews Trading but does not offer Data, update or use Connect market data in application setup. Verify the correct account, positions, chart history and advancing quotes afterward; account access alone does not establish market-data connectivity. No test order is needed.
+
+Automated regression covers second-key discovery, retry progress and status changes after saving application details. Live expired-key renewal and clean-PC acceptance of this update remain unverified; see the release notes for build-specific test evidence.
+
+
 Select Schwab Live and confirm that an account is selected and positions and buying power load where provided by Schwab. Compare the selected account with the one you approved. This checks the trading connection.
 
 Open a chart for a supported stock symbol and press Refresh. History should load without a market-data authentication error. Verify a fresh quote timestamp during the relevant market session. This checks data; an account list alone does not. Market closures and data entitlements can affect what updates. No test order is required for onboarding.
@@ -161,9 +174,9 @@ Open Configuration > Brokers > Reconnect to Schwab when authorization needs atte
 Trading and market data have independent OAuth approvals. The introduction page identifies the Trading Key first. After its approval, the next introduction identifies the Market Data Key. Continue manually or let the introduction's countdown advance. This is a second permission grant, not necessarily a failure of the first login. Finish both.
 
 ## Automatic sign-in
-The remember option stores brokerage sign-in details securely for this Windows user. It starts selected on a new installation and remains a visible opt-out: clear it before sign-in if you do not want retention. Windows-protected credentials are scoped to that Windows user and machine, so enter them once on each PC. Automatic sign-in attempts recognized forms and approval steps. Identity verification, account selection, a changed Schwab page, or a rejected password can still need your intervention. Do not confuse these brokerage fields with developer API credentials. Saving a password does not permanently authorize either API application.
+The remember option stores brokerage sign-in details securely for this Windows user and is selected by default when no saved sign-in exists. Clear it before starting automatic sign-in if you do not want the credentials retained. A new Windows PC cannot read credentials protected on another PC, so enter them once on each installation. Automatic sign-in attempts recognized forms and approval steps. Identity verification, account selection, a changed Schwab page, or a rejected password can still need your intervention. Do not confuse these brokerage fields with developer API credentials. Saving a password does not permanently authorize either API application.
 
-On a new PC, Schwab may require the browser profile to establish device trust. Complete identity verification in the visible automatic browser when Schwab offers it. If Schwab instead reports **Login is temporarily unavailable** or blocks the request, FastDOM stops without submitting the credentials again and opens the same dedicated profile without automation, restored extensions, or DevTools. The repair action uses Schwab's normal client sign-in page so opening it again does not reuse the internal gateway route that can show a blank shell. Sign in manually there, complete any 2FA, reach your Schwab account, and close that browser. Then select **Try automatic sign-in** again. You can start the same recovery at any time with **Trust / repair sign-in browser**. This profile is stored outside the application folder and is preserved across FastDOM updates; FastDOM never copies your normal Chrome profile or the Token Renewal profile.
+On a new PC, Schwab may require the browser profile to establish device trust. Complete identity verification in the visible automatic browser when Schwab offers it. If Schwab instead reports **Login is temporarily unavailable** or blocks the request, FastDOM stops without submitting the credentials again and opens the same dedicated profile without automation. The repair launch uses Schwab's normal client sign-in page and disables extensions and developer tools so browser add-ons, a restored diagnostic panel, or a reused internal gateway page cannot leave the sign-in surface blank. Sign in manually there, complete any 2FA, reach your Schwab account, and close that browser. Then select **Try automatic sign-in** again. You can start the same recovery at any time with **Trust / repair sign-in browser**. This profile is stored outside the application folder and is preserved across FastDOM updates; FastDOM never copies your normal Chrome profile or the Token Renewal profile.
 
 ## If you close the browser
 A system browser may reuse an existing process or tab; FastDOM cannot always reliably detect that you closed only the authorization tab. An application status saying "opening" or "complete approval there" may therefore outlast the tab. Cancel the pending attempt in FastDOM and start a new one rather than assuming the account is connected. If the UI remains stuck, record the step and status for support.
@@ -400,6 +413,9 @@ General > Enable Reconciler allows existing protective quantities to be resized 
 After entry and after every partial exit, compare position quantity with accepted protective orders. Ensure no exit quantity could unintentionally reverse the position and that remaining exposure is protected as intended. Review the activity message if reconciliation cannot establish broker truth. OCO/bracket behavior is not interchangeable across brokers, and app-managed protection may depend on FastDOM remaining connected.
 
 # Trading | Hot buttons, scripts, and keyboard shortcuts
+
+**Arrange hot buttons:** Select **Arrange** in the HOT BUTTONS header, then drag a button onto the position you want. The highlighted button swaps places with it; other buttons stay put. Dropping in the margin of a button selects that same slot, and dropping outside the slots makes no change. The banner names the destination. When either button is full-width, entire rows swap; an incomplete half-width row must be completed before swapping it with a full-width row. Drag near the top or bottom to scroll longer lists. Each successful move is saved automatically; select **Done** to resume clicking buttons. Panel clicks are disabled while arranging, but keyboard shortcuts remain active. Flatten and Cancel Symbol remain full-width wherever you place them. Existing layouts keep their order until you arrange them. No JSON editing is needed.
+
 Open the hot-buttons gear to edit visible actions. Each button has a label, appearance, and execution definition. Templates cover market and limit orders, dollar sizing, scale-outs, cancellation, risk entries, brackets, dialogs, and position management. Add/Delete and Up/Down change the layout; Apply inserts a selected script template. Save commits changes; Cancel discards the dialog edits.
 
 ## Reading a script
@@ -432,6 +448,8 @@ When reporting a failure, provide the time, edition/build, broker mode, action l
 
 # Charts | Chart toolbar, history, timeframes, and navigation
 Open Chart from the main window. The chart has its own symbol, link state, timeframe/history selection, drawing state, indicator selections, and execution controls. Confirm its account context before using the order row.
+
+Resize the chart by dragging any window edge or corner. The minimum is 640 × 520 Windows layout units; display scaling increases the physical pixel size. Toolbars wrap onto extra rows instead of shrinking their buttons, and the risk/secure buttons have a separate row. Your saved chart width is preserved when reopening. If multiple indicator panes need more room, use the chart area's vertical scrollbar; the trading controls and history slider remain visible. The mouse wheel over the chart continues to zoom candles. Enlarging the window gives more space to the chart and its panes without replacing your saved splitter settings.
 
 ## Top toolbar
 The symbol box changes the instrument. Star adds it to the main watchlist. Chain-link follows the DOM symbol. The timeframe/range selector controls candle aggregation and requested history. Refresh reloads data. Z− shows more candles; Z+ shows fewer, larger candles; reset returns to the default latest view.
@@ -487,7 +505,68 @@ Volume-weighted average price summarizes traded price weighted by volume within 
 The center is a moving average and the envelope reflects dispersion over the configured period and multiplier. Wider bands indicate greater recent variation; narrower bands indicate less. Touching an outer band alone does not establish reversal. The default label is 20,2, but settings can change it.
 
 ## ATR gadget
-ATR measures typical true range, including gaps, over its input series. Enabling ATR exposes a movable timeframe picker. FastDOM projects ATR High/Low from yesterday's close for the selected timeframe. These are volatility-based distances, not guaranteed daily boundaries. A daily ATR and a five-minute ATR measure different horizons. Read the selected timeframe and source before comparin…1707 tokens truncated…p Detector
+ATR measures typical true range, including gaps, over its input series. Enabling ATR exposes a movable timeframe picker. FastDOM projects ATR High/Low from yesterday's close for the selected timeframe. These are volatility-based distances, not guaranteed daily boundaries. A daily ATR and a five-minute ATR measure different horizons. Read the selected timeframe and source before comparing levels.
+
+# Indicators | Prior OHLC, premarket, opening range, and Location
+These features organize price by session and nearby reference levels. They do not independently submit orders.
+
+## Prev OHLC and Pre Mkt H/L
+Prior-session open, high, low, and close provide historical reference prices. Premarket high/low describe the configured premarket session's extremes. The calculation needs the appropriate historical session, not just today's visible candles. If source data is absent, do not substitute an arbitrary visible bar for yesterday's session.
+
+## ORB 15/30/60
+Opening-range boxes begin at 08:30 Central Time and cover 15, 30, or 60 minutes for the supported regular-session convention. Until a range completes, its developing high/low can change. A later break of the range is a price event, not proof of a profitable breakout. Futures overnight ranges and equity regular-session ranges are different concepts.
+
+## Location chip
+Location compares price with enabled anchors such as previous-session levels, premarket levels, and VWAP. It indicates whether price is at a reference and estimates room in ticks to the next level above/below. It respects each contributing level's display toggle, so switching an anchor off can change the result.
+
+NO LOCATION means the feature has no qualifying nearby anchor; it is not missing account authentication. Green/red room coloring compares space with the approximate round-turn cost wall. It is a contextual estimate, not a promise that a trade clears costs or reaches the next level. Move the chip if it obscures the plot.
+
+Practical workflow: load enough history, enable only the references you use, verify their session labels, and compare current location with both next levels. Do not confuse a chart's historical crosshair value with the current market price.
+
+# Indicators | Camarilla levels and Camarilla Plays
+Camarilla projects intraday reference levels from the prior regular-session high, low, and close. FastDOM prefers its dedicated prior-RTH calculation and can fall back to available prior-daily data. The legend identifies RTH or prior-daily so you can see the source.
+
+## Reading the levels
+R levels are upper references; S levels are lower references. The chart emphasizes R3/R4/R6, S3/S4/S6, and CP. CP is the central pivot. BC and TC define the central pivot range (CPR), shown as a band where visible. Price tags identify a level and its value. Levels outside the visible price range may not be drawn.
+
+The context label classifies CPR width relative to the prior range as "trend day (narrow CPR)" or "range day (wide CPR)." These labels describe a heuristic expectation, not a known outcome for the current day. A narrow range does not guarantee trending price.
+
+## Camarilla Plays study
+Enable Camarilla first, then Camarilla Plays. The study looks for documented fades: price tags an R3/R4 or S3/S4 reference and closes back across it, with B/S order-flow tilt supporting the direction. The visual shows the entry-to-target area toward CP and marks target/stop outcomes.
+
+The Alerts option adds a sound/activity message when a qualifying setup first appears live, with deduplication per session/level. It does not submit an order. This is a visual study; its edge did not pass the project's validation. Historical shaded successes must not be treated as a validated trading strategy.
+
+## Setup and troubleshooting
+Use a symbol with prior-session history, Refresh, and inspect the source label. If values differ from another platform, compare session boundaries, close definition, daily/RTH source, and included history before assuming arithmetic is wrong. The caption shares the indicator legend so it does not overwrite EMA text.
+
+# Indicators | Higher-timeframe support/resistance and trendlines
+Show 1H Levels, Show 4H Levels, and Show Daily Levels use independently fetched higher-timeframe bars, even when the visible chart is on a shorter timeframe. They derive structure from swing fractals and prior-period references. Changing the visible chart timeframe does not simply relabel its candles as higher-timeframe data.
+
+## Support/resistance zones
+Zones are bands rather than exact guaranteed turning prices. Their displayed role can change as price crosses/retests them. Multiple nearby zones may overlap; highlighted or selected subsets emphasize relevant structure. A chart zoom can reveal or hide zones because rendering considers the visible price range.
+
+Confirmed swings require subsequent bars. A level that becomes known later must not be interpreted as if it had been available at its original turning candle. Missing higher-timeframe history can leave these overlays empty while the main chart still works.
+
+## Trendlines 5m + 1H
+This feature projects support/resistance from confirmed swing anchors in five-minute and one-hour series. Lines are visual context and can become stale or invalidated. A projected line is not a scheduled order price. The legend counts the relevant displayed families.
+
+Check Trend optionally asks the selected AI model to review completed-candle anchors. It is display-only and does not execute a trend-following trade. If the AI provider is unavailable or the review fails, inspect the activity result; retained existing lines are not evidence of a newly successful AI review.
+
+Recommended setup: enable one higher-timeframe family first, identify its source, then add another only if it helps distinguish immediate and broader structure. Too many enabled overlays can obscure candles even when every calculation is correct.
+
+# Indicators | MACD, RSI, Vortex, and Chop Detector
+These indicators summarize momentum or market condition. Their panels and traffic lights are observations, not broker instructions.
+
+## MACD
+MACD compares fast and slow exponential averages. Its signal line smooths that difference; the histogram shows their separation. Standard defaults are 12/26/9 and the gear changes supported periods/style. A positive MACD is not the same statement as a rising histogram. Crossovers in a sideways market can repeatedly reverse.
+
+## RSI
+The RSI panel uses Wilder RSI, conventionally a 14-period measure, with configurable overbought/oversold thresholds commonly shown as 70/30. An extreme reading describes recent directional imbalance, not a guarantee of immediate reversal. Strong trends can remain extreme. The RSI panel is separate from RSI × Book, which additionally requires resting-book data.
+
+## Vortex
+VI+ and VI− compare directional movement over the configured period, with a 1.0 reference. Crossovers can suggest a change in trend structure, but frequent crossings can also indicate chop. The chart uses cyan/red lines. This overlay is display-only and does not create orders or standalone alerts.
+
+## Chop Detector
 The traffic light represents the current chop/whipsaw danger estimate: green means lower indicated danger, yellow caution, and red higher danger. Green does not mean a trade is safe or has positive expectancy. Read it together with volatility, spread, trend structure, and the timeframe used.
 
 If an oscillator differs from another platform, compare warm-up history, input prices, period, smoothing method, and session inclusion. A short history can produce a different initial value even when later values converge.
@@ -616,6 +695,10 @@ If the broker's answer to a close is unclear (for example, a timeout), the order
 
 ## Scan & score and AI
 SCAN & SCORE checks every strike, width, and gap combination of the selected strategy within RANGE ± strikes of the price, up to MAX WIDTH. Each combination is priced a third of the way from mid toward natural, which is closer to a realistic fill than mid. Combinations with wide leg markets, no possible profit at the natural price, undefined risk, or two expirations are skipped. Each remaining combination gets a 0-100 SCORE from probability, reward/risk, and the cost of crossing the market. Results at or above MIN SCORE and MIN PROB % are listed, and SORT changes the order. Use loads a row into the ticket at its listed entry price; it does not send anything.
+
+The SCORE describes the shape of the payoff, not an advantage. At market prices a spread is worth about its mid, so its expected profit is minus its costs. MKT EV shows that figure: the part of the bid/ask you pay by entering past mid, plus FEE/CONTRACT charged to open and again to close (default 0.65; set your broker's rate). It is never positive.
+
+To look for an advantage, enter a THESIS: the price you expect at the selected expiration, and optionally ± how unsure you are as one price standard deviation in dollars (0 uses the market's own uncertainty). The scan then lists only spreads expected to profit after costs if your thesis is right, sorted by expected return on risk after round-trip fees. THESIS EV is that expected profit per spread. P THESIS is the chance of any profit after costs if you are right. AT TGT is the result if the price ends exactly at your target, and IF FLAT is the result if the price never moves. If nothing is expected to profit, the scan says No trade. A thesis at today's price with market uncertainty is always No trade. Negative targets, ranges and fees are rejected. THESIS EV is only as good as your thesis: FastDOM does not know whether it is right, and the figures assume the spread is held to expiration.
 
 AI score list and AI Score (AI SETUP REVIEW) ask the optional AI to grade the listed combinations or the current spread. The AI sees only the spread's data, not your account. Its score is advice only: it never sends, blocks, or sizes an order. It is marked out of date when the legs, price, or quantity change. MIN AI SCORE hides rows below it and rows the AI did not score. These buttons are hidden in builds without the AI assistant. A high score is not a calibrated success rate.
 
@@ -990,16 +1073,70 @@ Keep or copy the returned **FD- support ID** and include it when contacting supp
 
 **Analyze in Ask FastDOM** opens a separate chat with this report attached; press Send to request analysis. The selected AI provider receives the report text and at most the last 100 retained events, not the reply email or screenshot. Local AI still uses cloud processing. The assistant can explain observations, hypotheses and missing evidence. It cannot trade or change settings. A historical report, UI marker or accepted request does not establish a current broker fill or working order; verify broker state. Contact support for unresolved issues, using the support ID.
 
+Chart resizing preserves the familiar wide layout: risk buttons sit beside the OHLC/volume text, and Manage/Squawk/drawing controls stay on the right. In narrower windows, controls wrap and the risk buttons move to a separate row to avoid overlap.
+
+### Closing with virtual protection
+Virtual stops are monitored by FastDOM and are not broker-held stop orders. They do not survive a restart or crash. When virtual protection is active, an exit is pending, or a protection change is in progress, an update cannot automatically close FastDOM. Closing the main window warns you and defaults to keeping the app running. Check your positions and broker orders before explicitly choosing to close and lose virtual protection. Older running builds must be closed manually before updating; the publisher never force-kills them.
+# Trading | Replacement and execution messages
+
+## Verify executions separately from working protection
+
+Take 1 with a resting target moves the farthest target tranche to a marketable
+limit; it does not necessarily exit one share. If that target fills during the
+change, FastDOM verifies the broker's execution and reports the actual filled
+quantity and average price. A partial fill or uncertain replacement requires
+checking the remaining orders at the broker. A confirmed target fill does not
+certify protection for the rest of the position.
+
+A cancellation rejected because the old order was replaced is not a rejection
+of the trade. FastDOM must verify the replacement before declaring cancellation
+complete. If the replacement identity is unavailable, the cancellation/flatten
+workflow stays unresolved rather than sending another close. This reconciliation
+hold is local to the running session; restarting is not proof that the broker
+orders have been resolved. Verify orders and positions directly with the broker.
+
+Long option descriptions in Account Positions wrap within the symbol column.
+Hovering the description shows the complete broker symbol.
 
 
-### Schwab renewal update — November 1, 2026
+# Options | Close an existing spread
 
-Availability: included in Beta 20261101-143121-4e7c1c09 and the Developer build.
+## One net closing order
 
-Each Trading and Market Data application has its own red/green authorization status, Renewed date, and Expires date in local time. Green means the saved authorization matches the saved application details and is inside the locally calculated seven-day refresh window. It does not verify live connectivity or detect revocation at Schwab. These dates describe authorization tokens, not the developer Client ID or secret. Red means reconnect is required or the stored status cannot be verified.
+In Options Trader, select **Close existing spread…**. Load the selected account's
+holdings and select the two to four contracts you want to close together. For a
+vertical, select its long and short contracts and leave Contracts per spread at 1.
+Set Spreads, refresh quotes, choose the combined net debit or credit limit and
+Day/GTC, then review the complete ticket. This sends one Schwab multi-leg closing
+order; no individual-leg fallback is used. The displayed total excludes fees.
 
-Automatic recovery rechecks Trading and the applicable Schwab Data authorization before sign-in and after each successful renewal. A newly discovered Data-key failure joins the same recovery flow; completed keys are not repeated on retry. When NinjaTrader supplies market data, this check respects that preference. Keep the recovery window open for all required key approvals, then close it after completion so FastDOM reconnects. A healthy Data authorization does not require another browser approval.
+The app refreshes quotes and verifies holdings and outstanding orders before sending.
+If the account changes, quotes are stale, a leg is no longer held or an order already
+uses those contracts, submission is blocked. Check Orders for fills or Change price….
+Accepted does not mean filled. After an uncertain outcome, check your broker before
+retrying. Other brokers are not supported by this spread-close screen.
 
-If an older Beta renews Trading but does not offer Data, update or use Connect market data in application setup. Verify the correct account, positions, chart history and advancing quotes afterward; account access alone does not establish market-data connectivity. No test order is needed.
 
-Release verification: 3,091 Beta and 3,111 Developer tests passed, including 700 trading-workflow and 41 safety cases. Live expired-key renewal and clean-PC acceptance of this update remain unverified.
+# Trading | Bracket placement sound
+
+## One cue per placement
+
+Regular accepted buys and sells play their placement cue from every entry surface, including DOM and chart clicks, when Order sounds is enabled. The cue confirms acceptance, not a fill.
+
+Placing a bracket or Secure ladder plays the placement cue once, on its first
+accepted order, regardless of the number of profit targets. A combined entry and
+bracket action shares that cue. Separate placement actions still sound separately.
+Rejection and execution sounds retain their existing behavior. The placement cue
+does not mean that every protection leg was accepted; check the status and Orders
+for incomplete protection.
+
+
+# Options Trader | Shared AI assessment
+
+## Ranking and setup quality
+
+AI score list and the selected ticket share an assessment for the same spread, entry price, underlying price and quote snapshot. Scores use one rubric: Strong 80-100, Reasonable 60-79, Marginal 40-59, Poor 0-39. Highest ranked in a scan does not mean a profitable trade. The AI can decline to shortlist any candidate; the screen then says No attractive setup identified.
+
+Use loads the scored candidate and its assessment. Refresh assessment reuses unchanged inputs; Refresh quotes loads a new snapshot and clears the old scan. Changed inputs or AI provider/model require a new assessment. The ticket shows the previous score when reassessed. Assessment is per spread; position quantity still scales the displayed payoff and risk.
+
+Break-even movement and payoff are calculated. AI commentary is advisory. Chart, news, earnings and a directional thesis are not evaluated, and model probability is not a calibrated forecast. Neither the score nor ranking establishes expected return. Invalid AI responses do not create recommendations. AI never submits or blocks an order.

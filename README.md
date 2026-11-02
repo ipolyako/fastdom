@@ -76,9 +76,9 @@ This early Beta is **unsigned**. Windows may display an unknown-publisher warnin
 
 ## Current release
 
-**Beta 20261101-165644-99f44760** — November 1, 2026.
+**Beta 20261102-154235-a47a1bc2** — November 2, 2026.
 
-Improves Schwab sign-in when the confirmation redirect is slow, without repeating the click or resubmitting credentials. Identity verification remains user-controlled. Clean-PC acceptance of this installer is pending.
+Options Trader can close a held spread as one net-priced order and shows expected value after costs, with an optional price thesis that answers No trade when nothing is expected to profit. Closing FastDOM now asks for confirmation while virtual stops are active. Also includes hot-button Arrange, smaller-screen charts and order-sound fixes. Clean-PC acceptance of this installer is pending.
 
 See the [changelog](CHANGELOG.md), [official download](https://fastdom.decoglobal.us/download), [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/), and [disclaimer](https://fastdom.decoglobal.us/disclaimer).
 

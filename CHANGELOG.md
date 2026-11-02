@@ -1,5 +1,34 @@
 # Release notes
 
+## Beta 20261102-154235-a47a1bc2 — November 2, 2026
+
+**Options Trader**
+- Close existing spread: choose 2–4 option contracts you hold and close them together as one order at a single net price, instead of closing each leg separately (Schwab).
+- Spread fills now show the true net price of the spread.
+- The scanner shows expected value after costs (MKT EV), which is never positive at market prices. You can enter a thesis: your expected price at expiration and how unsure you are. The scanner then lists only spreads expected to profit after costs if the thesis is right, and otherwise says No trade. THESIS EV is only as good as your thesis.
+- AI scores in the scan list and the ticket now agree for the same spread and quotes.
+
+**Trading and protection**
+- Closing FastDOM while virtual stops are active now asks for confirmation, because virtual stops are lost when the app closes.
+- Schwab Take 1, order replacement and cancel results are reconciled against the exact original order.
+- Chart stops are always red and targets always green, for long and short positions.
+- Bracket orders play one placement sound instead of one per target, and regular DOM orders play their sound again.
+
+**Layout**
+- Hot buttons: Arrange mode lets you drag buttons into the slot you choose. Cancel All is no longer a default button on new installations.
+- Charts fit smaller screens while keeping the original layout on wide windows.
+- Long option names in Positions are no longer cut off.
+
+The NinjaTrader bridge is unchanged since the previous Beta.
+
+Free, unsigned Windows x64 Beta. Close Beta before installing; saved settings remain separate. Start new installations in Simulation.
+
+- Installer: `FastDOM-Beta-20261102-154235-a47a1bc2-Setup-UNSIGNED.exe`
+- SHA-256: `c707fa99c8ae1c0df8edbdebe7593e639755aa1f25a5b44d62333e999d6887a2`
+- Size: 116,661,127 bytes.
+
+[Official download](https://fastdom.decoglobal.us/download) · [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/) · [Disclaimer](https://fastdom.decoglobal.us/disclaimer)
+
 ## Beta 20261101-165644-99f44760 — November 1, 2026
 
 - Schwab sign-in now waits for an already-started redirect when it takes longer than the browser action timeout. It does not click again or resubmit credentials during that wait.
