@@ -76,9 +76,9 @@ This early Beta is **unsigned**. Windows may display an unknown-publisher warnin
 
 ## Current release
 
-**Beta 20261102-154235-a47a1bc2** — November 2, 2026.
+**Beta 20261103-174246-9ba1a76f** — November 3, 2026.
 
-Options Trader can close a held spread as one net-priced order and shows expected value after costs, with an optional price thesis that answers No trade when nothing is expected to profit. Closing FastDOM now asks for confirmation while virtual stops are active. Also includes hot-button Arrange, smaller-screen charts and order-sound fixes. Clean-PC acceptance of this installer is pending.
+Secure Buy/Sell preserves target spacing when the market has passed the original targets and uses the newly supplied stop. Includes faster Flatten and its optional residual-close setting, plus the previous Options Trader, layout and sound improvements. Clean-PC acceptance of this installer is pending.
 
 See the [changelog](CHANGELOG.md), [official download](https://fastdom.decoglobal.us/download), [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/), and [disclaimer](https://fastdom.decoglobal.us/disclaimer).
 

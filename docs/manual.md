@@ -392,6 +392,7 @@ The basic sizing relationship is risk budget divided by loss per unit between en
 A chart context command can place a Risk Buy/Sell limit at the selected chart price. This differs from buying at a current quote and may remain unfilled. A staged stop is an input to the workflow; it is not by itself a live protective order.
 
 ## Secure
+Targets use the distance between the position's average entry and your new stop. If the market has already passed the nearest target, Secure shifts the whole ladder beyond the market while preserving that spacing. It does not stack all overtaken targets at the same price. Tick rounding can still merge targets whose spacing is smaller than one instrument tick.
 Secure actions apply the configured protection/target workflow to a position. They are not an assurance that the position becomes risk-free. Confirm the direction, stop reference, active target template, and actual accepted exits. Do not treat a displayed stop line as proof of broker protection.
 
 Read Order-management templates and reconciliation for how remaining percentages and resizing work. If an action is rejected because the stop, position, or account state is invalid, resolve that state rather than repeatedly pressing the button.
@@ -1117,6 +1118,46 @@ Accepted does not mean filled. After an uncertain outcome, check your broker bef
 retrying. Other brokers are not supported by this spread-close screen.
 
 
+# Trading | Flatten, exits and DOM guards
+
+## Flatten always closes
+
+Flatten is built for speed. It sends cancels for the symbol's working orders and reads
+the live position at the same time, then closes the position at market (a marketable
+limit outside regular hours) as soon as the broker has accepted the cancels — it does
+not wait for the broker to report them cancelled, which on Schwab can take another
+second or two. A cancel the broker rejects outright is shown as a FLATTEN WARNING
+before the close; the close is still sent. A few seconds after the close FastDOM
+sweeps the symbol's orders again and warns about anything still working ("after the
+close"). Check that warning at the broker; a surviving exit that fills later would
+open an opposite position.
+
+Because the close is sized from a position read taken while the cancels are in flight,
+an exit that fills in that instant can make the close over-sell and leave a small
+position on the opposite side. The post-close check always reports this ("FLATTEN
+OVER-CLOSED … you are now Short 3"). With **Configuration > General > Flatten:
+auto-close any opposite position it leaves behind** turned on, FastDOM also sends one
+market order (marketable limit outside regular hours) to close that residual and says
+so ("FLATTEN AUTO-CORRECT"). It never sends more than one correction per Flatten; if
+no usable quote is available for an after-hours correction it tells you to close the
+residual manually. Reverse, Secure and Bracket keep their stricter rule and do not send new
+orders while a cancellation is unconfirmed.
+
+## Exits that would exceed the position
+
+On Schwab, a DOM or chart sell limit (buy limit on a short) that, together with the
+bracket exits already working, would exceed the position is not sent. The message
+starts with "Not sent" and explains why: Schwab cancels the resting bracket exits when
+exits exceed the position. Move an existing target instead, or reduce or cancel an
+exit first. Plain resting limits, market orders, hot buttons and Take 1 are not
+affected.
+
+## Clicks right after a drag
+
+A left click on the DOM within half a second of releasing a drag never places an
+order; a toast says the click was ignored. Click again to place. This stops a double
+click or a bouncing mouse button from creating an order at the drop price.
+
 # Trading | Bracket placement sound
 
 ## One cue per placement
@@ -1126,7 +1167,9 @@ Regular accepted buys and sells play their placement cue from every entry surfac
 Placing a bracket or Secure ladder plays the placement cue once, on its first
 accepted order, regardless of the number of profit targets. A combined entry and
 bracket action shares that cue. Separate placement actions still sound separately.
-Rejection and execution sounds retain their existing behavior. The placement cue
+Every execution plays its own chime once per order: a rising triple for a buy fill
+(including covers and buy stops) and a falling triple for a sell fill (including
+sell stops). Rejection sounds are unchanged. The placement cue
 does not mean that every protection leg was accepted; check the status and Orders
 for incomplete protection.
 

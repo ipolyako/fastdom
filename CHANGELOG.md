@@ -1,5 +1,15 @@
 # Release notes
 
+## Beta 20261103-174246-9ba1a76f — November 3, 2026
+
+- Secure Buy/Sell keeps target spacing based on average entry and the new stop. When targets have been overtaken by the market, the ladder shifts together instead of stacking at one price.
+- Secure custom scripts carry the explicitly supplied stop through to the replacement bracket.
+- Faster Flatten cancellation handling, post-close verification, and an optional opposite-residual correction setting (off by default).
+- Includes all previous Beta features. Free, unsigned Windows x64 installer; close Beta before updating. Saved settings remain separate.
+
+Installer SHA-256: `2cd11c5caf66002d349f270926533e6a341041c52764f8cad081a50bb3cb2ef3`.
+Clean-PC and native broker acceptance of this build remain unverified.
+
 ## Beta 20261102-154235-a47a1bc2 — November 2, 2026
 
 **Options Trader**
