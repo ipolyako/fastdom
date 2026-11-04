@@ -10,8 +10,10 @@ not include NinjaTrader, a brokerage account, or a market-data subscription.
 1. Locate NinjaTrader's actual user-data folder (normally Documents\NinjaTrader 8;
    Documents may be redirected to OneDrive). Close NinjaTrader before updating
    an existing bridge. Back up the existing bridge source if present.
-2. Copy the accompanying FastDomNinjaTraderBridge.cs into bin\Custom\AddOns
-   inside that user-data folder. Do not copy the whole FastDOM installation.
+2. In FastDOM Configuration > Brokers, use Install / repair NinjaTrader bridge
+   to install the bundled source in the selected user-data folder. It preserves
+   a backup of an existing bridge. The manual alternative is to copy the bundled
+   FastDomNinjaTraderBridge.cs into bin\Custom\AddOns in that folder.
 3. Open NinjaTrader > New > NinjaScript Editor and press F5 to compile.
    Resolve compilation errors before proceeding, then restart NinjaTrader.
 4. Open http://127.0.0.1:9110/fastdom/health and verify accepted is true.

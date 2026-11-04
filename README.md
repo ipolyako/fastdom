@@ -76,9 +76,9 @@ This early Beta is **unsigned**. Windows may display an unknown-publisher warnin
 
 ## Current release
 
-**Beta 20261103-174246-9ba1a76f** — November 3, 2026.
+**Beta 20261103-185626-abd525ef** — November 3, 2026.
 
-Secure Buy/Sell preserves target spacing when the market has passed the original targets and uses the newly supplied stop. Includes faster Flatten and its optional residual-close setting, plus the previous Options Trader, layout and sound improvements. Clean-PC acceptance of this installer is pending.
+Includes NinjaTrader history-loading and startup improvements, cleanup of stale filled-order markers, and the earlier Secure Buy/Sell target-spacing fixes. NinjaTrader users should update the bundled bridge through Install / repair, compile it and restart NinjaTrader. Clean-PC and native performance acceptance remain pending.
 
 See the [changelog](CHANGELOG.md), [official download](https://fastdom.decoglobal.us/download), [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/), and [disclaimer](https://fastdom.decoglobal.us/disclaimer).
 

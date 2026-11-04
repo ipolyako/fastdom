@@ -1,5 +1,16 @@
 # Release notes
 
+## Beta 20261103-185626-abd525ef — November 3, 2026
+
+- NinjaTrader daily history uses daily-bar counts, and recent charts request the required number of bars directly.
+- Subscription initialization runs outside the shared quote-reader lock. Startup avoids a duplicate account-triggered refresh.
+- A verified filled or cancelled NinjaTrader order can retire its temporary-ID marker when the bridge returns its permanent ID.
+- Includes the earlier Secure Buy/Sell target-spacing fixes and all previous Beta features.
+- Update the bundled NinjaTrader bridge using Install / repair with NinjaTrader closed, then compile with F5 and restart NinjaTrader.
+
+Free, unsigned Windows x64 Beta. Installer SHA-256 `04034408dce4c3e38cd6b04d9ae053be5a0a822de62e0ebf261f87f477eedadb`.
+Clean-PC installation, native post-update latency and connected-screen marker removal remain pending acceptance.
+
 ## Beta 20261103-174246-9ba1a76f — November 3, 2026
 
 - Secure Buy/Sell keeps target spacing based on average entry and the new stop. When targets have been overtaken by the market, the ladder shifts together instead of stacking at one price.
