@@ -72,13 +72,13 @@ Chart AI features use your selected provider: your own installed, signed-in Code
 4. Start in **Simulation**. Fresh installs have live trading disabled.
 5. Open **More > Help** before configuring your own broker connection.
 
-This early Beta is **unsigned**. Windows may display an unknown-publisher warning or prevent installation under your security policy. Clean-machine onboarding remains under verification. Review the [known limitations](docs/known-limitations.md) before using it.
+This early Beta is **unsigned**. Windows may display an unknown-publisher warning or prevent installation under your security policy. Review the [known limitations](docs/known-limitations.md) before using it.
 
 ## Current release
 
-**Beta 20261103-185626-abd525ef** — November 3, 2026.
+**Beta 20261106-165708-d51ce8bb** — November 7, 2026 (built November 6).
 
-Includes NinjaTrader history-loading and startup improvements, cleanup of stale filled-order markers, and the earlier Secure Buy/Sell target-spacing fixes. NinjaTrader users should update the bundled bridge through Install / repair, compile it and restart NinjaTrader. Clean-PC and native performance acceptance remain pending.
+Includes named watchlists, Watch crosshair support, chart-history range improvements, risk-click stop-limit behavior, and fixes for Take 1, protection resizing and optional Flatten correction. NinjaTrader users should update the bundled bridge through Install / repair, compile with F5 and restart NinjaTrader.
 
 See the [changelog](CHANGELOG.md), [official download](https://fastdom.decoglobal.us/download), [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/), and [disclaimer](https://fastdom.decoglobal.us/disclaimer).
 

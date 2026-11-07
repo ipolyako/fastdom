@@ -1,19 +1,20 @@
 FastDOM Beta - optional NinjaTrader 8 integration
 
-The bridge source mentioned below ships with the FastDOM Beta installer in
-integrations\NinjaTrader. It is not included in this documentation repository.
-
 NinjaTrader is installed separately and must run on the same PC. Connect your
 own account/data feed with the required market-depth entitlement. FastDOM does
 not include NinjaTrader, a brokerage account, or a market-data subscription.
 
-1. Locate NinjaTrader's actual user-data folder (normally Documents\NinjaTrader 8;
-   Documents may be redirected to OneDrive). Close NinjaTrader before updating
-   an existing bridge. Back up the existing bridge source if present.
-2. In FastDOM Configuration > Brokers, use Install / repair NinjaTrader bridge
-   to install the bundled source in the selected user-data folder. It preserves
-   a backup of an existing bridge. The manual alternative is to copy the bundled
-   FastDomNinjaTraderBridge.cs into bin\Custom\AddOns in that folder.
+1. Install and open NinjaTrader 8 once, then close it. In FastDOM, open
+   Configuration > Brokers > Install / repair NinjaTrader bridge.
+   If NinjaTrader is not installed yet, you can return to this option later.
+   The optional checkbox on the FastDOM installer's final page opens the same
+   setup window. It is unchecked by default and does not start trading.
+2. Select NinjaTrader's actual user-data folder (normally Documents\NinjaTrader 8;
+   redirected Documents such as OneDrive are supported). Select Install / repair
+   bridge. FastDOM copies the bundled FastDomNinjaTraderBridge.cs into
+   bin\Custom\AddOns. An existing source file is backed up outside bin\Custom,
+   under FastDOM-Bridge-Backups. Installation does not change account settings.
+   Open bundled files provides this guide and the source for manual installation.
 3. Open NinjaTrader > New > NinjaScript Editor and press F5 to compile.
    Resolve compilation errors before proceeding, then restart NinjaTrader.
 4. Open http://127.0.0.1:9110/fastdom/health and verify accepted is true.

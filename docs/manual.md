@@ -299,7 +299,7 @@ The top bar selects the trading broker, symbol, optional NINJA MD feed, and acco
 The position list shows account holdings; the DOM's position summary concerns the current symbol. Day P/L, realized P/L, and open/unrealized P/L are different measures. They can also differ from a broker's reporting convention or update cadence. A blank value is not necessarily zero.
 
 ## Navigation
-Chart opens a separate chart. Orders displays working orders. OPT opens the options chain. More contains Watch, L2 Heat, BookMap, FootPrint, Time & Sales, Movers, Options Trader, Partner, Desk, Performance, Margin, Pulse, Trade Copier, SpotGamma, Learn, Help, and About.
+Chart opens a separate chart. Orders displays working orders. OPT opens the options chain. More contains Watch, Watchlists, L2 Heat, BookMap, FootPrint, Time & Sales, Movers, Options Trader, Partner, Desk, Performance, Margin, Pulse, Trade Copier, SpotGamma, Learn, Help, and About.
 
 The main configuration gear controls application settings. The hot-buttons gear controls actions and their keyboard assignments. Indicator gears inside a chart control the indicator's parameters, not broker configuration.
 
@@ -309,8 +309,15 @@ The status line gives a concise current message; the timestamped activity log pr
 # Workspace | Linking, Watch, watchlists, and saved layouts
 The small watchlist in the main window is a symbol list with price/change information. Use its add/remove controls and sortable headings. A chart's star adds its symbol to this watchlist. Removing a symbol from a watchlist does not cancel its orders or close its position.
 
+## Named watchlists
+Open **More > Watchlists**, enter a name, and choose **Add**. Each saved list appears in its own column with the usual symbol add/remove and price/change controls. **Pop out** opens a linked copy in a separate window: edits to its symbols also update the list in the manager. Closing the manager leaves open pop-outs running; closing the last view stops that list's quote subscriptions. Names and symbols are saved, but named pop-out windows are not automatically restored at startup.
+
+Named watchlists display quotes without collecting footprint history. Only the current DOM symbol and the main DOM watchlist are eligible for footprint accumulation. Selecting a named-list symbol into the DOM makes it eligible while it is the DOM symbol.
+
 ## Watch multi-chart window
 More > Watch opens a grid of small charts. Enter a symbol and Add, choose the timeframe/history range, and use Refresh to reload. Each tile has a symbol header and close control; drag headers to rearrange tiles. The counter indicates current tiles and the supported capacity. Watch is a scanning layout, not proof that every symbol has authorized historical data.
+
+Move the pointer over a tile's plot to see horizontal and vertical crosshair lines, with the hovered price on the right axis and time along the bottom. These labels describe the pointer location, not the current executable quote.
 
 If all tiles show authentication unavailable, troubleshoot the shared history/data connection first. If only one tile fails, check that symbol's format, provider coverage, and timeframe. Changing tile order does not change the main trading account.
 
@@ -389,7 +396,7 @@ The basic sizing relationship is risk budget divided by loss per unit between en
 4. Choose the appropriate Risk action. The STP variants and stacked-target variants are separate configured buttons; inspect their scripts rather than inferring all differences from the abbreviation.
 5. After a fill, verify the actual position, stop coverage, and target quantities against broker state.
 
-A chart context command can place a Risk Buy/Sell limit at the selected chart price. This differs from buying at a current quote and may remain unfilled. A staged stop is an input to the workflow; it is not by itself a live protective order.
+A chart context command places a Risk Buy/Sell entry at the selected chart price. A buy above the current ask or a sell below the current bid uses a stop-limit entry, with trigger and limit at the selected price; the other side uses a limit entry. The menu identifies the intended entry type, and submission rechecks the current executable quote. A stop-limit may trigger without filling if the market moves past its limit. A staged protective stop is an input to the workflow; it is not by itself a live protective order.
 
 ## Secure
 Targets use the distance between the position's average entry and your new stop. If the market has already passed the nearest target, Secure shifts the whole ladder beyond the market while preserving that spacing. It does not stack all overtaken targets at the same price. Tick rounding can still merge targets whose spacing is smaller than one instrument tick.
@@ -454,6 +461,8 @@ Resize the chart by dragging any window edge or corner. The minimum is 640 × 52
 
 ## Top toolbar
 The symbol box changes the instrument. Star adds it to the main watchlist. Chain-link follows the DOM symbol. The timeframe/range selector controls candle aggregation and requested history. Refresh reloads data. Z− shows more candles; Z+ shows fewer, larger candles; reset returns to the default latest view.
+
+For minute/hour charts, the selected history span bounds the displayed candles, including cached history and live updates. A 5m · 3D selection means five-minute candles over three calendar days, not a fixed quota of 864 candles. Weekends and closed sessions reduce the count. The current NinjaTrader bridge requests that selected calendar span without adding older sessions; update the bridge, compile it in NinjaTrader and restart NinjaTrader to activate this behavior. Provider delays and missing history can still affect loading.
 
 Configs contains display/session settings such as Extended, extended-hours background, and Show Trades. Extended affects included history; Ext BG shades the extended-session background. Show Trades marks supported closed/standalone trades for the symbol with realized P/L. Do not confuse this with a live order acknowledgment.
 
@@ -812,7 +821,9 @@ When comparing with Footprint, align the aggregation interval and session. The t
 ## Movers
 More > Movers presents the available mover/universe data and offers Refresh. Treat the displayed ranking as a screen of the supplied universe, not a complete scan of every tradable security. Confirm symbol, quote freshness, volume/liquidity, and the reason a candidate is listed before opening a chart.
 
-The selected broker's native discovery APIs are tried first: Schwab equity movers or Alpaca gainers, losers and most-actives. If unavailable, empty or unsuccessful, the scanner uses its configured fallback and displays the source and reason. NINJA MD changes quote delivery, not the trading account or primary broker discovery source. Yahoo ranked screens have limited coverage. Optional external providers require their own configuration; FastDOM does not create subscriptions for you.
+Top Gainers, Top Losers and Most Active try the selected broker's native ranked lists first, with configured discovery as fallback. Momentum Scan independently uses broad discovery: a configured Massive snapshot, the U.S. listed-symbol directory with bulk quotes, then configured FMP or Yahoo screens if needed. A nonempty native ranked list never bypasses Momentum Scan's broad discovery. The status identifies both sources and their symbol counts; directory scans may use a five-minute cache and partial coverage is disclosed. NINJA MD changes quote delivery, not the trading account or primary broker discovery source. Yahoo ranked screens have limited coverage. Optional external providers require their own configuration; FastDOM does not create subscriptions for you.
+
+Momentum Scan also supplements broad discovery with free public Stock Analysis, TradingView and Finviz gainers snapshots, without API keys. Stock Analysis and TradingView supply premarket pages; TradingView supplies an after-hours page when rows are available. Finviz contributes regular-session snapshots. Public pages have limited coverage and unknown delay, use a five-minute cache, and can be unavailable or change format. Source counts and failures appear in status; the Source column tooltip includes the session and fetch time. Results appear as sources finish; a slow broad scan or ranked list does not hide completed public results. Each broad/ranked source wait is bounded to three minutes; successful rows remain available if another source times out. Duplicate symbols retain the primary discovery row intact, replacing a public duplicate when the primary result arrives. Public data is for discovery, not execution quotes. Missing extended-hours volume is not replaced with regular-session volume.
 
 Momentum Scan replaces FAST < $30. Enter Min price and Max price, then Apply; defaults are $1–$30. Bounds are inclusive and positive sub-dollar values are allowed. Additional filters are at least +5% change, 100K shares, $500K dollar volume, and no more than 2% quoted spread when available. Missing spread is not a pass on liquidity; unknown spreads remain included. Missing volume excludes a candidate. Apply filters the available discovery rows, not the entire market. Refresh retains the range while the window stays open; reopening restores the defaults. Invalid input leaves the last valid results in place. Selecting a row loads a symbol and never places an order.
 
@@ -1120,17 +1131,23 @@ retrying. Other brokers are not supported by this spread-close screen.
 
 # Trading | Flatten, exits and DOM guards
 
-## Flatten always closes
+## Flatten execution and verification
 
 Flatten is built for speed. It sends cancels for the symbol's working orders and reads
 the live position at the same time, then closes the position at market (a marketable
-limit outside regular hours) as soon as the broker has accepted the cancels — it does
-not wait for the broker to report them cancelled, which on Schwab can take another
-second or two. A cancel the broker rejects outright is shown as a FLATTEN WARNING
+limit outside regular hours). Schwab waits up to five seconds for broker-confirmed
+cancellations because a cancellation acknowledgement can leave shares reserved by
+the old exits. It then refreshes the position before sizing the close when exits were
+present. Other brokers retain the acknowledgement-based fast path. A cancel the
+broker rejects outright or cannot confirm is shown as a FLATTEN WARNING
 before the close; the close is still sent. A few seconds after the close FastDOM
 sweeps the symbol's orders again and warns about anything still working ("after the
 close"). Check that warning at the broker; a surviving exit that fills later would
 open an opposite position.
+
+A submitted or accepted close is not a confirmed fill. A same-direction position
+still present at the post-close check is reported as FLATTEN INCOMPLETE; inspect the
+close order and position. FastDOM does not blindly submit a duplicate close.
 
 Because the close is sized from a position read taken while the cancels are in flight,
 an exit that fills in that instant can make the close over-sell and leave a small
@@ -1138,7 +1155,11 @@ position on the opposite side. The post-close check always reports this ("FLATTE
 OVER-CLOSED … you are now Short 3"). With **Configuration > General > Flatten:
 auto-close any opposite position it leaves behind** turned on, FastDOM also sends one
 market order (marketable limit outside regular hours) to close that residual and says
-so ("FLATTEN AUTO-CORRECT"). It never sends more than one correction per Flatten; if
+so ("FLATTEN AUTO-CORRECT"). Correction requires broker confirmation that the original
+close is terminal and the other orders are cleared, followed by a fresh position read.
+If the close is still working, partially filled, replaced, or cannot be verified,
+FastDOM withholds correction and tells you to check the position and orders at the broker.
+It never sends more than one correction per Flatten; if
 no usable quote is available for an after-hours correction it tells you to close the
 residual manually. Reverse, Secure and Bracket keep their stricter rule and do not send new
 orders while a cancellation is unconfirmed.

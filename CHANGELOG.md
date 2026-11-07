@@ -1,5 +1,15 @@
 # Release notes
 
+## Beta 20261106-165708-d51ce8bb — published November 7, 2026
+
+Includes named watchlists, Watch crosshair support, chart-history range improvements, risk-click stop-limit behavior, and fixes for Take 1, protection resizing and optional Flatten correction. NinjaTrader users should update the bundled bridge through Install / repair, compile with F5 and restart NinjaTrader.
+
+- Optional Flatten correction verifies that the original close has completed and obtains a fresh position before sizing a correction.
+- Take 1 coordinates with concurrent Schwab order replacements. Protection resizing accounts for pending exits.
+- Updated help covers named watchlists, Watch crosshair, risk-click controls and NinjaTrader history/bridge setup.
+
+Free, unsigned Windows x64 Beta. Installer SHA-256 `46a63f354a1e25d33b4b49a11aa7a839dc046c3a301da83e65477882da2061a9`.
+
 ## Beta 20261103-185626-abd525ef — November 3, 2026
 
 - NinjaTrader daily history uses daily-bar counts, and recent charts request the required number of bars directly.
@@ -329,7 +339,7 @@ Installer SHA-256:
 139fd7d0f529af571694689f331610a307582f8a221b7dd167af17f7fe65f053
 ```
 
-Download and checksum are published on the [official download page](https://fastdom.decoglobal.us/download). The installer is unsigned. Clean-machine onboarding remains under verification. Existing saved settings are preserved.
+Download and checksum are published on the [official download page](https://fastdom.decoglobal.us/download). The installer is unsigned. Existing saved settings are preserved.
 
 ## Beta 20261026-004726-eea7c609 — October 26, 2026
 
@@ -341,7 +351,7 @@ Installer SHA-256:
 a24944c390864f3a3fa78f817c37e42e9967098e0273518fb6026136a4f5c54d
 ```
 
-Download and checksum are published on the [official download page](https://fastdom.decoglobal.us/download). The installer is unsigned. Clean-machine onboarding remains under verification. Newer training lessons can show display improvements not yet in this public installer; their build notes identify that distinction.
+Download and checksum are published on the [official download page](https://fastdom.decoglobal.us/download). The installer is unsigned. Newer training lessons can show display improvements not yet in this public installer; their build notes identify that distinction.
 
 ## Beta 20261025-150447-934ac48b — October 25, 2026
 
