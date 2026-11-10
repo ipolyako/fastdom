@@ -76,9 +76,9 @@ This early Beta is **unsigned**. Windows may display an unknown-publisher warnin
 
 ## Current release
 
-**Beta 20261106-165708-d51ce8bb** — November 7, 2026 (built November 6).
+**Beta 20261110-111434-93c11bce** — November 10, 2026.
 
-Includes named watchlists, Watch crosshair support, chart-history range improvements, risk-click stop-limit behavior, and fixes for Take 1, protection resizing and optional Flatten correction. NinjaTrader users should update the bundled bridge through Install / repair, compile with F5 and restart NinjaTrader.
+Adds the Earnings view (More > Earnings) that merges the Nasdaq, Finviz and Stock Analysis calendars with report timing, estimates, source agreement and a market-cap band filter. The Watchlists manager now shows symbol and company name without streaming quotes; pop-outs show last price and change. Watch charts gain a day-change dot beside the pin, the chart position line shows live P/L and entry pills again, Schwab streamer reconnect storms are prevented, identical history requests share one provider call, and the Watch layout saves reliably. Strategy Center is not included in this Beta.
 
 See the [changelog](CHANGELOG.md), [official download](https://fastdom.decoglobal.us/download), [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/), and [disclaimer](https://fastdom.decoglobal.us/disclaimer).
 

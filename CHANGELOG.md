@@ -1,5 +1,18 @@
 # Release notes
 
+## Beta 20261110-111434-93c11bce — published November 10, 2026
+
+Adds the Earnings view (More > Earnings) that merges the Nasdaq, Finviz and Stock Analysis calendars with report timing, estimates, source agreement and a market-cap band filter. The Watchlists manager now shows symbol and company name without streaming quotes; pop-outs show last price and change. Watch charts gain a day-change dot beside the pin, the chart position line shows live P/L and entry pills again, Schwab streamer reconnect storms are prevented, identical history requests share one provider call, and the Watch layout saves reliably. Strategy Center is not included in this Beta.
+
+- More > Earnings: one US trading day at a time merged from three public calendars; notes flag single-source listings and timing or date disagreements; filters for text, timing, market-cap band (Small, Mid, Large, Mega), watchlist symbols and two-or-more sources.
+- More > Watchlists: lists capture symbols and company names and hold no quote subscriptions; Pop out streams last price and change while open. Company names are looked up once per list and saved with it.
+- Watch: a green/red dot beside each chart's pin shows whether the last price is above or below the previous close; gray when the quote carries no previous close. Layout saving no longer fails on unusual window bounds.
+- Charts: live P/L and entry pills are back on the position line. Identical in-flight history requests share one provider call.
+- Schwab: streamer connects are cooled down when no streamer URL is available and connect storms no longer block broker switches.
+- Strategy Center (ORB deployments with automatic execution) stays in the Developer edition for now; it is absent from this Beta's menu and help.
+
+Free, unsigned Windows x64 Beta. Installer SHA-256 `27fa0c3d67066bc0b032c76ca73b580abc255be377c9a408d2c57a029d550c91`.
+
 ## Beta 20261106-165708-d51ce8bb — published November 7, 2026
 
 Includes named watchlists, Watch crosshair support, chart-history range improvements, risk-click stop-limit behavior, and fixes for Take 1, protection resizing and optional Flatten correction. NinjaTrader users should update the bundled bridge through Install / repair, compile with F5 and restart NinjaTrader.
