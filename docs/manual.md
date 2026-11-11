@@ -766,7 +766,7 @@ These controls have different scopes and consequences. Read the configured hot-b
 
 ## Cancel
 
-Cancel Sym requests cancellation of working orders for the current symbol. Cancel All has broader scope according to the invoking control/account context. Cancellation does not close an existing position, and removing a protective stop can leave a position unprotected. A cancel request may race with a fill. Verify the final broker state.
+Cancel Sym requests cancellation of working orders for the current symbol. Cancel All has broader scope according to the invoking control/account context. Cancel All is not part of the standard hot-button set: installations made before November 2, 2026 had it, and an untouched one is removed when a newer build loads the profile. A Cancel All button you relabelled, scripted or bound to a key is kept, and you can add one yourself from the hot-button templates. Cancellation does not close an existing position, and removing a protective stop can leave a position unprotected. A cancel request may race with a fill. Verify the final broker state.
 
 
 

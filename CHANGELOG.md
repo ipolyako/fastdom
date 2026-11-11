@@ -1,17 +1,18 @@
 # Release notes
 
-## Beta 20261111-152041-5b5a1a06 — published November 11, 2026
+## Beta 20261111-161323-c5e93b5a — published November 11, 2026
 
-Options Trader gains Find trades: the AI states its own price view and plans a search, FastDOM scans the chain for defined-risk structures, and the AI scores the list. A pick is loaded into the ticket only when it earns an AI score of 70 or better and an expected gain of at least 10% of its maximum loss; otherwise FastDOM says there is no trade worth taking. Closing an existing option spread now shows the opening price and estimated P/L, uses a clearer confirmation, and lets you close several positions from the same window. Charts add Keltner Channels, the 3/10 oscillator and an ATR trailing stop line. Strategy Center is not included in this Beta.
+Options Trader gains Find trades: the AI states its own price view and plans a search, FastDOM scans the chain for defined-risk structures, and the AI scores the list. A pick is loaded into the ticket only when it earns an AI score of 70 or better and an expected gain of at least 10% of its maximum loss; otherwise FastDOM says there is no trade worth taking. Closing an existing option spread now shows the opening price and estimated P/L, uses a clearer confirmation, and lets you close several positions from the same window. Charts add Keltner Channels, the 3/10 oscillator and an ATR trailing stop line. Installations made before November 2 no longer show the retired Cancel All hot button after updating. Strategy Center is not included in this Beta.
 
 - Options Trader, Find trades: one button runs three steps (AI plan, chain scan ranked by expected return under the AI's price view, AI scoring). A failed run stays visible in amber and says the ticket still holds the default spread, not a suggestion. A brief AI sign-in collision is retried once.
 - Options Trader, setup assessment: the AI scores a setup from market evidence with a weighted rubric and states its own price view; the trader's thesis input is removed. Diagonals can choose the back-month strike on either side. FastDOM keeps a track record of AI picks.
 - Close existing spread: shows the net opening price and estimated P/L, a structured confirmation, and holds only the contracts already sent, so other positions can be closed from the same window.
 - Charts: Keltner Channels (20-period EMA with ATR bands), the 3/10 oscillator in the MACD pane with bars drawn as the fast line from zero, and an ATR trailing stop line (close minus or plus 3 average true ranges, 10 bars by default). All three are display only and place no orders.
 - Background work is quieter: failed polls back off and scheduled work rests when markets are closed.
+- Hot buttons: the Cancel All button that older installations kept from the original button set is removed on update when it is unchanged; a Cancel All you customised or added yourself stays, and Cancel Sym is unaffected.
 - Strategy Center stays in the Developer edition; it is absent from this Beta's menu and help.
 
-Free, unsigned Windows x64 Beta. Installer SHA-256 `d2fe4ef3b461a30a1e8e8ae6df2ee299375c63eb879eed003d3a741a823cbf79`.
+Free, unsigned Windows x64 Beta. Installer SHA-256 `ecc76bca5c76bcaef1580711a32969d57f5762f82cd980f9d0885cdbd2a4d91d`.
 
 ## Beta 20261110-111434-93c11bce — published November 10, 2026
 

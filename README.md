@@ -76,9 +76,9 @@ This early Beta is **unsigned**. Windows may display an unknown-publisher warnin
 
 ## Current release
 
-**Beta 20261111-152041-5b5a1a06** — November 11, 2026.
+**Beta 20261111-161323-c5e93b5a** — November 11, 2026.
 
-Options Trader gains Find trades: the AI states its own price view and plans a search, FastDOM scans the chain for defined-risk structures, and the AI scores the list. A pick is loaded into the ticket only when it earns an AI score of 70 or better and an expected gain of at least 10% of its maximum loss; otherwise FastDOM says there is no trade worth taking. Closing an existing option spread now shows the opening price and estimated P/L, uses a clearer confirmation, and lets you close several positions from the same window. Charts add Keltner Channels, the 3/10 oscillator and an ATR trailing stop line. Strategy Center is not included in this Beta.
+Options Trader gains Find trades: the AI states its own price view and plans a search, FastDOM scans the chain for defined-risk structures, and the AI scores the list. A pick is loaded into the ticket only when it earns an AI score of 70 or better and an expected gain of at least 10% of its maximum loss; otherwise FastDOM says there is no trade worth taking. Closing an existing option spread now shows the opening price and estimated P/L, uses a clearer confirmation, and lets you close several positions from the same window. Charts add Keltner Channels, the 3/10 oscillator and an ATR trailing stop line. Installations made before November 2 no longer show the retired Cancel All hot button after updating. Strategy Center is not included in this Beta.
 
 See the [changelog](CHANGELOG.md), [official download](https://fastdom.decoglobal.us/download), [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/), and [disclaimer](https://fastdom.decoglobal.us/disclaimer).
 
