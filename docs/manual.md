@@ -486,7 +486,7 @@ Switching provider does not change what the features are allowed to do. Both run
 
 3. Return to FastDOM and choose Check again (or Validate installation). FastDOM finds claude.exe on PATH, next to an npm installation, or in the native installer's location. If it was just installed and is still missing, restart FastDOM.
 
-4. Claude model choices are sonnet, opus, and haiku (each uses the current model of that tier), plus the model set in your Claude settings if you have one.
+4. Claude model choices are sonnet, opus, haiku, and fable (each uses the current model of that tier), plus the model set in your Claude settings if you have one.
 
 
 
@@ -1064,6 +1064,18 @@ The center is a moving average and the envelope reflects dispersion over the con
 
 
 
+## ATR Trailing Stop
+
+A volatility trailing stop drawn on the price chart. While the side is long the line sits under price at the close minus 3 average true ranges (10-bar simple average) and only ever rises; when a bar closes below it the side flips, and the line moves above price at the close plus 3 average true ranges and only ever falls until a close above it flips back. The legend shows the settings, the current side and the stop price, for example STOP 10,3 LONG 7652.18. The gear changes period, multiplier, color and line. Turn it on under Indicators. The defaults are the values that best reproduced the trailing stop on one Linda Raschke 2-minute S&P chart (within about 0.7 points on average, read from a screenshot); she does not publish her formula, so treat it as a close copy. It is a display line only: FastDOM places, moves and cancels no orders from it, and it is not connected to synthetic stops or protection.
+
+
+
+## Keltner Channels
+
+The center is an exponential moving average of the close and the bands sit a multiple of the average true range away, so their width follows how far bars travel (gaps included), not how scattered the closes are as Bollinger Bands do. The default is 20 bars and 2.5 ranges, the setting Linda Raschke uses on her charts; the gear changes period, multiplier, color and line. Turn it on under Indicators. A close outside a band shows an unusually stretched move; it does not say whether the move continues or reverses.
+
+
+
 ## ATR gadget
 
 ATR measures typical true range, including gaps, over its input series. Enabling ATR exposes a movable timeframe picker. FastDOM projects ATR High/Low from yesterday's close for the selected timeframe. These are volatility-based distances, not guaranteed daily boundaries. A daily ATR and a five-minute ATR measure different horizons. Read the selected timeframe and source before comparing levels.
@@ -1173,6 +1185,12 @@ These indicators summarize momentum or market condition. Their panels and traffi
 ## MACD
 
 MACD compares fast and slow exponential averages. Its signal line smooths that difference; the histogram shows their separation. Standard defaults are 12/26/9 and the gear changes supported periods/style. A positive MACD is not the same statement as a rising histogram. Crossovers in a sideways market can repeatedly reverse.
+
+
+
+## 3/10 Oscillator (LBR)
+
+Linda Raschke's 3/10 oscillator, drawn in the MACD pane in place of MACD (turning one on turns the other off). The fast line is the 3-bar simple average of the close minus the 10-bar simple average; the slow line is the 16-bar simple average of the fast line; the bars show the fast line's own height from zero, as on her charts. The periods are fixed. In a steady trend the bars stay on one side of zero while the fast line keeps dipping to the slow line; that combination, with price giving little back, is what she calls a creeper trend. Read it for shape: the slow line's direction describes the trend, and a fast line that pulls back toward a rising slow line and turns up again is the pattern she calls an Anti. FastDOM draws the lines only; it marks no setups and gives no buy or sell signal from them. The pane label says which side of zero the fast line is on and whether it is above or below the slow line.
 
 
 
@@ -1390,7 +1408,7 @@ More > Options Trader builds a multi-leg option spread and sends it as one order
 
 2. Choose the STRATEGY, then Call or Put where it applies, and Buy or Sell. Buying usually means paying a net debit; selling usually means receiving a net credit.
 
-3. Set the center STRIKE, the WIDTH and, for condors and strangles, the GAP with the − and + buttons.
+3. Set the center STRIKE, the WIDTH and, for condors and strangles, the GAP with the − and + buttons. For a diagonal, choose the BACK STRIKE directly: it may sit on either side of the front strike. Below the front strike (calls) or above it (puts) is the conventional in-the-money diagonal; the other side is the out-of-the-money orientation, and the strategy name says which you have built.
 
 4. Check the legs table: action, expiration, strike, type, bid, ask, mid, and delta for each leg.
 
@@ -1404,7 +1422,7 @@ NET PRICE is always entered as a positive number per spread. Mid prices every le
 
 
 
-AT EXPIRATION shows max profit, max loss, breakevens, a payoff chart, and a model profit estimate for the entered price and quantity. A max loss of UNLIMITED means the spread has undefined risk (for example, a short straddle or strangle). Calendars and diagonals depend on the back month's remaining value, so only their debit max loss is stated. The profit estimate is a lognormal model based on the legs' implied volatility, without drift. It is a model estimate, not a forecast or a success rate. It is shown as n/a when two expirations are involved or no implied volatility is available.
+AT EXPIRATION shows max profit, max loss, breakevens, a payoff chart, and a model profit estimate for the entered price and quantity. A max loss of UNLIMITED means the spread has undefined risk (for example, a short straddle or strangle). Calendars and diagonals depend on the back month's remaining value, so on the ticket only their maximum loss is stated: the price paid, plus the gap between the strikes when the bought back-month strike is further out of the money than the strike sold (a call bought above, or a put bought below, it). In a Find trades list, a calendar's or diagonal's MAX P, PROB and AI EV are model estimates at the front expiration that assume the back-month option keeps its current implied volatility, so they carry more model risk than the figures for single-expiration spreads. The profit estimate is a lognormal model based on the legs' implied volatility, without drift. It is a model estimate, not a forecast or a success rate. It is shown as n/a when two expirations are involved or no implied volatility is available.
 
 
 
@@ -1452,11 +1470,17 @@ The SCORE describes the shape of the payoff, not an advantage. At market prices 
 
 
 
-To look for an advantage, enter a THESIS: the price you expect at the selected expiration, and optionally ± how unsure you are as one price standard deviation in dollars (0 uses the market's own uncertainty). The scan then lists only spreads expected to profit after costs if your thesis is right, sorted by expected return on risk after round-trip fees. THESIS EV is that expected profit per spread. P THESIS is the chance of any profit after costs if you are right. AT TGT is the result if the price ends exactly at your target, and IF FLAT is the result if the price never moves. If nothing is expected to profit, the scan says No trade. A thesis at today's price with market uncertainty is always No trade. Negative targets, ranges and fees are rejected. THESIS EV is only as good as your thesis: FastDOM does not know whether it is right, and the figures assume the spread is held to expiration.
+The scan does not ask for a price target. IF FLAT is each spread's result if the price never moves, and MKT EV is its value under the market's own implied distribution after fees. Direction is judged by the AI assessment from market evidence, not from a number you enter. Negative fees are rejected.
 
 
 
-AI score list and AI Score (AI SETUP REVIEW) ask the optional AI to grade the listed combinations or the current spread. The AI sees only the spread's data, not your account. Its score is advice only: it never sends, blocks, or sizes an order. It is marked out of date when the legs, price, or quantity change. MIN AI SCORE hides rows below it and rows the AI did not score. These buttons are hidden in builds without the AI assistant. A high score is not a calibrated success rate.
+**AI track record…** lists every price view and pick the Options Trader AI has stated, from Find trades and from Refresh assessment, and scores each one after its expiration has passed: whether the underlying closed inside the AI's range, whether its direction was right, and what the pick would have made for one spread at the price shown, held to expiration, before fees. It records what the AI said, not what you traded, so every figure is hypothetical; pressing a button twice on the same view counts once. Calendars and diagonals are scored on the price view only, because the back-month option's value at the front expiration is not known afterwards. The header gives the totals. A handful of results proves nothing either way; the record becomes meaningful over dozens of resolved views. The record is a file in your FastDOM user-data folder and is never sent anywhere.
+
+**IV rank.** Once each trading day, between 10:00 and 16:00 New York time while Schwab is connected, FastDOM stores one implied-volatility reading for every symbol in your named watchlists: the at-the-money implied volatility of the expiration closest to 30 days. A symbol you assess or search with Find trades gets a reading that day too. When a symbol has at least 20 daily readings, the assessment evidence includes its IV rank (where today's reading sits between the lowest and highest stored) and IV percentile (the share of stored readings at or below today's), over up to one year of readings. Before that, Gaps and limits says how many readings exist. The history starts the day a symbol is first read; there is no way to backfill it.
+
+**Find trades** needs only the SYMBOL. It gathers the market evidence described below, and the AI states its own price view and which structures and which expirations within 45 days are worth searching (up to six structure-and-expiration pairs). It can name any defined-risk structure FastDOM builds: call or put debit spreads, call or put credit spreads, iron condors and iron butterflies sold for a credit or bought for a debit, long butterflies and condors, long straddles and strangles, and long calendars and diagonals with a front and a back expiration. Naked short options, including short straddles and strangles, are never offered. It chooses expirations deliberately against earnings and scheduled events. The AI never picks strikes: FastDOM scans every strike combination for those structures and expirations, keeps only spreads expected to profit after costs under the AI's price view, and lists the best few of each (ids F1, F2, …) with the SETUP column showing structure and expiration and AI EV showing the expected profit per spread under that view. The AI then scores the list with the same rubric, and the candidate it shortlists is loaded into the ticket for you to review only if it clears the pick bar: an AI score of 70 or better and, under the AI's price view, an expected profit of at least 10% of the maximum loss. A score in the 60s means the setup is not obviously bad, which is not a reason to trade it; such candidates stay in the list but the status says "No trade worth taking" and names the best one. A cleared candidate is loaded; press Refresh assessment for its full breakdown. If the evidence supports nothing, the status says No trade and why, and nothing is loaded. The existing strategy, strike, Scan and AI score list controls are unchanged and still work by hand. Find trades takes a few minutes, never sends an order, and its picks are only as good as the AI's price view: AI EV is an estimate under that view, not an edge. If the search fails, the status line under the list turns amber and says "Find trades failed; no recommendation" with the reason; the spread still shown in the ticket is then the default for the symbol (nearest strike, first expiration), not a suggestion. A result always appears as rows in the SCAN & SCORE list with the pick marked. When several Claude Code processes share one sign-in they can collide while renewing it; FastDOM repeats the AI call once after a few seconds before reporting that as a failure.
+
+AI score list and Refresh assessment (AI SETUP ASSESSMENT) ask the optional AI to assess the listed combinations or the current spread under current market conditions. Before asking, FastDOM gathers a market evidence pack and hands it to the AI with the spread's own data, never your account: price action (5/20/60-day change, position against the 20- and 50-day averages, 60-day range, average true range), volatility (20- and 60-day realized volatility, the legs' implied volatility against it, and the implied one-standard-deviation move to expiry with each breakeven's distance in standard deviations), market regime (SPY trend and the VIX level and its six-month percentile), the next expected earnings date and whether it falls inside the trade, scheduled major US releases inside the trade (Fed rate decision and minutes, CPI, PCE, payrolls, PPI, GDP, retail sales, ISM, jobless claims and similar) and recent headlines. Sources are your broker's daily history (Yahoo's public chart if unavailable), Yahoo for SPY and VIX, and Nasdaq's public earnings-date and economic calendars. Anything that could not be read is listed under Gaps and limits; it is never guessed. The AI scores five components from that evidence and FastDOM computes the weighted result: Direction & price action 30%, Volatility fit 20%, Event risk 15%, Pricing & liquidity 20%, Time & theta 15%. The AI also states its own price view from the evidence: bullish, bearish or neutral, the range it considers most likely at the last expiration, and its confidence, and it scores Direction by how well your spread fits that view. You do not enter a target. Each component shows its score, a bar and a short reason; below them are the summary, strengths and risks, a suggestion, what would change the assessment, the evidence items the AI cited, and gaps. With Web research checked (the default), the selected AI CLI may also search the web for central-bank policy and current developments inside the trade's life and must list the pages it used; this takes longer. Unchecked, it uses only the gathered evidence. Changing the Web research box marks the assessment out of date. The economic calendar is usually complete for about two weeks ahead; earnings dates are estimates until the company confirms them. Its score is advisory only: it never sends, blocks, or sizes an order and is not a prediction. It is marked out of date when the legs, price, or quantity change. MIN AI SCORE hides rows below it and rows the AI did not score. These buttons are hidden in builds without the AI assistant. A high score is not a calibrated success rate.
 
 
 
@@ -2266,6 +2290,10 @@ Set Spreads, refresh quotes, choose the combined net debit or credit limit and
 Day/GTC, then review the complete ticket. This sends one Schwab multi-leg closing
 
 order; no individual-leg fallback is used. The displayed total excludes fees.
+
+The ticket and the confirmation state what the close locks in: the net price the spread was opened at (from the broker's average fill prices) and the estimated P/L at the entered limit, before fees. If the broker reports no average cost for a leg, the line says the estimate is unavailable; it never blocks the close.
+
+After a close is sent, the window holds the contracts in that order: it will not quote or review them again, and says so, because a second close for the same contracts could double the order. Other positions in the list can still be closed from the same window. Selecting different contracts clears the limit price, so refresh quotes to price the new spread and check whether it is a debit or a credit. To close the same contracts again (for example after cancelling the first order at the broker), check Orders, then close and reopen the window.
 
 
 

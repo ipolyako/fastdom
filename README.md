@@ -76,9 +76,9 @@ This early Beta is **unsigned**. Windows may display an unknown-publisher warnin
 
 ## Current release
 
-**Beta 20261110-111434-93c11bce** — November 10, 2026.
+**Beta 20261111-152041-5b5a1a06** — November 11, 2026.
 
-Adds the Earnings view (More > Earnings) that merges the Nasdaq, Finviz and Stock Analysis calendars with report timing, estimates, source agreement and a market-cap band filter. The Watchlists manager now shows symbol and company name without streaming quotes; pop-outs show last price and change. Watch charts gain a day-change dot beside the pin, the chart position line shows live P/L and entry pills again, Schwab streamer reconnect storms are prevented, identical history requests share one provider call, and the Watch layout saves reliably. Strategy Center is not included in this Beta.
+Options Trader gains Find trades: the AI states its own price view and plans a search, FastDOM scans the chain for defined-risk structures, and the AI scores the list. A pick is loaded into the ticket only when it earns an AI score of 70 or better and an expected gain of at least 10% of its maximum loss; otherwise FastDOM says there is no trade worth taking. Closing an existing option spread now shows the opening price and estimated P/L, uses a clearer confirmation, and lets you close several positions from the same window. Charts add Keltner Channels, the 3/10 oscillator and an ATR trailing stop line. Strategy Center is not included in this Beta.
 
 See the [changelog](CHANGELOG.md), [official download](https://fastdom.decoglobal.us/download), [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/), and [disclaimer](https://fastdom.decoglobal.us/disclaimer).
 
