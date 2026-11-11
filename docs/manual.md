@@ -806,6 +806,10 @@ Risk Buy, Risk Buy STP, Risk Sell, Risk Sell STP, Secure Buy, and Secure Sell ar
 
 Risk-sized scripts require a valid positive risk budget, a valid stop and an executable-side quote. Missing or invalid inputs reject the action; they do not fall back to the selected share size. A zero-sized risk entry stops subsequent commands. Saved custom scripts are preserved on update: inspect the configured script and supply an explicit STOP when required.
 
+The standard Risk Buy, Risk Sell, Risk Buy Simple and Risk Sell Simple scripts read `RISK:$RISK`. `$RISK` is the amount in the Risk box, in the same way `$STOP` is the stop you supply. Sizing is risk divided by the distance between entry and stop: with $1,000 in the Risk box, an entry at 62.60 and a stop at 62.35, the order is 4,000 shares, limited by available funds. If the Risk box is empty, a `RISK:$RISK` script sends nothing and asks for an amount. Custom buttons may use `RISK:$RISK` too; a literal amount such as `RISK:$300` in a custom button is used exactly as written. Installations made before this change showed `RISK:$300` in the standard buttons although the Risk box decided the amount; an untouched `$300` is rewritten to `$RISK` on update.
+
+Outside regular trading hours a script's market entry (`MKT`) on a stock is sent as a limit 10 cents through the bid for sells or the ask for buys, because extended sessions accept limit orders only. Without a bid/ask quote nothing is sent. Futures and regular hours are unchanged.
+
 
 
 The basic sizing relationship is risk budget divided by loss per unit between entry and stop, including the instrument's point/tick value where appropriate. A smaller stop distance can produce a much larger size. Price movement, gaps, fees, and slippage mean actual loss can exceed the nominal budget.
