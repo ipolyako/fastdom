@@ -1,19 +1,21 @@
 # Release notes
 
-## Beta 20261112-133159-dd226fee — published November 12, 2026
+## Beta 20261112-143312-3d71c7fa — published November 12, 2026
 
-Movers gains an ORB SCAN tab: a whole-market screen for opening-range candidates by gap, daily range and premarket dollar volume, with thresholds you can change and a line saying where the data comes from and how fresh it is. A stop on the chart can be converted to an AI trailing stop: the AI reviews price action about every 45 seconds, sets how tight to trail, and only ever moves the stop toward price. The main window can be zoomed from 70% to 130% with the two buttons beside More or Ctrl + and Ctrl −. Charts accept weekly timeframes. Configuration > General can reset selected parts of your setup to defaults, with a backup first. This build also fixes a moved stop leaving a second, dead marker at its old price, and Add Row in Chart Timeframes duplicating a row. Strategy Center is not included in this Beta.
+Movers gains an ORB SCAN tab: a whole-market screen for opening-range candidates by gap, daily range and premarket dollar volume, with thresholds you can change and a line saying where the data comes from and how fresh it is. A stop on the chart can be converted to an AI trailing stop: the AI reviews price action about every 45 seconds, sets how tight to trail, and only ever moves the stop toward price. The main window can be zoomed from 70% to 130% with the Zoom buttons on the status line or Ctrl + and Ctrl −. Charts accept weekly timeframes. Configuration > General can reset selected parts of your setup to defaults, with a backup first. This build also fixes a moved stop leaving a second, dead marker at its old price, and Add Row in Chart Timeframes duplicating a row. Help has a Contact support topic with the support address. Strategy Center is not included in this Beta.
 
 - Movers, ORB SCAN: screens the whole market, not only your watchlist, for stocks with a gap of at least 0.3 ATR, a daily range of at least 3% of price and at least $500M traded before the open. Only stocks that meet all three are listed. The three values can be changed and are saved. The tab shows the data source and whether each row is delayed (market-wide data is about 15 minutes behind) or from your broker. It is a candidate list, not a signal.
 - Chart, Convert to AI trailing stop: right-click a working stop. No distance to enter; the selected AI provider reviews recent bars, ATR, averages and VWAP about every 45 seconds and sets how tight to trail, and FastDOM applies it on every quote. The stop only ever tightens, the distance stays between a quarter of an ATR and four ATRs, and the AI cannot cancel, sell or change targets. The managed stop's marker reads AI STP. Trailing runs only while FastDOM is open; each review is one AI request.
-- Main window zoom: − and + right after More, or Ctrl −, Ctrl + and Ctrl 0, scale the whole window from 70% to 130% so it fits beside a chart on a smaller monitor. Saved per PC.
+- Main window zoom: the cyan Zoom buttons at the right end of the status line (−, the current percentage, +), or Ctrl −, Ctrl + and Ctrl 0, scale the whole window from 70% to 130% so it fits beside a chart on a smaller monitor. Clicking the percentage returns to 100%. Saved per PC.
 - Chart Timeframes: weekly bars (up to 20 years). Add Row now inserts one new, uniquely named row in place of a duplicate.
 - Configuration > General > Reset to defaults: return window layout and zoom, hot buttons, keyboard shortcuts, position templates, chart settings or ORB scan values to a new installation's values, each on its own. A backup of the current files is made first and FastDOM restarts by itself. Broker connections, risk limits, watchlists, drawings and trade history are never reset.
 - Order Management: picking a different position template and pressing Save now asks whether to make it the active one.
 - Fix: after a stop was moved at a broker that issues a new order number for the change, the chart could keep a second stop marker at the old price although only one order was working.
+- Performance, Day view: double-click the symbol whose matched lots are open to close them.
+- Help: a Contact support topic gives the support address (support@decoglobal.us), what to include and what never to send. The sections on the AI trailing stop, zoom, weekly timeframes, position templates and reset now sit under the topics they belong to.
 - Strategy Center stays in the Developer edition; it is absent from this Beta's menu and help.
 
-Free, unsigned Windows x64 Beta. Installer SHA-256 `fb2b6183172064eb4ccc55749d17c33c76becf852d7967b667f28ae88b68a1a5`.
+Free, unsigned Windows x64 Beta. Installer SHA-256 `94f935065b96b1ab42986aae21367c6d1013fece754b1edd43247bdeeb21ef7c`.
 
 ## Beta 20261111-172712-8a418749 — published November 11, 2026
 

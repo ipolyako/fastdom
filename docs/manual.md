@@ -612,6 +612,12 @@ The main configuration gear controls application settings. The hot-buttons gear 
 
 The status line gives a concise current message; the timestamped activity log provides context such as subscription, authentication, order result, or analysis failure. A request being sent is not the same as a confirmed fill. Use Orders and the broker's own order state to resolve uncertainty.
 
+## Zooming the main window
+
+
+
+The three cyan Zoom buttons at the right end of the status line, just above the activity log, make the whole main window smaller (−) or larger (+), from 70% to 130% in 5% steps. The middle button shows the current zoom; click it to return to 100%. Ctrl − and Ctrl + do the same, and Ctrl 0 returns to 100%. Everything scales together, so controls keep their positions relative to each other, and the window can become narrower than its normal minimum, which leaves room for a chart on a smaller monitor. The window's height follows the zoom so the same content stays visible. The setting is saved with the window layout on each PC. Only the main window zooms; charts and other windows resize freely as before. Tooltips, and some menus and dropdowns that open as separate pop-ups, may appear at normal size.
+
 
 
 # Workspace | Linking, Watch, watchlists, and saved layouts
@@ -874,6 +880,12 @@ General > Enable Reconciler allows existing protective quantities to be resized 
 
 After entry and after every partial exit, compare position quantity with accepted protective orders. Ensure no exit quantity could unintentionally reverse the position and that remaining exposure is protected as intended. Review the activity message if reconciliation cannot establish broker truth. OCO/bracket behavior is not interchangeable across brokers, and app-managed protection may depend on FastDOM remaining connected.
 
+## Position templates: which one is active
+
+
+
+In Configuration > Order Management, choosing a template in the dropdown opens it for viewing and editing; it does not make it the one your Risk Buy, Risk Sell and Secure buttons use. Press Set this template active for that. If you pick a different template and press Save without setting it active, FastDOM asks whether to make it active: Yes switches, No saves your edits and keeps the current one, Cancel returns to the screen.
+
 
 
 # Trading | Hot buttons, scripts, and keyboard shortcuts
@@ -984,6 +996,12 @@ The top quote/candle header describes the selected or current candle. The legend
 
 The chart's time axis, provider timestamps, and session-specific calculations are not all interchangeable clocks. Opening-range/session features follow their documented exchange-session conventions. Check the timeframe before interpreting a completed-bar signal: one bar on a 1-minute chart is not one bar on a 1-hour chart.
 
+## Weekly chart timeframes
+
+
+
+Chart Timeframes accepts weekly as a Bar Type. Weekly and daily bars need Period Type month or year, with a period Schwab serves (months 1, 2, 3 or 6; years 1, 2, 3, 5, 10, 15 or 20), and weekly uses Bar Size 1; year 20 gives the longest weekly chart. Each week is labelled by its Monday. Add Row inserts below the selected row under the name New timeframe; if you leave that name, Save replaces it with one built from the settings, such as 1W · 20Y. During the day the current week's bar updates its close from live prices, but that day's high and low from before the chart was opened are filled in only when the chart next reloads.
+
 
 
 # Charts | Drawing tools, context menu, and price alerts
@@ -1041,6 +1059,16 @@ In Beta, open Configuration > General > Email communications, enter your receivi
 
 
 Developer retains personal SMTP setup and Send test email. Those sending credentials are not used or included in Beta.
+
+## Trailing a stop from the chart
+
+
+
+Right-click a working stop order on the chart. Convert to trailing stop asks for a distance in points and then walks the stop behind the best price on every quote. Convert to AI trailing stop asks for nothing: it starts trailing at the gap the stop has at that moment, and about every 45 seconds the selected AI provider reviews recent 1-minute and 5-minute bars, ATR, the fast and slow averages, VWAP, the day's range, your entry and the current stop, and sets how tight to trail. It can also name a structure level, such as the last swing low, for the stop to sit beyond. FastDOM applies that setting on every quote, so the stop reacts between reviews. While the AI is managing a stop, its marker on the chart reads AI STP (or AI SL) instead of STP, and returns to the plain label when AI trailing ends. The reason for each setting appears on the chart's status line. Stop AI trailing in the same menu ends it and leaves the stop where it is.
+
+
+
+Both kinds only ever move the stop toward price; a wider setting never loosens a resting stop. For the AI version the distance is limited to between a quarter of an ATR and four ATRs, the stop is kept at least two ticks from the market, and the AI cannot cancel, sell or change targets. If the AI is slow, unreadable or unavailable, trailing continues at the last distance and the status line says so. Trailing works only while FastDOM is running and receiving quotes; if it closes, the stop stays resting at the broker at its last price. Each review is one AI request, so a managed position uses roughly one request every 45 seconds. The AI's choices are judgement, not a tested edge.
 
 
 
@@ -1707,55 +1735,6 @@ Each row lists which sources include the company (for example `2/3 N F ·`). Not
 
 Data is read-only public information fetched on demand and cached (Nasdaq and Stock Analysis 15 minutes, Finviz 60 minutes). The Finviz week load is paged slowly (about a minute) and is unavailable for dates outside this and next week, where Nasdaq alone is shown. Estimates are vendor consensus, not issuer confirmation; confirm the date with the company's investor-relations release before trading around it. No AI, broker, order or account data is involved.
 
-## Trailing a stop from the chart
-
-
-
-Right-click a working stop order on the chart. Convert to trailing stop asks for a distance in points and then walks the stop behind the best price on every quote. Convert to AI trailing stop asks for nothing: it starts trailing at the gap the stop has at that moment, and about every 45 seconds the selected AI provider reviews recent 1-minute and 5-minute bars, ATR, the fast and slow averages, VWAP, the day's range, your entry and the current stop, and sets how tight to trail. It can also name a structure level, such as the last swing low, for the stop to sit beyond. FastDOM applies that setting on every quote, so the stop reacts between reviews. While the AI is managing a stop, its marker on the chart reads AI STP (or AI SL) instead of STP, and returns to the plain label when AI trailing ends. The reason for each setting appears on the chart's status line. Stop AI trailing in the same menu ends it and leaves the stop where it is.
-
-
-
-Both kinds only ever move the stop toward price; a wider setting never loosens a resting stop. For the AI version the distance is limited to between a quarter of an ATR and four ATRs, the stop is kept at least two ticks from the market, and the AI cannot cancel, sell or change targets. If the AI is slow, unreadable or unavailable, trailing continues at the last distance and the status line says so. Trailing works only while FastDOM is running and receiving quotes; if it closes, the stop stays resting at the broker at its last price. Each review is one AI request, so a managed position uses roughly one request every 45 seconds. The AI's choices are judgement, not a tested edge.
-
-
-
-## Position templates: which one is active
-
-
-
-In Configuration > Order Management, choosing a template in the dropdown opens it for viewing and editing; it does not make it the one your Risk Buy, Risk Sell and Secure buttons use. Press Set this template active for that. If you pick a different template and press Save without setting it active, FastDOM asks whether to make it active: Yes switches, No saves your edits and keeps the current one, Cancel returns to the screen.
-
-
-
-## Weekly chart timeframes
-
-
-
-Chart Timeframes accepts weekly as a Bar Type. Weekly and daily bars need Period Type month or year, with a period Schwab serves (months 1, 2, 3 or 6; years 1, 2, 3, 5, 10, 15 or 20), and weekly uses Bar Size 1; year 20 gives the longest weekly chart. Each week is labelled by its Monday. Add Row inserts below the selected row under the name New timeframe; if you leave that name, Save replaces it with one built from the settings, such as 1W · 20Y. During the day the current week's bar updates its close from live prices, but that day's high and low from before the chart was opened are filled in only when the chart next reloads.
-
-
-
-## Zooming the main window
-
-
-
-The two small buttons right after More make the whole main window smaller (−) or larger (+), from 70% to 130% in 5% steps. Ctrl − and Ctrl + do the same, and Ctrl 0 returns to 100%. Everything scales together, so controls keep their positions relative to each other, and the window can become narrower than its normal minimum, which leaves room for a chart on a smaller monitor. The window's height follows the zoom so the same content stays visible. The setting is saved with the window layout on each PC. Hover either button to see the current percentage. Only the main window zooms; charts and other windows resize freely as before. Tooltips, and some menus and dropdowns that open as separate pop-ups, may appear at normal size.
-
-
-
-## Resetting parts of your setup
-
-
-
-Configuration > General > Reset to defaults returns selected parts of your setup to what a new installation has. Tick any of: window layout and zoom, hot buttons, keyboard shortcuts, position templates, chart timeframes and default indicators, ORB scan values; then press Reset selected and confirm. Parts you do not tick keep their values. Broker connections, risk limits, watchlists, drawings and trade history are never reset.
-
-
-
-Before anything changes, FastDOM copies the current settings files to a dated folder named backups
-eset-date-time inside its configuration folder and shows you the path. To undo a reset, close FastDOM and copy those files back over the ones in the configuration folder. After a reset the Configuration window closes without saving, so other edits made in it are discarded, and FastDOM offers to restart: Yes closes it and opens it again by itself with the defaults loaded; No keeps it running with the old buttons, templates and layout until the next start.
-
-
-
 ## Movers
 
 More > Movers presents the available mover/universe data and offers Refresh. Treat the displayed ranking as a screen of the supplied universe, not a complete scan of every tradable security. Confirm symbol, quote freshness, volume/liquidity, and the reason a candidate is listed before opening a chart.
@@ -1855,7 +1834,7 @@ This view does not place a trade merely by running Check size. Any resulting ord
 
 ## Performance
 
-More > Performance opens calendar-style results. Use previous/next, Today, and Month/Week/Day to select the reporting period; Refresh reloads supported account/execution history. Read whether a value represents realized trade P/L, day/account P/L, or an aggregate before comparing it with another panel.
+More > Performance opens calendar-style results. Use previous/next, Today, and Month/Week/Day to select the reporting period; Refresh reloads supported account/execution history. Read whether a value represents realized trade P/L, day/account P/L, or an aggregate before comparing it with another panel. In Day view, click a symbol to see the matched opening and closing lots behind its realized P/L; double-click that symbol to close the lots again.
 
 
 
@@ -2053,6 +2032,17 @@ Default symbol, default quantity, DOM visible levels, and flatten offset define 
 
 Beta requires only a receiving email address and its verification code. Save email preferences separately from the rest of the dialog. Refresh status retrieves the server's current verification and subscription state. Product updates are optional; verification alone never opts you in. Developer keeps its personal SMTP controls. Email failures do not disable in-app sounds or submit orders.
 
+## Resetting parts of your setup
+
+
+
+Configuration > General > Reset to defaults returns selected parts of your setup to what a new installation has. Tick any of: window layout and zoom, hot buttons, keyboard shortcuts, position templates, chart timeframes and default indicators, ORB scan values; then press Reset selected and confirm. Parts you do not tick keep their values. Broker connections, risk limits, watchlists, drawings and trade history are never reset.
+
+
+
+Before anything changes, FastDOM copies the current settings files to a dated folder named backups
+eset-date-time inside its configuration folder and shows you the path. To undo a reset, close FastDOM and copy those files back over the ones in the configuration folder. After a reset the Configuration window closes without saving, so other edits made in it are discarded, and FastDOM offers to restart: Yes closes it and opens it again by itself with the defaults loaded; No keeps it running with the old buttons, templates and layout until the next start.
+
 
 
 
@@ -2197,6 +2187,20 @@ The guide is bundled with the build so it works offline. Future releases can exp
 
 
 
+
+# Support | Contact support
+
+## Email
+
+To contact FastDOM support, email **support@decoglobal.us**. This is the address for questions, problems, bug reports and feedback. The same address is on the website, https://fastdom.decoglobal.us, under Support.
+
+## What to include
+
+Give the build ID from More > About, your Windows version, the broker you use, what you did, what you expected and what happened instead, and the exact text of any error. A screenshot helps; hide account numbers first. If you sent a problem report from FastDOM, include its FD- support ID.
+
+## What never to send
+
+Do not send passwords, API keys, application secrets, tokens, callback codes or your database. Support will never ask for them.
 
 # Support | Ask FastDOM AI help
 
