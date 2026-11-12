@@ -1,8 +1,8 @@
 # Release notes
 
-## Beta 20261112-143312-3d71c7fa — published November 12, 2026
+## Beta 20261112-153528-af99fc93 — published November 12, 2026
 
-Movers gains an ORB SCAN tab: a whole-market screen for opening-range candidates by gap, daily range and premarket dollar volume, with thresholds you can change and a line saying where the data comes from and how fresh it is. A stop on the chart can be converted to an AI trailing stop: the AI reviews price action about every 45 seconds, sets how tight to trail, and only ever moves the stop toward price. The main window can be zoomed from 70% to 130% with the Zoom buttons on the status line or Ctrl + and Ctrl −. Charts accept weekly timeframes. Configuration > General can reset selected parts of your setup to defaults, with a backup first. This build also fixes a moved stop leaving a second, dead marker at its old price, and Add Row in Chart Timeframes duplicating a row. Help has a Contact support topic with the support address. Strategy Center is not included in this Beta.
+Movers gains an ORB SCAN tab: a whole-market screen for opening-range candidates by gap, daily range and premarket dollar volume, with thresholds you can change and a line saying where the data comes from and how fresh it is. A stop on the chart can be converted to an AI trailing stop: the AI reviews price action about every 45 seconds, sets how tight to trail, and only ever moves the stop toward price. The main window can be zoomed from 70% to 130% with the Zoom buttons on the status line or Ctrl + and Ctrl −. Charts accept weekly timeframes. Configuration > General can reset selected parts of your setup to defaults, with a backup first. This build also fixes a moved stop leaving a second, dead marker at its old price, and Add Row in Chart Timeframes duplicating a row. The hot-button editor gains Configure with AI: describe a change in words, such as "add a button that takes 15% profit", review what it did, and Save. Help has a full hot button script syntax reference and a Contact support topic with the support address. Strategy Center is not included in this Beta.
 
 - Movers, ORB SCAN: screens the whole market, not only your watchlist, for stocks with a gap of at least 0.3 ATR, a daily range of at least 3% of price and at least $500M traded before the open. Only stocks that meet all three are listed. The three values can be changed and are saved. The tab shows the data source and whether each row is delayed (market-wide data is about 15 minutes behind) or from your broker. It is a candidate list, not a signal.
 - Chart, Convert to AI trailing stop: right-click a working stop. No distance to enter; the selected AI provider reviews recent bars, ATR, averages and VWAP about every 45 seconds and sets how tight to trail, and FastDOM applies it on every quote. The stop only ever tightens, the distance stays between a quarter of an ATR and four ATRs, and the AI cannot cancel, sell or change targets. The managed stop's marker reads AI STP. Trailing runs only while FastDOM is open; each review is one AI request.
@@ -13,9 +13,13 @@ Movers gains an ORB SCAN tab: a whole-market screen for opening-range candidates
 - Fix: after a stop was moved at a broker that issues a new order number for the change, the chart could keep a second stop marker at the old price although only one order was working.
 - Performance, Day view: double-click the symbol whose matched lots are open to close them.
 - Help: a Contact support topic gives the support address (support@decoglobal.us), what to include and what never to send. The sections on the AI trailing stop, zoom, weekly timeframes, position templates and reset now sit under the topics they belong to.
+- Trading Controls, Configure with AI: type a change in words and press Apply. The AI can add a percentage sell or cover button or any built-in template, and rename, recolour, move, turn on or off, or remove buttons. Changed rows are marked and nothing takes effect until Save. It cannot write its own scripts, press a button, or reach orders, brokers or risk limits. It uses your own Codex or Claude Code sign-in.
+- Help: a hot button script syntax reference covers every command, size and price form, BRACKET targets, SECURE and DIALOG, with worked examples and the common error messages, so Ask FastDOM AI help can explain and draft scripts.
+- Movers: Searching with three dots shows beside the window title on every tab while any list is being fetched.
+- Keyboard-only Shortcuts: the On and 2x Press check boxes are centred in their rows.
 - Strategy Center stays in the Developer edition; it is absent from this Beta's menu and help.
 
-Free, unsigned Windows x64 Beta. Installer SHA-256 `94f935065b96b1ab42986aae21367c6d1013fece754b1edd43247bdeeb21ef7c`.
+Free, unsigned Windows x64 Beta. Installer SHA-256 `5d8380be78e6ca8c362ab63b45df2a78b64c15008695379efc45986f0d20ccb5`.
 
 ## Beta 20261111-172712-8a418749 — published November 11, 2026
 

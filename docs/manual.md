@@ -900,6 +900,14 @@ Open the hot-buttons gear to edit visible actions. Each button has a label, appe
 
 
 
+## Configure with AI
+
+In the hot-button editor (Trading Controls), Configure with AI… opens a box where you describe a change in words, for example "add a button that takes 15% profit", "make Flatten red", or "move Sell 25% above Sell 10%". Press Apply or Enter. The selected AI provider proposes the changes, FastDOM checks each one and applies it to the list in the window, and the rows it added or changed are marked with a dot in the AI column. Below the box you see what was done and anything that was refused, with the reason.
+
+Nothing takes effect until you press Save; Cancel discards all of it, the same as for edits made by hand. The AI can add two kinds of button: a percentage sell or cover of the open position at market (the same kind as the built-in Sell 10% and Cover 10%), and any built-in template, unchanged. It can also rename, recolour, move, turn on or off, or remove buttons. It cannot write its own scripts, so a request that needs a new script is answered with an explanation instead of a button; use a template or type the script yourself. A request to take a percentage of profit adds both a Sell and a Cover button unless you name one side.
+
+The AI sets a shortcut only when you ask for one, and a shortcut already used by another button or a keyboard-only action is refused. It edits this list only: it cannot press a button, place an order, or change brokers, accounts or risk limits. It uses your own Codex or Claude Code sign-in (Configuration > General > AI PROVIDER); each request is one AI request. Read every marked row before saving, and try a new button in Simulation first.
+
 ## Reading a script
 
 BUY SIZE LMT ASK means a buy using the configured size at an ask-referenced limit. SELL PCT:25 MKT requests a partial-position market sell. A bid/ask offset changes the acceptable limit. CANCEL and BRACKET lines introduce additional operations; a multi-line button is not necessarily one atomic broker action.
@@ -923,6 +931,118 @@ FastDOM has focus and typing protections, but do not rely on remembered factory 
 Practice configuration in simulation, including a focused text field, a different chart, and an open auxiliary window. Confirm exactly which window/context receives the action before relying on it live. Opening Help does not intentionally execute any trading command.
 
 
+
+# Trading | Hot button script syntax reference
+
+## How a script is read
+
+A hot button's script is plain text typed in the Script box of the hot-button editor (Trading Controls). Each line is one command; a semicolon also separates commands, so `CANCEL ALL; BUY SIZE LMT ASK` is two commands on one line. Lines run from top to bottom, and if one fails the rest are skipped and a message appears on the status line. A line starting with `#` is a comment. Upper and lower case are the same. Words are separated by spaces, and an offset is written without spaces: `ASK+0.05`, not `ASK + 0.05`.
+
+A script always acts on the symbol and account selected in the window where the button is pressed. If the Script box is empty, the button runs its built-in action instead, shown in the list in square brackets, for example `[SellPercent]`.
+
+The commands are BUY, SELL, CANCEL, FLAT, REVERSE, BRACKET, SECURE and DIALOG. Anything else stops the script with "Unknown command".
+
+## BUY and SELL
+
+Form: `BUY size type price STOP price` and the same for SELL. Only the word BUY or SELL is required.
+
+Size, one of:
+
+- `SIZE`: the number in the Size box. This is also what is used when no size is written.
+- A number, such as `100`: that many shares or contracts.
+- `$500`: as many shares as $500 buys at the order's price.
+- `$AMOUNT`: the dollar amount in the Amount box.
+- `HALF`: half of the open position.
+- `POS`: the whole open position.
+- `PCT:25`: 25% of the open position, rounded up to a whole share.
+- `RISK:$100`: as many shares as lose $100 if the stop on the same line is hit. Shares = risk dollars divided by the distance between entry and stop.
+- `RISK:$RISK`: the same, using the amount in the Risk box. With an empty Risk box nothing is sent.
+
+HALF, POS and PCT are sized from the open position. With no open position they fall back to the Size box, so `SELL PCT:25 MKT` pressed while flat sells the Size box quantity and opens a short. Keep those buttons for managing a position.
+
+Type, one of:
+
+- `MKT`: market order. This is also used when no type is written. Outside regular hours a market order on a stock is sent as a limit 10 cents through the bid or ask, because extended sessions do not fill market orders.
+- `LMT` followed by a price: limit order.
+
+Price, one of: `ASK`, `BID`, `LAST`, `MID`, each optionally with an offset such as `ASK+0.05` or `BID-0.10`; a plain number such as `550.25`; or a value asked for with DIALOG, written `$STOP`.
+
+`STOP` followed by a price, at the end of the line, is the protective stop price for this entry. It is required with RISK sizing, where it sets the share count. It must be below the entry for a BUY and above it for a SELL, otherwise nothing is sent. STOP on a BUY or SELL line does not by itself place a stop order; the BRACKET line does that.
+
+Examples:
+
+- `BUY SIZE LMT ASK`: buy the Size box quantity with a limit at the ask.
+- `SELL 100 MKT`: sell 100 shares at market.
+- `BUY $1000 LMT ASK+0.05`: buy $1,000 worth with a limit 5 cents above the ask.
+- `SELL HALF LMT BID`: sell half the position with a limit at the bid.
+- `SELL PCT:25 MKT`: sell a quarter of a long position at market.
+- `BUY PCT:25 MKT`: buy back a quarter of a short position at market.
+- `BUY RISK:$100 LMT ASK STOP ASK-1.00`: buy at the ask, sized so a stop $1 below loses $100.
+
+## CANCEL, FLAT and REVERSE
+
+- `CANCEL ALL`: cancel every working order for this symbol on this account.
+- `CANCEL BUY`: cancel only the buy orders for this symbol.
+- `CANCEL SELL`: cancel only the sell orders for this symbol.
+- `FLAT MKT` (or `FLATTEN`): cancel the symbol's working orders and close the position.
+- `REVERSE MKT`: cancel the symbol's working orders, then send a market order for twice the position so it ends the same size on the other side. With no position nothing is sent.
+
+## BRACKET: a stop and targets
+
+Form: `BRACKET STOP price T1 price size T2 price size` with as many targets as you want (T1, T2, T3 and so on). STOP is required; targets are optional.
+
+BRACKET protects the entry on the line above it, or the open position when there is no entry line. It places the stop and the profit targets on the opposite side of the entry, and it first removes the exit orders that were already working for that symbol, so pressing an entry button again resizes the protection to the whole position. With no entry and no position nothing is placed.
+
+Prices in a BRACKET line can also use:
+
+- `ENTRY`: the entry price, with an offset such as `ENTRY-1.00`.
+- R-multiples: `ENTRY+2R` means the entry plus twice the risk, where 1R is the distance between the entry and the stop. For a short, targets are below: `ENTRY-2R`.
+
+Target sizes, written after the target's price:
+
+- `PCT:33`: 33% of the whole position.
+- `REM:50`: 50% of what is left after the earlier targets. `REM:100` on the last target takes everything that remains.
+- No size: the position is split equally between the targets, and the last one takes the remainder.
+
+Examples:
+
+- `BRACKET STOP ENTRY-1.00 T1 ENTRY+2R`: stop $1 below the entry, one target at twice that distance.
+- `BRACKET STOP $STOP T1 ENTRY+1R PCT:33 T2 ENTRY+2R PCT:33 T3 ENTRY+3R PCT:34`: three targets of a third each.
+- `BRACKET STOP ENTRY+1.00 T1 ENTRY-1R T2 ENTRY-2R`: for a short, stop above and two cover targets below.
+
+On the standard Risk Buy and Risk Sell buttons the BRACKET line is written by FastDOM from the active position template in Configuration > Order Management, so change the template there, not the line.
+
+## SECURE and DIALOG
+
+- `DIALOG STOP`: ask for a price before the rest of the script runs, and make it available as `$STOP`. Any name works: `DIALOG TARGET` gives `$TARGET`. Cancelling the box cancels the script. When the stop was already chosen on the chart, the box is skipped.
+- `SECURE STOP price`: for an open position, cancel its working orders and place a new stop with the full target ladder of the active position template, measured from the position's average price. The stop must be below the market for a long and above it for a short. Usually written as `DIALOG STOP` then `SECURE STOP $STOP`.
+
+## Complete examples
+
+Risk-sized long with a stop you type and two targets:
+
+- Line 1: `DIALOG STOP`
+- Line 2: `BUY RISK:$RISK LMT ASK+0.10 STOP $STOP`
+- Line 3: `BRACKET STOP $STOP T1 ENTRY+1R PCT:50 T2 ENTRY+2R REM:100`
+
+Risk-sized short, same idea:
+
+- Line 1: `DIALOG STOP`
+- Line 2: `SELL RISK:$RISK LMT BID-0.10 STOP $STOP`
+- Line 3: `BRACKET STOP $STOP T1 ENTRY-1R PCT:50 T2 ENTRY-2R REM:100`
+
+Cancel the resting buys and re-enter at the bid:
+
+- Line 1: `CANCEL BUY`
+- Line 2: `BUY SIZE LMT BID`
+
+Take 15% off a long position at the bid: `SELL PCT:15 LMT BID`. Take 15% off a short at the ask: `BUY PCT:15 LMT ASK`.
+
+## Messages and limits
+
+FastDOM does not check a script when you save it; mistakes show up when the button is pressed, as a message on the status line and no order. Common ones: "Unknown command", "Unknown price reference" (a misspelled ASK, BID, LAST, MID or ENTRY), "Expected price expression" (LMT or STOP with nothing after it), "RISK ORDER NOT PLACED" (no stop on the line, an empty Risk box, or a stop too close or too far for the amount), "BUY stop must be below entry", and "BRACKET: STOP price required". A risk-sized entry is also reduced to what available funds can carry, with a message saying so.
+
+A script with several lines is several separate orders, not one all-or-nothing order. Every order still passes the normal risk checks. Try any new or changed script in Simulation, with and without an open position, before using it live.
 
 # Trading | Orders, positions, risk gates, and failure handling
 
@@ -1737,7 +1857,7 @@ Data is read-only public information fetched on demand and cached (Nasdaq and St
 
 ## Movers
 
-More > Movers presents the available mover/universe data and offers Refresh. Treat the displayed ranking as a screen of the supplied universe, not a complete scan of every tradable security. Confirm symbol, quote freshness, volume/liquidity, and the reason a candidate is listed before opening a chart.
+More > Movers presents the available mover/universe data and offers Refresh. While any list is being fetched, Searching with three pulsing dots shows beside the window title on every tab; an empty list is final only once it has gone. Treat the displayed ranking as a screen of the supplied universe, not a complete scan of every tradable security. Confirm symbol, quote freshness, volume/liquidity, and the reason a candidate is listed before opening a chart.
 
 
 
