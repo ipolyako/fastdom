@@ -76,9 +76,9 @@ This early Beta is **unsigned**. Windows may display an unknown-publisher warnin
 
 ## Current release
 
-**Beta 20261111-172712-8a418749** — November 11, 2026.
+**Beta 20261112-133159-dd226fee** — November 12, 2026.
 
-Options Trader gains Find trades: the AI states its own price view and plans a search, FastDOM scans the chain for defined-risk structures, and the AI scores the list. A pick is loaded into the ticket only when it earns an AI score of 70 or better and an expected gain of at least 10% of its maximum loss; otherwise FastDOM says there is no trade worth taking. Closing an existing option spread now shows the opening price and estimated P/L, uses a clearer confirmation, and lets you close several positions from the same window. Charts add Keltner Channels, the 3/10 oscillator and an ATR trailing stop line. Installations made before November 2 no longer show the retired Cancel All hot button after updating. This build also fixes two order defects: a chart could price an order from the previous symbol's quote right after a symbol change, and a script's market entry was not filled outside regular hours (it is now sent as a limit 10 cents through the bid or ask). The standard risk buttons read RISK:$RISK, the amount in the Risk box. Strategy Center is not included in this Beta.
+Movers gains an ORB SCAN tab: a whole-market screen for opening-range candidates by gap, daily range and premarket dollar volume, with thresholds you can change and a line saying where the data comes from and how fresh it is. A stop on the chart can be converted to an AI trailing stop: the AI reviews price action about every 45 seconds, sets how tight to trail, and only ever moves the stop toward price. The main window can be zoomed from 70% to 130% with the two buttons beside More or Ctrl + and Ctrl −. Charts accept weekly timeframes. Configuration > General can reset selected parts of your setup to defaults, with a backup first. This build also fixes a moved stop leaving a second, dead marker at its old price, and Add Row in Chart Timeframes duplicating a row. Strategy Center is not included in this Beta.
 
 See the [changelog](CHANGELOG.md), [official download](https://fastdom.decoglobal.us/download), [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/), and [disclaimer](https://fastdom.decoglobal.us/disclaimer).
 
