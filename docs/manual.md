@@ -2160,8 +2160,7 @@ Configuration > General > Reset to defaults returns selected parts of your setup
 
 
 
-Before anything changes, FastDOM copies the current settings files to a dated folder named backups
-eset-date-time inside its configuration folder and shows you the path. To undo a reset, close FastDOM and copy those files back over the ones in the configuration folder. After a reset the Configuration window closes without saving, so other edits made in it are discarded, and FastDOM offers to restart: Yes closes it and opens it again by itself with the defaults loaded; No keeps it running with the old buttons, templates and layout until the next start.
+Before anything changes, FastDOM copies the current settings files to a dated folder named backups\reset-date-time inside its configuration folder and shows you the path. To undo a reset, close FastDOM and copy those files back over the ones in the configuration folder. After a reset the Configuration window closes without saving, so other edits made in it are discarded, and FastDOM offers to restart: Yes closes it and opens it again by itself with the defaults loaded; No keeps it running with the old buttons, templates and layout until the next start.
 
 
 

@@ -76,9 +76,9 @@ This early Beta is **unsigned**. Windows may display an unknown-publisher warnin
 
 ## Current release
 
-**Beta 20261112-153528-af99fc93** — November 12, 2026.
+**Beta 20261114-133306-e8c7de04** — November 14, 2026.
 
-Movers gains an ORB SCAN tab: a whole-market screen for opening-range candidates by gap, daily range and premarket dollar volume, with thresholds you can change and a line saying where the data comes from and how fresh it is. A stop on the chart can be converted to an AI trailing stop: the AI reviews price action about every 45 seconds, sets how tight to trail, and only ever moves the stop toward price. The main window can be zoomed from 70% to 130% with the Zoom buttons on the status line or Ctrl + and Ctrl −. Charts accept weekly timeframes. Configuration > General can reset selected parts of your setup to defaults, with a backup first. This build also fixes a moved stop leaving a second, dead marker at its old price, and Add Row in Chart Timeframes duplicating a row. The hot-button editor gains Configure with AI: describe a change in words, such as "add a button that takes 15% profit", review what it did, and Save. Help has a full hot button script syntax reference and a Contact support topic with the support address. Strategy Center is not included in this Beta.
+Working orders now show a price tag on the chart's price axis, and each Watch tile carries the company name as a watermark. A price prompt opened from a hot button takes the keyboard straight away, also when the button was pressed in another window, and the chart no longer takes the keyboard back from an open FastDOM dialog after an order action. In watchlists the list name and the column headers have their own colours, so they no longer blend with the symbol rows. Configuration has a Close button. Automatic Schwab sign-in starts its browser differently, a change intended to stop the access-denied refusals seen since late October; it has not yet been confirmed inside FastDOM, and browser sign-in remains available. Strategy Center is not included in this Beta.
 
 See the [changelog](CHANGELOG.md), [official download](https://fastdom.decoglobal.us/download), [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/), and [disclaimer](https://fastdom.decoglobal.us/disclaimer).
 

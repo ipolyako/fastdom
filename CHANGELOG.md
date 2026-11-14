@@ -1,5 +1,20 @@
 # Release notes
 
+## Beta 20261114-133306-e8c7de04 — published November 14, 2026
+
+Working orders now show a price tag on the chart's price axis, and each Watch tile carries the company name as a watermark. A price prompt opened from a hot button takes the keyboard straight away, also when the button was pressed in another window, and the chart no longer takes the keyboard back from an open FastDOM dialog after an order action. In watchlists the list name and the column headers have their own colours, so they no longer blend with the symbol rows. Configuration has a Close button. Automatic Schwab sign-in starts its browser differently, a change intended to stop the access-denied refusals seen since late October; it has not yet been confirmed inside FastDOM, and browser sign-in remains available. Strategy Center is not included in this Beta.
+
+- Chart: a working order shows its price as a tag on the price axis.
+- Watch: each tile shows the company name as a watermark.
+- Price prompt: the prompt opened by a hot button takes the keyboard when it opens, including when the button was pressed in a window on another thread.
+- Chart: after an order action the chart no longer takes the keyboard away from an open FastDOM dialog.
+- Watchlists: the list name is cyan and the column headers (SYM, NAME, LAST, CHG) are blue; symbol rows are unchanged.
+- Configuration: a Close button beside Cancel and Save closes the window without saving. Actions already carried out there, such as a Schwab reconnect, are not undone.
+- Automatic Schwab sign-in: the sign-in browser is started without the automation setting that Schwab appears to refuse (HTTP 403 "access denied" on login since late October). This is intended to stop those refusals and is not yet confirmed in FastDOM. Setting the environment variable FASTDOM_SCHWAB_SIGNIN_HIDE_AUTOMATION to 0 restores the previous start-up after restarting FastDOM. Browser sign-in and the manual trust set-up are unchanged.
+- Strategy Center and the Avatar voice stay in the Developer edition; they are absent from this Beta's menus, chart toolbar and help.
+
+Free, unsigned Windows x64 Beta. Installer SHA-256 `b91238c2825c54a83a283965602ab2243de003ad9371c781d14359d3d82420bd`.
+
 ## Beta 20261112-153528-af99fc93 — published November 12, 2026
 
 Movers gains an ORB SCAN tab: a whole-market screen for opening-range candidates by gap, daily range and premarket dollar volume, with thresholds you can change and a line saying where the data comes from and how fresh it is. A stop on the chart can be converted to an AI trailing stop: the AI reviews price action about every 45 seconds, sets how tight to trail, and only ever moves the stop toward price. The main window can be zoomed from 70% to 130% with the Zoom buttons on the status line or Ctrl + and Ctrl −. Charts accept weekly timeframes. Configuration > General can reset selected parts of your setup to defaults, with a backup first. This build also fixes a moved stop leaving a second, dead marker at its old price, and Add Row in Chart Timeframes duplicating a row. The hot-button editor gains Configure with AI: describe a change in words, such as "add a button that takes 15% profit", review what it did, and Save. Help has a full hot button script syntax reference and a Contact support topic with the support address. Strategy Center is not included in this Beta.
