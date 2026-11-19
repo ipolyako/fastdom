@@ -751,7 +751,7 @@ A buy limit at or above the ask can execute immediately; a sell limit at or belo
 
 Dragging a working-order marker moves the orders at the grabbed row. Hold Shift through release when dragging a stop to include the other stops for the same account, symbol and side. A DOM drag is admitted as a group: while its broker replacements are pending, another DOM drag on that account/symbol is blocked in full. Wait for the completion message before dragging again. Broker replacements are separate operations; an incomplete result lists how many orders were confirmed and requires checking the remaining orders. The app does not automatically retry or roll back a partial move.
 
-An exit order's marker on the chart shows the profit or loss for that order's own quantity (never more than the position holds), not for the whole position. The position line still shows the whole-position figure.
+An exit order's marker on the chart shows its remaining order quantity followed by **POS**, the estimated profit or loss for the entire current position at that exact price, before fees. The DOM's **POS P/L** column uses the same full-position calculation at each ladder row price. Zoomed DOM rows can round an order to a nearby price; hover its marker to see the exact limit/stop price and remaining quantity. The POS amount is hypothetical position P/L, not a claim that a partial target or undersized stop closes or protects the whole position.
 
 
 
@@ -1657,6 +1657,15 @@ Sending needs a fresh quote snapshot (under 60 seconds old). A leg whose own quo
 
 Linked position cards come first, then the individual contracts. Select a card, a single option, or one to four contracts on the same underlying with a quantity per set.
 
+Each card says what kind of position it is. A two-leg vertical is named by its direction, with the same names the opening ticket uses, and the line under the title says where it wins and loses at expiration:
+
+- **Bull put vertical (credit)**: long the lower put, short the higher put. Bullish: you keep the credit if the stock is above the higher strike at expiration; the maximum loss is below the lower strike.
+- **Bear put vertical (debit)**: short the lower put, long the higher put. Bearish: full profit below the lower strike; you lose the debit above the higher strike.
+- **Bull call vertical (debit)**: long the lower call, short the higher call. Bullish: full profit above the higher strike; you lose the debit below the lower strike.
+- **Bear call vertical (credit)**: short the lower call, long the higher call. Bearish: you keep the credit below the lower strike; the maximum loss is above the higher strike.
+
+Iron condors read Neutral, reverse iron condors read as expecting a large move, and single options read Bullish or Bearish with what a short option obliges you to do. The direction is read from which leg is long and which is short; credit or debit follows from the strikes. It describes the structure at expiration, not your result: your actual entry prices and P/L are in the panel on the right.
+
 - A card labelled **Suggested from holdings** is a vertical or iron condor inferred from contracts you hold with matching expiry, direction and strikes. The same contract can appear in more than one suggestion, so do not add card quantities together.
 - A card matched to a filled opening order shows that those legs were traded together. It does not prove today's lots still belong to that trade.
 
@@ -2008,6 +2017,8 @@ If "No data loaded" persists after Refresh, confirm the selected storage backend
 
 More > Margin estimates distance to a margin call, conditional call prices, and position size that survives a specified adverse move. It uses account data and configured assumptions. It is a planning calculator, not a broker promise to maintain margin requirements.
 
+Option positions are named as in the positions list, for example NVDA P162 Dec18 (underlying, put or call with strike, expiry month and day); hover the name on a Margin card for the full contract code. Wherever FastDOM shows this short name, an expiry outside the current calendar year also carries its year, as in NVDA C170 Dec17 '27, so a contract a year out is not mistaken for next month's.
+
 
 
 ## Setup and use
@@ -2097,10 +2108,106 @@ The top cards group the figures by subject, and each card names its source in th
 
 Below the cards, **Statements as filed with the SEC** shows the income statement, balance sheet and cash flow for the last eight quarters or five fiscal years (switch with Quarterly / Annual), newest first, with margins, revenue growth and free cash flow worked out from them. **Short interest history** lists the last 24 settlement dates with shares short, the change from the previous report, average daily volume and days to cover. Its % of float column appears only when a float is published for the symbol; many ETFs have none.
 
+## Key signals
+
+Above the cards, **Key signals** lists what FastDOM works out from the SEC statements and the short-interest reports already loaded in the window. It is plain arithmetic on those figures; nothing extra is fetched and no AI is involved. Each row shows the result and, beside it, the figures it was worked out from, so you can check it against the tables below. A row marked **WATCH** or **ALERT** is one to look at first; the mark is a fixed threshold, not a trading signal.
+
+- **Revenue**: the latest quarter and its growth against the same quarter a year earlier, with the previous quarter's growth for comparison. WATCH when revenue is falling, ALERT when it fell more than 20%.
+- **Margins**: gross and operating margin, and the change in points against the same quarter a year earlier. WATCH when either fell five points or more.
+- **Net income**: the latest quarter's profit or loss and how many of the last eight quarters were profitable. WATCH on a loss, and also when a profit sits on top of an operating loss, because that profit came from items outside day-to-day operations.
+- **Cash runway**: cash and short-term investments divided by the free cash flow spent over the last four quarters. It assumes the same rate of spending and no new funding, so read it as "how soon the company needs money", not as a forecast. WATCH under 24 months, ALERT under 12. A company with positive free cash flow shows Self-funding. No runway is shown unless all four quarters of cash flow are filed.
+- **Share count**: the change in shares outstanding (or average diluted shares when that is what the filings state) over a year. WATCH from +5%, ALERT from +20%. A rise of 90% or more, or a fall of 45% or more, is reported as a possible stock split or reverse split, because filed share counts are not split-adjusted.
+- **Current ratio**: current assets divided by current liabilities. WATCH below 1.
+- **Debt**: long-term debt against stockholders' equity. WATCH above two times equity or when equity is negative.
+- **Stock compensation**: stock-based compensation as a share of revenue over the last four quarters. WATCH from 15%.
+- **Short interest**: the latest report as a percentage of today's float (or in shares when no float is published), the change from the previous report and over six reports, and days to cover. WATCH from 10% of float or a jump of 25% in one report, ALERT from 20% of float.
+
+A company that files only annual statements gets the same signals worked out from fiscal years. A fund has no statements, so it shows at most the short-interest row.
+
+## AI brief
+
+**AI brief**, at the right of the Key signals panel, asks your AI provider (Configuration > General > AI PROVIDER) for a short plain-English reading of the company: one headline, what the company or fund is, three to six points by topic (growth, profitability, cash, dilution, debt, short interest, valuation, fund), and a list of things to check elsewhere. It usually takes under a minute.
+
+- It runs only when you press the button. Loading a symbol never calls the AI.
+- The AI is given only the public figures loaded in this window and the key signals. Nothing about your accounts, positions or orders is sent, and the AI has no web access or tools for this request.
+- It explains the figures; it is told not to calculate its own, and FastDOM checks its answer. Any number in the brief that is not in the loaded figures is listed in yellow under the brief as "Not found in the loaded figures". Treat a sentence that uses such a number as unverified. The check catches invented numbers; it cannot tell that a real figure was attached to the wrong claim, so read the brief against the signals and tables.
+- It has not read the filing text, the news or the chart. It cannot know about an open share offering, guidance, lawsuits or events unless a figure shows it. It gives no price target and no buy or sell opinion, and it is not advice.
+- The last brief for each symbol is kept and shown again the next time you load that symbol, with the AI model and the time it was written. When a newer quarter or short-interest report has been loaded since, a yellow line says so; press **Update AI brief** to rewrite it.
+
+If the button reports that AI setup is required, finish the provider setup in Configuration > General.
+
+## SEC filings
+
+Below Key signals, **SEC filings** shows what the company's filing list at the SEC says by itself, from the type of each filing and the item numbers on its 8-K reports. No filing text is read for these rows and no AI is involved. Each row has an **Open** link to the filing at sec.gov. The panel appears a moment after the figures, and only for companies that file with the SEC under the symbol; most funds and some foreign companies show none.
+
+- **Latest report**: the most recent quarterly or annual report (10-Q, 10-K, 20-F or 40-F).
+- **Listing notice** (ALERT): an 8-K item 3.01 in the last 12 months, which reports a delisting notice, a failure to meet a listing rule, or a transfer of listing. Open it to see which.
+- **Restatement** (ALERT): an 8-K item 4.02, where the company says earlier financial statements should no longer be relied on.
+- **Late report** (ALERT): a notice (form NT) that a report could not be filed on time.
+- **Bankruptcy** and **Debt trigger** (ALERT): 8-K items 1.03 and 2.04.
+- **Auditor change** (WATCH): 8-K item 4.01.
+- **Prospectuses**: how many prospectus filings (forms 424B) were made in 12 months and the latest one. A prospectus is filed when securities are offered: new shares, notes, or shares resold by holders. WATCH when the latest is under 90 days old. More than twenty in a year is treated as routine note issuance, as banks do, and is not marked.
+- **Registration**: the latest registration statement (S-1, S-3, F-1, F-3) in three years. A shelf registration shows that the company can sell securities at short notice; it is capacity, not a sale. WATCH when filed in the last 12 months.
+- **Private share sales** (WATCH): 8-K item 3.02, a sale of shares or convertible securities outside a registered offering.
+- **Material agreements**: 8-K item 1.01 in the last six months. Financing agreements are reported under this item, along with ordinary business deals.
+- **Insider sale notices**: Forms 144 in the last 90 days. A Form 144 is notice of an intended sale of restricted shares; it does not show that the sale happened.
+
+When none of the marked rows applies, a line under the list says so. That is a statement about the filing list only: an at-the-market program, warrants or a going-concern warning live in the text of the report, which the list cannot show. Use the filing check for those.
+
+## AI filing check
+
+**AI filing check**, at the right of the SEC filings panel, reads the filings themselves for dilution and solvency. It usually takes under a minute.
+
+What happens when you press it:
+
+1. FastDOM chooses the filings: the latest quarterly or annual report, up to two offering documents (prospectus or registration) from the last 12 months, and up to three 8-K reports from the last six months that carry a financing, listing or reporting item (1.01, 1.03, 2.04, 3.01, 3.02, 3.03, 4.01, 4.02, 5.03). Earnings-only 8-Ks are not read.
+2. It downloads them from sec.gov and cuts each one to the passages that contain fixed wording: going concern and substantial doubt, at-the-market programs and equity lines, offerings, listing deficiencies and reverse splits, defaults and waivers, material weaknesses and restatements, liquidity statements, convertibles, warrants, shelf registrations and authorized shares. For an offering document it keeps the cover, use of proceeds and dilution; for an 8-K, the text from its first item.
+3. Your AI provider is given those passages, the SEC filings rows and the key signals, with no web access or tools, and reports what the passages state. Every finding must carry a word-for-word quote.
+4. FastDOM looks up each quote in the text it downloaded. A finding whose quote is there is shown with the filing it came from as a link. A finding whose quote is not there is moved to the end and marked **unverified**.
+
+Reading the result:
+
+- Findings are marked ALERT (the company itself puts its survival, listing or reporting in question, or a share sale is under way), WATCH (standing capacity to add shares or pressure: an open share-sale program, warrants, convertibles, a shelf, a waiver) or left unmarked for context.
+- **Searched by FastDOM, not found anywhere in the latest report** lists wording that appears nowhere in the whole report, such as going-concern wording or an at-the-market program. FastDOM searches the full text for this itself, so it does not depend on the AI. It covers the latest report only, not older filings.
+- **Filings read** lists exactly which filings were used, as links.
+- Numbers in the findings that are not in the passages are listed in yellow, as in the AI brief.
+
+Limits to keep in mind:
+
+- The AI sees selected passages, not whole filings, and never the exhibits. Something worded differently from the fixed list can be missed. A clean result is not proof that nothing is there.
+- The quote check proves the words are in the filing. It does not prove the AI's sentence about them is right: read the quote, and open the filing before acting on a finding.
+- Filings state capacity and terms as of their date. They rarely say how much of a share-sale program has been used since, and they say nothing about what the company did after the filing date.
+- Proxy statements, insider forms and foreign companies' 6-K reports are not read.
+- It gives no opinion on the share price, and it is not advice.
+
+**Hide** beside the AI brief and AI filing check titles folds the text away to one line (the brief's headline, or the number of findings) so the figure cards move back up; **Show** unfolds it. A newly written text is always shown.
+
+The last check for each symbol is kept and shown again when you load the symbol, with the model and time. When the company has filed since, a yellow line says so; press **Update AI filing check**. Nothing about your accounts, positions or orders is sent to the SEC or to the AI provider.
+
+## Ask a question
+
+The **Ask** box, below SEC filings, answers one question at a time about the company on screen. Type the question and press Enter or Ask. Examples: "Why did the gross margin change?", "How much of the at-the-market program has been used?", "How concentrated is revenue among customers?", "What debt comes due and when?". It usually answers in under half a minute.
+
+What happens when you ask:
+
+1. FastDOM downloads the latest quarterly or annual report from sec.gov (once; it is reused for later questions) and picks the paragraphs that share the words of your question. It also matches the words a report would use for the same thing, so "fall" finds "decreased" and "lawsuit" finds "litigation".
+2. Your AI provider is given your question, those paragraphs, the figures loaded in the window, the key signals and the SEC filings rows, with no web access or tools.
+3. The answer is shown with the report's own words in quotation marks where it rests on them, and a link to the report. FastDOM looks up each quote in the paragraphs it sent; a quote that is not there is marked **unverified**. Numbers that are not in the figures or paragraphs are listed in yellow.
+
+Reading the answer:
+
+- The line under each answer says how many paragraphs of which report were used. "From the loaded figures only" means no paragraph of the report matched your question, or the symbol has no report (most funds), so the answer rests on the cards and signals alone.
+- When the material does not answer the question, the answer says so and says what is missing. Reword the question with the terms a report would use, or open the report from the link.
+- Paragraphs are picked by matching words, not by understanding the question. The right paragraph can be missed when the report words it differently, and only the latest report is searched, not earlier reports, 8-Ks or exhibits.
+- It reports what the figures and the report state. It does not give a price target or a buy or sell opinion, and it is not advice.
+- A follow-up such as "and last year?" is understood from the question just before it. The last five answers for the company stay in the window until you load another symbol or close the window; they are not saved.
+
+Nothing about your accounts, positions or orders is sent to the SEC or to the AI provider.
+
 ## Where the figures come from
 
 - **Finviz** quote page: the snapshot cards. No account or key needed.
-- **SEC EDGAR**: the statements and the filed share counts, taken from the company's own 10-Q and 10-K reports. No account or key needed.
+- **SEC EDGAR**: the statements and the filed share counts, taken from the company's own 10-Q and 10-K reports, and the filing list and filing documents used by SEC filings and the AI filing check. No account or key needed.
 - **Massive** (optional): exact short interest per settlement date with history, the float, and share counts by class. This needs a Massive API key in the FASTDOM_MASSIVE_API_KEY environment variable; the free Massive plan is enough. Without a key the short interest and float shown are the Finviz figures, with no settlement date or history.
 - **Your market-data broker**: the Broker fundamentals card.
 
@@ -2119,7 +2226,7 @@ A source that fails is named in the yellow line at the bottom and the rest of th
 
 ## Limits
 
-Answers are reused for 15 minutes per symbol, and Massive short interest for six hours; Refresh fetches Finviz, the SEC and the broker again at once. The free Massive plan allows five requests a minute and each new symbol uses up to three, so loading several symbols quickly can leave some Massive figures to be filled from Finviz until you press Refresh a minute later. Nothing is fetched unless the window asks: there is no background refresh.
+Answers are reused for 15 minutes per symbol, and Massive short interest for six hours; Refresh fetches Finviz, the SEC and the broker again at once. The free Massive plan allows five requests a minute and each new symbol uses up to three, so loading several symbols quickly can leave some Massive figures to be filled from Finviz until you press Refresh a minute later. Nothing is fetched unless the window asks: there is no background refresh. The filing list is fetched once when a symbol loads and reused for 15 minutes. The AI brief, the AI filing check and answers to questions are written only when you press their buttons, and filing documents are downloaded only for a filing check (up to six per check) or a question (the latest report, once).
 
 
 

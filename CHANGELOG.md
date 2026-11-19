@@ -1,5 +1,13 @@
 # Release notes
 
+## Beta 20261119-162250-b2bec9eb — published November 19, 2026
+
+Chart targets and stops again show full-position P/L, marked POS, so chart and DOM amounts agree at the same price. Order quantities are unchanged. Hover DOM orders for their exact prices and remaining quantity; zoomed ladder rows may be rounded. This release also includes clearer balance and Financials displays, improved option-position labels, and a history-request retry correction.
+
+The installer is unsigned. Clean Windows-machine acceptance and customer broker onboarding remain under verification. The NinjaTrader order-confirmation changes shipped in the previous Beta have automated coverage but still await native paper-order acceptance; install and recompile the supplied bridge to receive its rejection details. Strategy Center and Avatar voice are excluded from Beta.
+
+Installer SHA-256: `6c0c7650fc828bd2080bbc2c72fce63d1d9aafab63c2254e38f8369da2ec9cf7`
+
 ## Beta 20261118-214440-a3e6d51f — published November 18, 2026
 
 This Beta adds a Financials view (More > Financials) with company fundamentals, share counts, short interest and the statements filed with the SEC. Options Trader gains a position review with a payoff chart and an opening review whose price can still be edited. Watch keeps charts in saved slots, with Arrange and Undo, and always fits the window. Hot-button actions have a built-in editor, and a stop can be converted to an AI trailing stop from the chart. NinjaTrader orders, changes and cancellations are now reported as done only after NinjaTrader itself confirms them; this is covered by automated tests and has not yet been confirmed with NinjaTrader paper orders, and the bridge must be installed again and recompiled to get the new rejection reasons. Strategy Center and the Avatar voice are not included in this Beta.
