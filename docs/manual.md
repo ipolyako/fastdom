@@ -430,6 +430,21 @@ FastDOM connects to NinjaTrader through its bridge. NinjaTrader must be running 
 
 
 
+## Order confirmations with NinjaTrader
+
+NinjaTrader acknowledges that it received an order before it accepts it, so FastDOM waits for NinjaTrader's own order state before reporting a result.
+
+- **New orders** show SENT until NinjaTrader reports them working, filled or rejected. If the answer is lost or times out, the order shows UNKNOWN. FastDOM does not send it again; check the order in NinjaTrader.
+- **Changes to a working order** (price or quantity, including Reconciler resizes and dragging a stop) are reported as done only after NinjaTrader shows the new terms, within about four seconds. Otherwise the message says the replacement is not confirmed and no retry is sent.
+- **After an unconfirmed change**, FastDOM holds further changes to that one order, even after a restart, until NinjaTrader shows the intended terms or the order is finished. This prevents a duplicate change if the first one was only delayed. Other orders and new entries are not affected. To get past it, look at the order and any rejection in NinjaTrader and manage that order there.
+- **Cancellations** are confirmed against NinjaTrader's order state as well, including when NinjaTrader gives the order a new native ID.
+- **Buying while short**: a buy that fits inside the current short position in the same contract is sent as Buy to Cover. This is a classification of the order, not a guarantee that it only reduces the position, and it does not exempt the order from the account's limits.
+- **Rejection reasons**: with the current bridge, FastDOM shows the reason NinjaTrader gives for a rejected order. With an older bridge it says the native reason is unavailable; install the bridge again from Configuration > Brokers, recompile in NinjaTrader (NinjaScript Editor, F5) and restart NinjaTrader.
+
+An account's maximum order or position quantity is enforced by the broker. A rejected resize or buy near that limit is the limit working, not a FastDOM fault; see PROTECTION INCOMPLETE under the Reconciler.
+
+
+
 ## Depth versus tape
 
 Bookmap and L2 tools need market depth. Footprint needs native executions with bid/ask classification. A connection that supplies one may not supply the other. The bridge's feed must be active, the instrument subscribed, and the upstream entitlement available.
@@ -662,13 +677,27 @@ Each generated column has **AI research / sources**, containing the original req
 
 
 
-Desk's **Create Screen List** saves the latest Finviz screen into **More > Watchlists**, including its name, symbols, research, and sources. **Create Watchlist** after a general Desk answer saves the current opportunity board into that collection. Repeated names receive a numeric suffix. Use **Pop out** there to open an individual linked watchlist, or **Delete** to remove the list.
+Desk's **Create Screen List** saves the latest Finviz screen into **More > Watchlists**, including its name, symbols, research, and sources. **Create Watchlist** after a general Desk answer saves the current opportunity board into that collection. Repeated names receive a numeric suffix. Use **Pop out** there to open an individual linked watchlist, **Clear** to remove every symbol while keeping the list, or **Delete** to remove the list.
 
 
 
 ## Watch multi-chart window
 
-More > Watch opens a grid of small charts. Enter a symbol and Add, choose the timeframe/history range, and use Refresh to reload. Each tile has a symbol header and close control; drag headers to rearrange tiles. The counter indicates current tiles and the supported capacity. Watch is a scanning layout, not proof that every symbol has authorized historical data.
+More > Watch opens a grid of small charts. Enter a symbol and Add, choose the timeframe/history range, and use Refresh to reload. Each tile has a symbol header and close control. The counter indicates current tiles and the supported capacity (24 symbols). Watch is a scanning layout, not proof that every symbol has authorized historical data. It is read-only: arranging charts never places orders and does not reload history.
+
+All charts and empty slots always fit the window, with no scrolling. Resizing the window scales the tiles; more charts mean smaller tiles. Click a ticker to open its full chart for a larger view.
+
+Arranging the board:
+
+- **Lock layout** keeps the arrangement that is on screen. After that, removing a ticker leaves an empty slot where it was, and the other charts do not shift.
+- **Add** fills the selected empty slot, or the first free one. To choose the place, click **+ Add here** on an empty slot and then enter the ticker above. When a locked board is full, Add makes a new row and resizes the whole board to fit. Symbols beyond the 24-chart limit stay in the input box with a message.
+- Drag a chart's header onto another chart to swap the two, or onto an empty slot to move it there.
+- **Pin** anchors a ticker to its slot and turns Lock on. A pinned chart is not moved by ordinary dragging.
+- **Unlock layout** returns to automatic placement in ticker order. When any chart is pinned the button reads **Unlock & unpin all** and also clears every pin.
+- **Arrange** removes the empty slots and refits the charts left to right, top to bottom, keeping Lock on. Pinned charts can move and stay pinned in their new slots.
+- **Undo arrangement** restores the slots, gaps and lock state from before Arrange. It works only until you next add, remove, pin or move a chart, and it is not kept after the window closes.
+
+The arrangement is saved with the Watch layout and with workspace snapshots. Layouts saved by an older version keep their symbol order and pins.
 
 
 
@@ -721,6 +750,8 @@ A buy limit at or above the ask can execute immediately; a sell limit at or belo
 ## Reading depth honestly
 
 Dragging a working-order marker moves the orders at the grabbed row. Hold Shift through release when dragging a stop to include the other stops for the same account, symbol and side. A DOM drag is admitted as a group: while its broker replacements are pending, another DOM drag on that account/symbol is blocked in full. Wait for the completion message before dragging again. Broker replacements are separate operations; an incomplete result lists how many orders were confirmed and requires checking the remaining orders. The app does not automatically retry or roll back a partial move.
+
+An exit order's marker on the chart shows the profit or loss for that order's own quantity (never more than the position holds), not for the whole position. The position line still shows the whole-position figure.
 
 
 
@@ -812,9 +843,13 @@ Risk Buy, Risk Buy STP, Risk Sell, Risk Sell STP, Secure Buy, and Secure Sell ar
 
 Risk-sized scripts require a valid positive risk budget, a valid stop and an executable-side quote. Missing or invalid inputs reject the action; they do not fall back to the selected share size. A zero-sized risk entry stops subsequent commands. Saved custom scripts are preserved on update: inspect the configured script and supply an explicit STOP when required.
 
-The standard Risk Buy, Risk Sell, Risk Buy Simple and Risk Sell Simple scripts read `RISK:$RISK`. `$RISK` is the amount in the Risk box, in the same way `$STOP` is the stop you supply. Sizing is risk divided by the distance between entry and stop: with $1,000 in the Risk box, an entry at 62.60 and a stop at 62.35, the order is 4,000 shares, limited by available funds. If the Risk box is empty, a `RISK:$RISK` script sends nothing and asks for an amount. Custom buttons may use `RISK:$RISK` too; a literal amount such as `RISK:$300` in a custom button is used exactly as written. Installations made before this change showed `RISK:$300` in the standard buttons although the Risk box decided the amount; an untouched `$300` is rewritten to `$RISK` on update.
+The standard Risk Buy, Risk Sell, Risk Buy Simple and Risk Sell Simple scripts read `RISK:$RISK`. `$RISK` is the amount in the Risk box, in the same way `$STOP` is the stop you supply. Sizing is risk divided by the distance between entry and stop: with $1,000 in the Risk box, an entry at 62.60 and a stop at 62.35, the requested size is 4,000 shares, subject to configured order-risk limits and broker acceptance. Available funds alone do not cap Risk Buy/Sell sizing; broker buying power and instrument-specific requirements remain authoritative. If the Risk box is empty, a `RISK:$RISK` script sends nothing and asks for an amount. Custom buttons may use `RISK:$RISK` too; a literal amount such as `RISK:$300` in a custom button is used exactly as written. Installations made before this change showed `RISK:$300` in the standard buttons although the Risk box decided the amount; an untouched `$300` is rewritten to `$RISK` on update.
 
 Outside regular trading hours a script's market entry (`MKT`) on a stock is sent as a limit 10 cents through the bid for sells or the ask for buys, because extended sessions accept limit orders only. Without a bid/ask quote nothing is sent. Futures and regular hours are unchanged.
+
+The built-in market buttons follow the same rule: Buy Mkt, Sell Mkt and the percentage buttons (Buy/Cover %, Sell/Short %, Cover %, Sell %) send that 10-cent limit on a stock outside regular hours. In the pre-market and after-hours sessions it is a Day extended-hours limit; overnight and at weekends it is queued as a GTC limit for the next regular session at the price computed when you clicked.
+
+When a percentage button closes part of a stock position that already has targets or a stop working (Sell/Short % or Sell % on a long, Buy/Cover % or Cover % on a short), FastDOM first reduces those exit orders by the same number of shares, taking them from the farthest target, and then sends the closing order. Without this the broker sees every share already committed to an exit order and cancels them all to fill the new one. The reduction takes about a second per order changed. If it cannot be done the closing order is still sent and a message tells you to check your targets and stop. It follows the Protection Reconciler setting and does not apply to futures.
 
 
 
@@ -874,6 +909,8 @@ The last target should normally consume 100% of the remainder if the intention i
 
 General > Enable Reconciler allows existing protective quantities to be resized after confirmed fills to match broker position. It may increase, decrease, or cancel existing protection. It does not create missing protection or change prices. Enabling it is therefore a real order-management choice, not simply a display preference.
 
+A resize counts only when the broker confirms it. If one resize fails or cannot be confirmed, the Reconciler stops that pass, leaves the existing protective orders in place, and shows **PROTECTION INCOMPLETE** with how much of the position has a confirmed stop (for example "Reported stops 220/327; 107 without confirmed stop coverage"), or says the coverage could not be read. Treat that message as a position that is partly unprotected: check the orders at the broker and add or fix the stop yourself. A common cause is the account's maximum order or position quantity; FastDOM does not split orders or work around a broker limit.
+
 
 
 ## Verification workflow
@@ -899,6 +936,18 @@ In Configuration > Order Management, choosing a template in the dropdown opens i
 Open the hot-buttons gear to edit visible actions. Each button has a label, appearance, and execution definition. Templates cover market and limit orders, dollar sizing, scale-outs, cancellation, risk entries, brackets, dialogs, and position management. Add/Delete and Up/Down change the layout; Apply inserts a selected script template. Save commits changes; Cancel discards the dialog edits.
 
 
+
+## Configure buttons manually
+
+Uncheck **On** and press **Save** to hide a button from the trading panel. Its definition remains in Trading Controls so you can enable it again. Remaining buttons close the gaps; Arrange uses only visible buttons.
+
+In Trading Controls, select a button to see its saved **Behavior**: **Built-in action** or **Script**. Built-in buttons show an explanation instead of an empty script box. The **Action** list contains the implemented actions; quantity controls appear for actions that use them. Price and order type follow the chosen built-in action, rather than a separate template picker. Click the background or text-color swatch to choose a palette color, adjust the color channels, or enter an exact hex value. Apply accepts the color; Cancel leaves it unchanged.
+
+To create a short-only cover button, click **+ Add**, choose **Cover % — short only**, enter the percentage in **Value**, and set its label and shortcut. To buy the same percentage when long or short, choose **Buy / Cover % — add long or cover short**. For the opposite direction, choose **Sell / Short % — sell long or add short**. These combined actions use a fresh position and do nothing when flat. The separate Sell % action reduces longs only. Percentages must be greater than zero and at most 100, with at most two decimal places; whole-share quantities round up and are capped at the current position size. Labels are independent of the percentage, so update the label when changing the value.
+
+Choose **Script** to edit code or insert a script template. **Insert template** replaces the code; it does not report the selected button's current behavior. Clearing code leaves Script mode selected and requires new code or an explicit switch to Built-in action before saving. Standard Risk Buy/Sell scripts still obtain their bracket ladder from the active Order Management template, as the editor explains.
+
+Changing a default button's behavior or quantity creates an editable identity so Save cannot restore its old action. Changing only its label, colors or shortcut retains its identity. Flatten remains protected against conversion into an entry action. **Save** applies the edited list; **Cancel** discards it. Editing the settings does not execute a trading button.
 
 ## Configure with AI
 
@@ -1110,7 +1159,7 @@ Indicators opens the indicator list. A gear beside an indicator edits its suppor
 
 ## Reading the plot
 
-The top quote/candle header describes the selected or current candle. The legend identifies enabled overlays. Candles show open, high, low, and close; volume occupies its own area. Auxiliary indicators can add panels beneath price. The Older/Newer scrollbar controls the visible historical region. A chart scrolled into history can show old bars while the live quote continues elsewhere.
+The top quote/candle header describes the selected or current candle. The legend identifies enabled overlays. Candles show open, high, low, and close; volume occupies its own area. Auxiliary indicators can add panels beneath price. A timeframe such as **1m · 5D** loads five days of one-minute candles, but opens on the latest 120 candles so the bars remain readable. The status line shows how many candles are visible and how many are loaded. Use Z-/Z+ to change candle density and the Older history/Latest slider to move through the loaded range. A chart scrolled into history can show old bars while the live quote continues elsewhere.
 
 
 
@@ -1185,6 +1234,10 @@ Developer retains personal SMTP setup and Send test email. Those sending credent
 
 
 Right-click a working stop order on the chart. Convert to trailing stop asks for a distance in points and then walks the stop behind the best price on every quote. Convert to AI trailing stop asks for nothing: it starts trailing at the gap the stop has at that moment, and about every 45 seconds the selected AI provider reviews recent 1-minute and 5-minute bars, ATR, the fast and slow averages, VWAP, the day's range, your entry and the current stop, and sets how tight to trail. It can also name a structure level, such as the last swing low, for the stop to sit beyond. FastDOM applies that setting on every quote, so the stop reacts between reviews. While the AI is managing a stop, its marker on the chart reads AI STP (or AI SL) instead of STP, and returns to the plain label when AI trailing ends. The reason for each setting appears on the chart's status line. Stop AI trailing in the same menu ends it and leaves the stop where it is.
+
+The AI is told which session it is (regular, pre-market or after-hours) and the current spread. Outside regular hours it is asked to give more room, and FastDOM enforces a wider minimum: the distance is never less than two spreads or half a 5-minute ATR, against one spread or a quarter of an ATR in the regular session.
+
+A virtual stop (the dashed S pill marked SL·SYN, used for stocks when the broker will not hold a stop order, such as before the open and after the close) has the same choice: right-click the pill and choose Convert to AI trailing stop. The AI decides the distance and structure level in the same way, and FastDOM moves the virtual stop's price on live quotes. It only moves toward price, never away, and it is kept at least one full spread from the bid (for a long) or the ask (for a short) so a wide quote does not trigger it. The pill reads AI SL·SYN while the AI is trailing it. Like a broker stop or limit pill, the virtual stop pill also shows the profit or loss the position would close with at that price. When the stop is hit, the virtual stop exits exactly as it would without AI trailing; outside regular hours that exit is a limit order and can miss in a fast move. While no session is open (overnight and weekends) the virtual stop holds, the AI is not asked, and trailing resumes with the next session. Stop AI trailing leaves the virtual stop armed at its last price. Dragging the pill yourself still works and the AI continues from where you put it. All of this needs FastDOM to stay running: a virtual stop does not exist at the broker.
 
 
 
@@ -1580,7 +1633,11 @@ AT EXPIRATION shows max profit, max loss, breakevens, a payoff chart, and a mode
 
 ## Review & Send
 
-Review & Send shows the complete order text, including the account, every leg, quantity, net price, and risk. Nothing is sent until you approve it. The order then passes FastDOM's normal risk checks:
+Review & Send opens a review of the opening order: the masked account, each BUY TO OPEN / SELL TO OPEN leg with its contract quantity, the net limit, the total debit or credit, refreshed mid and natural quotes, maximum profit and loss for the full quantity, the expiry breakevens and the model probability of profit. All dollar figures are before fees, and maximum profit is not expected earnings. Results that are undefined or span two expirations are labelled as such. Cancel is the default.
+
+You can still change the price in the review: edit **Net price**, switch **Pay debit / Receive credit**, step by one cent, or pick **Mid** or **Natural**. The cash, maximum payoff and probability update at once, and an invalid price disables Send. Cancel leaves the ticket's original price unchanged. Sending uses the edited price with the account, legs, quantity and time in force captured when the review opened, and checks quote freshness again. Quotes here are snapshots, not streaming prices.
+
+Nothing is sent until you approve it. The order then passes FastDOM's normal risk checks:
 
 - Symbol restrictions apply to the underlying.
 
@@ -1591,6 +1648,30 @@ Review & Send shows the complete order text, including the account, every leg, q
 
 
 Sending needs a fresh quote snapshot (under 60 seconds old). A leg whose own quote is 1-5 minutes old can still be sent, and the warning is shown in the quote status and in the confirmation. A leg quote older than 5 minutes blocks sending; use Refresh quotes. Adjusted or non-standard contracts (for example, ones that deliver cash or a basket instead of 100 shares) are not supported and cannot be sent.
+
+
+
+## Review position: manage what you hold
+
+**Review position**, next to Close existing spread, opens the selected account's option holdings. It loads when opened and when you select a card; after that use **Refresh**. There is no automatic refresh.
+
+Linked position cards come first, then the individual contracts. Select a card, a single option, or one to four contracts on the same underlying with a quantity per set.
+
+- A card labelled **Suggested from holdings** is a vertical or iron condor inferred from contracts you hold with matching expiry, direction and strikes. The same contract can appear in more than one suggestion, so do not add card quantities together.
+- A card matched to a filled opening order shows that those legs were traded together. It does not prove today's lots still belong to that trade.
+
+For the selection the view shows the number of complete spreads, the broker's average opening debit or credit, current mid and natural closing prices, and estimated P/L for the complete spreads. Contracts that do not complete a set are left out and listed as unmatched. P/L is before fees, uses the broker's average costs rather than individual trade lots, and is not realized P/L. A missing cost or quote shows Unavailable, never zero.
+
+The payoff chart uses your average entry costs. The line is profit or loss at expiration, the dashed marker is the current underlying price, the blue dot is P/L at the current mid, and the amber ring is expiration P/L at that same price. Positions with missing costs or more than one expiration have no fixed payoff curve. Probability of maximum profit is an estimate at expiration from current implied volatility; it is not a forecast and not the chance of touching a price.
+
+Single long or short calls and puts are supported the same way. For a single option the quantity is contracts and the order is an ordinary limit order on that contract.
+
+Set **Order quantity** and choose:
+
+- **Add to position…**: opens the editable opening review for the same legs, directions and ratios. It first refreshes holdings and quotes and checks for overlapping or unresolved orders, then sends one opening order through the normal risk checks. Opening short options still needs the account's permission and passes the maximum-risk limit.
+- **Close selected spreads…**: opens the closing ticket with those legs and quantity, after fresh holdings confirm them. The closing ticket keeps its own confirmation and checks.
+
+After an add, further actions on those contracts wait until the broker reports the order finished and fresh holdings match. If the outcome of an order is unknown the contracts stay blocked and nothing is retried; check Orders and the broker. An accepted opening order is not proof of a fill.
 
 
 
@@ -1851,7 +1932,7 @@ Open **More > Earnings**. The window shows one US trading day at a time, merged 
 - **Finviz** free screener: the report timestamp (before open / after close) for every company reporting this week and next week.
 - **Stock Analysis**: detail rows for the current day (EPS and revenue estimates, index membership) and per-day company counts for the week strip.
 
-Each row lists which sources include the company (for example `2/3 N F ·`). Notes flag when only one source lists that date, when sources disagree on before/after market, or when another source has the company on a different date. Use the day strip or **Week** buttons to move; **Today** returns to the current Eastern date. Filters: text, timing, market-cap band (Any; Small below $2B including micro caps; Mid $2B–$10B; Large $10B–$200B; Mega $200B and above — a band hides companies with no reported cap), watchlist symbols only, and two-or-more sources. Double-click or press Enter to make that symbol active in the DOM and charts.
+Each row lists which sources include the company (for example `2/3 N F ·`). Notes flag when only one source lists that date, when sources disagree on before/after market, or when another source has the company on a different date. Use the day strip or **Week** buttons to move; **Today** returns to the current Eastern date. Filters: text, timing, market-cap band (Any; Small below $2B including micro caps; Mid $2B–$10B; Large $10B–$200B; Mega $200B and above — a band hides companies with no reported cap), watchlist symbols only, and two-or-more sources. Click a row or press Enter to make that symbol active in the DOM and charts.
 
 Data is read-only public information fetched on demand and cached (Nasdaq and Stock Analysis 15 minutes, Finviz 60 minutes). The Finviz week load is paged slowly (about a minute) and is unavailable for dates outside this and next week, where Nasdaq alone is shown. Estimates are vendor consensus, not issuer confirmation; confirm the date with the company's investor-relations release before trading around it. No AI, broker, order or account data is involved.
 
@@ -1873,11 +1954,14 @@ Momentum Scan replaces FAST < $30. Enter Min price and Max price, then Apply; de
 
 
 
-ORB Scan is a separate tab for opening-range stock selection. It is a market-wide scan answered by one request to TradingView's public U.S. stock screener, which returns the prior close, premarket price and volume, today's open and the 14-day ATR for every listed stock and ETF at $5 or more that traded premarket and clears the range rule. FastDOM then applies three rules to each returned row. Screener data needs no key and is about 15 minutes delayed, so the gap and premarket total trail the live market by that much. With the default values these are: the gap from the prior close is at least 0.3 of the 14-day average true range (ATR), the ATR is at least 3% of the price, and at least $500M traded premarket between 3:00 and 8:30 Central. A gap down counts the same as a gap up. Only symbols that meet all three rules are listed, ordered by premarket dollar volume; a symbol that fails any rule is not shown. Before 8:47 Central the gap is measured from the latest premarket price and marked pre; after that, once the delayed feed has caught up with the bell, it is measured from the regular-session open. Premarket dollar volume is a running total until the open, so a symbol can appear later in the morning once it has traded enough.
+ORB Scan is a separate tab for opening-range stock selection. It is a market-wide scan answered by one request to TradingView's public U.S. stock screener, which returns the prior close, premarket price and volume, today's open and the 14-day ATR for every listed stock and ETF at $5 or more that traded premarket and clears the range rule. FastDOM then applies four rules to each returned row. Screener data needs no key and is about 15 minutes delayed, so the gap and premarket total trail the live market by that much. With the default values these are: the gap from the prior close is at least 0.3 of the 14-day average true range (ATR), the ATR is at least 2% of the price, at least $100M traded premarket between 3:00 and 8:30 Central, and the price is at least $20. These defaults come from a review of real trading results in November 2026: stocks meeting the price, premarket and gap rules made money and the rest lost it, and a 3% range minimum would have excluded many of the good days. They describe past results, not a guarantee. A gap down counts the same as a gap up. Only symbols that meet all four rules are listed, ordered by premarket dollar volume, and only the top 10 by default (Show top); a symbol that fails any rule is not shown. A replay of these rules over about 2,900 stocks found that the day's top 10 by premarket dollar volume held most of the opening-range trades that worked; setting Min gap and Min ATR % to 0 turns the scan into exactly that list, with gap and ATR still shown on every row. Before 8:47 Central the gap is measured from the latest premarket price and marked pre; after that, once the delayed feed has caught up with the bell, it is measured from the regular-session open. Premarket dollar volume is a running total until the open, so a symbol can appear later in the morning once it has traded enough.
 
 
 
-The scan refreshes about every two minutes or when you press Refresh. Below the values, a source line states where the data came from (the TradingView screener, or broker price history when the fallback ran), how fresh it is as the source itself reports it (Real-time, Delayed 15 min, End of day), what the gap is measured from, and how many stocks were examined. Each row repeats this in its Source and Data columns, so a mixed result is visible row by row. From shows Watchlist for symbols that are also on your watchlist. If the screener cannot be reached, the scan falls back to daily and five-minute price history from your connected market-data broker for up to 80 symbols taken from the broad discovery snapshot and your watchlist, and the status line says so; that path is slower and can miss thinly traded gappers. The three values are shown at the top of the tab as Min gap (ATR), Min ATR % and Min premarket $M. Change any of them and press Apply to save and rescan; Defaults restores 0.3, 3 and 500. The line below the boxes states the values in use. Input that is not a plain number, or is outside 0–20 ATR, 0–100% or $0–1,000,000M, is refused and nothing changes. After 8:40 Central the timer refresh slows to about every ten minutes, because the gap and premarket total no longer change. The scan is a screen for choosing what to watch, not an order signal. Because only the most active qualifying names are measured, a thinly traded gapper can be missed.
+The scan refreshes about every two minutes or when you press Refresh. Below the values, a source line states where the data came from (the TradingView screener, or broker price history when the fallback ran), how fresh it is as the source itself reports it (Real-time, Delayed 15 min, End of day), what the gap is measured from, and how many stocks were examined. Each row repeats this in its Source and Data columns, so a mixed result is visible row by row. From shows Watchlist for symbols that are also on your watchlist. If the screener cannot be reached, the scan falls back to daily and five-minute price history from your connected market-data broker for up to 80 symbols taken from the broad discovery snapshot and your watchlist, and the status line says so; that path is slower and can miss thinly traded gappers. The values are shown at the top of the tab as Min gap (ATR), Min ATR %, Min premarket $M, Min price $ and Show top. **Fill ORB UP / ORB DOWN each morning** (off by default; press Apply to save) makes FastDOM run the same scan once a minute from 8:20 to 8:29 Central on trading days, even with Movers closed, and replace the named watchlists ORB UP (top rows gapping up or flat) and ORB DOWN (top rows gapping down) with the result; an open list window updates in place, and the activity log records each fill. It places no orders.
+
+
+Change any of them and press Apply to save and rescan; Defaults restores 0.3, 2, 100, 20 and the top 10. The line below the boxes states the values in use. Input that is not a plain number, or is outside 0–20 ATR, 0–100% or $0–1,000,000M, is refused and nothing changes. After 8:40 Central the timer refresh slows to about every ten minutes, because the gap and premarket total no longer change. The scan is a screen for choosing what to watch, not an order signal. Because only the most active qualifying names are measured, a thinly traded gapper can be missed.
 
 
 
@@ -1938,7 +2022,17 @@ A call-price estimate assumes a relationship between account equity, position mo
 
 
 
-The main window's overnight-margin information highlights exposure relevant to carrying positions beyond intraday treatment. Buying power and overnight capacity are not interchangeable. A position permitted intraday can require more equity later.
+The main window's BP value is broker-reported buying power. Its tooltip separately lists day-trading buying power, intraday buying power, available funds, net liquidation and cash. Missing buying power is shown as unknown, without substituting another balance. The margin banner distinguishes negative available funds, calculated maintenance shortfall and broker-reported call fields. It does not prescribe liquidation quantities or predict a call deadline. Negative available funds alone do not prove a Reg T call or block a Risk Buy/Sell order.
+
+The balance panel separately shows API-reported intraday buying power, available funds, maintenance requirement and call fields. **Retrieved** means FastDOM received a response; it is not the broker's margin-calculation time. Failed refreshes retain the previous figures with a visible warning, and responses older than two minutes are marked stale. Refresh balances requests another response without placing an order.
+
+These account snapshots do not determine whether a specific order will be accepted. Negative balances do not prove every new order is prohibited, and positive balances do not guarantee approval. A snapshot retrieved after a fill cannot establish what Schwab used before that fill. An accepted order does not clear an account margin warning. Confirm the specific order decision and any required margin action with Schwab; FastDOM does not infer an explanation such as hedging or a concentration exemption from the fill alone.
+
+A broker buying-power rejection remains visible for that account during the session, with its order and exact reason, even if later reported balances are positive or another order fills. Dismiss hides that historical notice; it does not establish that a restriction has cleared. Repeated updates for the same rejected order do not restore a dismissed notice. Existing risk checks and broker validation continue to apply; the notice neither retries orders nor disables closing or protective controls.
+
+After a buying-power rejection, **Check what would work** runs an optional Schwab preview of that rejected order and a bounded set of smaller quantities. It does not run before submission or automatically after rejection. Supported orders are unfilled, single stock/ETF market or limit orders with a broker order ID. The check preserves the original account, symbol, buy/sell/short instruction, limit price, session and duration. It shows the largest passing quantity tested below the rejected size, rechecked once, with its order value and projected balances. This is a current preview, not a guaranteed maximum or proof of what would have filled earlier. If conditions change, the service is unavailable or no passing size is verified, the result says so. Nothing is submitted, retried or changed in your ticket. Switching account or dismissing the notice cancels its diagnostic display.
+
+Schwab concentration requirements can rise when a position's Point of No Return (PNR) falls within its Expected Price Range (EPR). Displayed balances can lag the requirements enforced during order validation. FastDOM does not currently receive verified PNR/EPR thresholds and does not infer a concentration breach from a generic buying-power rejection. In thinkorswim, inspect Monitor > Activity & Positions > the position's BP Effect or Margin Req. A successful refresh does not prove that displayed buying power is usable for a particular order.
 
 
 
@@ -1954,7 +2048,7 @@ This view does not place a trade merely by running Check size. Any resulting ord
 
 ## Performance
 
-More > Performance opens calendar-style results. Use previous/next, Today, and Month/Week/Day to select the reporting period; Refresh reloads supported account/execution history. Read whether a value represents realized trade P/L, day/account P/L, or an aggregate before comparing it with another panel. In Day view, click a symbol to see the matched opening and closing lots behind its realized P/L; double-click that symbol to close the lots again.
+More > Performance opens calendar-style results. Use previous/next, Today, and Month/Week/Day to select the reporting period; Refresh reloads supported account/execution history. Read whether a value represents realized trade P/L, day/account P/L, or an aggregate before comparing it with another panel. Realized P/L is measured against the average price paid for the open position, the same average the position line and chart show: selling part of a position above its average books a profit and below it a loss, whichever purchase came first. Once a position is fully closed the total is the same as a broker's first-in-first-out statement; only the split between partial closes can differ, so a broker or tax report may show a different figure for a day on which part of a position stayed open. In Day view, click a symbol to see each closing fill with the average price it was measured against and when that position was opened; double-click that symbol to close the list again.
 
 
 
@@ -1983,6 +2077,49 @@ More > Learn opens trade review for a selected date. Previous/next and Today mov
 
 
 For discrepancies, report the date, symbol, reporting scope, and redacted trade details. Do not "fix" a result by deleting live archive records. Historical price touching an exit level is not evidence your actual order filled there.
+
+
+
+# Analysis | Financials: company fundamentals, shares and short interest
+
+## Opening it
+
+More > Financials opens a company's fundamentals. It opens on the symbol that is on the DOM. After that the window keeps its own symbol: type another ticker in the Symbol box and press Enter (or Load) to read a different company without changing the DOM. Use DOM symbol loads whatever the DOM shows now. Choosing More > Financials while the window is already open only brings it forward. The view is read-only: it never changes the DOM symbol, accounts or orders. It covers stocks and ETFs, not futures or option contracts.
+
+## What it shows
+
+The top cards group the figures by subject, and each card names its source in the corner. Hover a figure for its definition or exact value. The cards are packed into equal columns that fill the window, so widening the window shows more columns and shortens the page. A card appears only when its source has figures for the symbol.
+
+- **Shares and short interest**: shares outstanding, shares issued and treasury shares, the float, short interest in shares with its settlement date, short interest as a percentage of the float, days to cover, and the change since the previous report.
+- **Valuation, Profitability, Growth, Estimates and earnings, Financial strength, Dividend, Ownership, Price and trading, Performance, Company**: the Finviz snapshot, including forward P/E, analyst target price, the earnings date, and insider and institutional ownership.
+- **Fund profile** (ETFs and other funds): category, sponsor, expense ratio, asset type, tags, total holdings, assets under management, and Finviz's return and flow figures. For a fund the company cards that do not apply (valuation, profitability, growth, ownership) are simply absent.
+- **Broker fundamentals**: the fundamentals your market-data broker reports (Schwab), with plain labels: market cap, shares outstanding, 52-week range, beta, average volumes, valuation ratios, margins, returns, debt ratios and the dividend amounts and dates. Figures the broker leaves empty are not shown, and for a fund the company-only ratios (margins, P/E, returns) are left out.
+
+Below the cards, **Statements as filed with the SEC** shows the income statement, balance sheet and cash flow for the last eight quarters or five fiscal years (switch with Quarterly / Annual), newest first, with margins, revenue growth and free cash flow worked out from them. **Short interest history** lists the last 24 settlement dates with shares short, the change from the previous report, average daily volume and days to cover. Its % of float column appears only when a float is published for the symbol; many ETFs have none.
+
+## Where the figures come from
+
+- **Finviz** quote page: the snapshot cards. No account or key needed.
+- **SEC EDGAR**: the statements and the filed share counts, taken from the company's own 10-Q and 10-K reports. No account or key needed.
+- **Massive** (optional): exact short interest per settlement date with history, the float, and share counts by class. This needs a Massive API key in the FASTDOM_MASSIVE_API_KEY environment variable; the free Massive plan is enough. Without a key the short interest and float shown are the Finviz figures, with no settlement date or history.
+- **Your market-data broker**: the Broker fundamentals card.
+
+A source that fails is named in the yellow line at the bottom and the rest of the view still loads.
+
+## Reading it correctly
+
+- Short interest is reported by the exchanges twice a month and published about a week after each settlement date. It is never a live figure. Always read it with its settlement date.
+- Shares outstanding is the count on the cover of the latest SEC filing when that agrees with the other sources. For a company with several share classes the filed count can belong to another class, so the listed class's count is shown instead and the all-classes figure appears beneath it.
+- Statements are in US dollars as the company filed them. Filings do not state every quarter directly: the fourth quarter, and cash flow in every quarter, are derived by subtracting the earlier year-to-date figure from the later one. A dash means the company did not file that line under a tag FastDOM recognises; it does not mean zero.
+- Per-share figures and share counts in the statements are as originally filed and are not adjusted for later stock splits, so an older column can look out of scale after a split.
+- ETFs and most foreign companies file no US-GAAP statements with the SEC, so their statement tables are empty; the snapshot cards still load.
+- Days to cover in the history is the exchange-reported figure. It does not go below 1.00, so a heavily traded symbol can show 1.00 on every row.
+- A fund's name and description come from Finviz as written and can disagree with each other after the fund changes its objective. Check the sponsor's page for the current terms.
+- Finviz figures can lag a new filing by a day or more. Confirm anything you will trade on against the company's own report.
+
+## Limits
+
+Answers are reused for 15 minutes per symbol, and Massive short interest for six hours; Refresh fetches Finviz, the SEC and the broker again at once. The free Massive plan allows five requests a minute and each new symbol uses up to three, so loading several symbols quickly can leave some Massive figures to be filled from Finviz until you press Refresh a minute later. Nothing is fetched unless the window asks: there is no background refresh.
 
 
 
@@ -2172,6 +2309,16 @@ Before anything changes, FastDOM copies the current settings files to a dated fo
 Services includes universe and refresh settings for Movers. Available features depend on the installed edition. Indicators chooses defaults for new charts. Saved charts restore their own settings. Order Management contains the active take-profit template. Storage selects the archive/authentication backend and requires restart; it does not copy history.
 
 
+
+## Background tab
+
+Configuration > Background lists everything FastDOM does without a window showing it: scheduled jobs (the ORB morning fill, workspace save, account sync, chart history prefetch, options collectors), recorders (order-book and footprint archives), broker polling and streams, per-chart indicator refreshes and the display refresh loops.
+
+Each row shows the job, its state (Has not run, Idle, Ran N s ago, Failed), the time and result of its last run, how many times it ran, skipped and failed since the app started, and its schedule. Select a row, or hover over its name, to read what the job does in plain words, when it last ran and how long it took, and why it last skipped. For example the ORB morning fill reads "Outside the fill window (08:20-08:29 Central on trading days)" for most of the day, or "Fill ORB UP / ORB DOWN is switched off on the ORB SCAN tab".
+
+Recent events lists the last 500 runs, skips and failures, newest first; failures are red. A job that skips for the same reason again and again is listed once, when the reason changes. Fast loops such as display refresh and broker polling are counted in the table but not listed as events.
+
+The tab only reports. It cannot start, stop or change a job, and its counts reset when the app restarts.
 
 # Troubleshooting | Accounts work but charts or Watch do not
 
@@ -2475,6 +2622,8 @@ Day/GTC, then review the complete ticket. This sends one Schwab multi-leg closin
 
 order; no individual-leg fallback is used. The displayed total excludes fees.
 
+**Refresh quotes** also fills the **Estimated P/L** card beside the price controls, for the selected closing quantity before fees. It follows your edits to the net limit and to debit or credit, and shows Unavailable when a quote or the broker's cost is missing. Changing the quantity requires refreshing quotes again.
+
 The ticket and the confirmation state what the close locks in: the net price the spread was opened at (from the broker's average fill prices) and the estimated P/L at the entered limit, before fees. If the broker reports no average cost for a leg, the line says the estimate is unavailable; it never blocks the close.
 
 After a close is sent, the window holds the contracts in that order: it will not quote or review them again, and says so, because a second close for the same contracts could double the order. Other positions in the list can still be closed from the same window. Selecting different contracts clears the limit price, so refresh quotes to price the new spread and check whether it is a debit or a credit. To close the same contracts again (for example after cancelling the first order at the broker), check Orders, then close and reopen the window.
@@ -2644,3 +2793,11 @@ Use loads the scored candidate and its assessment. Refresh assessment reuses unc
 
 
 Break-even movement and payoff are calculated. AI commentary is advisory. Chart, news, earnings and a directional thesis are not evaluated, and model probability is not a calibrated forecast. Neither the score nor ranking establishes expected return. Invalid AI responses do not create recommendations. AI never submits or blocks an order.
+
+
+
+### Configure chart timeframes
+
+In Chart Timeframes, set **Each candle represents** and **Load history for**. History controls how much data is available through the chart's Older history/Latest slider; it does not change the initial 120-candle view. The preview becomes the chart dropdown label; select a row to enter an optional custom name. Add, remove and reorder rows before saving. FastDOM chooses source candles and aggregation automatically.
+
+Candle units include Seconds, Minutes, Hours, Days and Weeks. Daily and weekly candles currently use intervals of one. Intraday history accepts Days or Weeks (seven requested days per week); daily/weekly history accepts supported Months or Years. Available history depends on the provider. Seconds require NinjaTrader history and its bridge currently limits requests to the latest three hours; Schwab and Alpaca do not supply second-candle history. The editor shows this limit and any unsupported combinations before saving. Existing presets retain their source request settings unless their interval or history is changed.

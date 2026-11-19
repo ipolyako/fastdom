@@ -1,5 +1,29 @@
 # Release notes
 
+## Beta 20261118-214440-a3e6d51f — published November 18, 2026
+
+This Beta adds a Financials view (More > Financials) with company fundamentals, share counts, short interest and the statements filed with the SEC. Options Trader gains a position review with a payoff chart and an opening review whose price can still be edited. Watch keeps charts in saved slots, with Arrange and Undo, and always fits the window. Hot-button actions have a built-in editor, and a stop can be converted to an AI trailing stop from the chart. NinjaTrader orders, changes and cancellations are now reported as done only after NinjaTrader itself confirms them; this is covered by automated tests and has not yet been confirmed with NinjaTrader paper orders, and the bridge must be installed again and recompiled to get the new rejection reasons. Strategy Center and the Avatar voice are not included in this Beta.
+
+- Financials (More > Financials): valuation, profitability, growth, estimates, ownership and performance from Finviz; shares outstanding, shares issued, float and short interest with its settlement date and 24-report history; quarterly and annual income statement, balance sheet and cash flow from SEC filings; and the fundamentals reported by Schwab. It opens on the DOM symbol and then keeps its own symbol. Read-only. Exact short interest history and float need a free Massive API key in the FASTDOM_MASSIVE_API_KEY environment variable; without it the Finviz figures are shown.
+- Options Trader, Review & Send: the opening review lists each leg, the net limit, total debit or credit, maximum profit and loss, breakevens and model probability, and the net price can be changed there before sending.
+- Options Trader, Review position: shows option holdings as linked position cards and single contracts with average-cost P/L, current closing prices and a payoff chart, and can add to or close the selected position. It refreshes when opened and when you press Refresh; there is no periodic refresh. The closing ticket shows an Estimated P/L card.
+- Watch: Lock layout keeps charts in fixed slots, removing a ticker leaves an empty slot, + Add here places a ticker in a chosen slot, Pin anchors a chart, Arrange closes the gaps and Undo arrangement restores them. All charts fit the window without scrolling.
+- Buying power: after a broker buying-power rejection, Check what would work runs an optional Schwab preview of that order and of smaller quantities. Balance details the broker does not report are hidden.
+- Risk sizing: risk-sized entries are no longer capped by the available-funds figure, which is not buying power; the configured risk checks and the broker decide.
+- Trading Controls: built-in hot-button actions (Buy/Cover %, Sell/Short %, Cover %, Sell %, quantity rules) can be edited without writing a script, buttons have a colour picker, and disabled buttons stay editable.
+- Percentage buttons: a partial close first reduces the working targets and stop by the same amount, and the buttons work outside regular hours with an extended-hours limit order.
+- Stops: right-click a working stop or a virtual stop on the chart and choose Convert to AI trailing stop.
+- Chart: an exit order's marker shows the P/L for that order's quantity; the timeframe editor and selection were repaired; line drawing was added.
+- Performance calendar: P/L uses average cost, and disabled day cells keep their dark background.
+- Watchlists have a Clear button. In Earnings a single click sends the symbol to the DOM, and a Searching indicator shows while results load.
+- Configuration: a Background tab lists every timer and background job with its last run and result.
+- NinjaTrader: a new order shows SENT until NinjaTrader reports it working, filled or rejected; a price or quantity change is reported as done only after NinjaTrader shows the new terms; cancellations are confirmed the same way. An unconfirmed result is never retried automatically, and further changes to that one order are held until NinjaTrader shows the intended terms or the order is finished. A buy that fits inside a short position is sent as Buy to Cover. These changes passed automated tests and are not yet confirmed with NinjaTrader paper orders.
+- NinjaTrader bridge: this Beta ships an updated bridge that reports NinjaTrader's rejection reason. Install it from Configuration > Brokers > Install / repair NinjaTrader bridge, recompile in NinjaTrader (NinjaScript Editor, F5) and restart NinjaTrader.
+- Reconciler: when a protective order cannot be resized or the resize is not confirmed, it stops, leaves existing protection in place and shows PROTECTION INCOMPLETE with how much of the position has a confirmed stop.
+- Strategy Center and the Avatar voice stay in the Developer edition; they are absent from this Beta's menus, chart toolbar and help.
+
+Free, unsigned Windows x64 Beta. Installer SHA-256 `487b72d544e48e6b5305a903cc3a0a2adaf591cfbf4c776ba10bdfc86395397f`.
+
 ## Beta 20261114-133306-e8c7de04 — published November 14, 2026
 
 Working orders now show a price tag on the chart's price axis, and each Watch tile carries the company name as a watermark. A price prompt opened from a hot button takes the keyboard straight away, also when the button was pressed in another window, and the chart no longer takes the keyboard back from an open FastDOM dialog after an order action. In watchlists the list name and the column headers have their own colours, so they no longer blend with the symbol rows. Configuration has a Close button. Automatic Schwab sign-in starts its browser differently, a change intended to stop the access-denied refusals seen since late October; it has not yet been confirmed inside FastDOM, and browser sign-in remains available. Strategy Center is not included in this Beta.

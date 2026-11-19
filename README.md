@@ -76,9 +76,9 @@ This early Beta is **unsigned**. Windows may display an unknown-publisher warnin
 
 ## Current release
 
-**Beta 20261114-133306-e8c7de04** — November 14, 2026.
+**Beta 20261118-214440-a3e6d51f** — November 18, 2026.
 
-Working orders now show a price tag on the chart's price axis, and each Watch tile carries the company name as a watermark. A price prompt opened from a hot button takes the keyboard straight away, also when the button was pressed in another window, and the chart no longer takes the keyboard back from an open FastDOM dialog after an order action. In watchlists the list name and the column headers have their own colours, so they no longer blend with the symbol rows. Configuration has a Close button. Automatic Schwab sign-in starts its browser differently, a change intended to stop the access-denied refusals seen since late October; it has not yet been confirmed inside FastDOM, and browser sign-in remains available. Strategy Center is not included in this Beta.
+This Beta adds a Financials view (More > Financials) with company fundamentals, share counts, short interest and the statements filed with the SEC. Options Trader gains a position review with a payoff chart and an opening review whose price can still be edited. Watch keeps charts in saved slots, with Arrange and Undo, and always fits the window. Hot-button actions have a built-in editor, and a stop can be converted to an AI trailing stop from the chart. NinjaTrader orders, changes and cancellations are now reported as done only after NinjaTrader itself confirms them; this is covered by automated tests and has not yet been confirmed with NinjaTrader paper orders, and the bridge must be installed again and recompiled to get the new rejection reasons. Strategy Center and the Avatar voice are not included in this Beta.
 
 See the [changelog](CHANGELOG.md), [official download](https://fastdom.decoglobal.us/download), [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/), and [disclaimer](https://fastdom.decoglobal.us/disclaimer).
 
