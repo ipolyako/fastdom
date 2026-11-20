@@ -1657,14 +1657,14 @@ Sending needs a fresh quote snapshot (under 60 seconds old). A leg whose own quo
 
 Linked position cards come first, then the individual contracts. Select a card, a single option, or one to four contracts on the same underlying with a quantity per set.
 
-Each card says what kind of position it is. A two-leg vertical is named by its direction, with the same names the opening ticket uses, and the line under the title says where it wins and loses at expiration:
+Each card names the structure and describes its expiration payoff. This does not establish the original entry cash flow or whether the position is profitable:
 
-- **Bull put vertical (credit)**: long the lower put, short the higher put. Bullish: you keep the credit if the stock is above the higher strike at expiration; the maximum loss is below the lower strike.
-- **Bear put vertical (debit)**: short the lower put, long the higher put. Bearish: full profit below the lower strike; you lose the debit above the higher strike.
-- **Bull call vertical (debit)**: long the lower call, short the higher call. Bullish: full profit above the higher strike; you lose the debit below the lower strike.
-- **Bear call vertical (credit)**: short the lower call, long the higher call. Bearish: you keep the credit below the lower strike; the maximum loss is above the higher strike.
+- **Bull put vertical**: long the lower put, short the higher put. Expiration payoff is highest above the higher strike and lowest below the lower strike.
+- **Bear put vertical**: short the lower put, long the higher put. Expiration payoff is highest below the lower strike and lowest above the higher strike.
+- **Bull call vertical**: long the lower call, short the higher call. Expiration payoff is highest above the higher strike and lowest below the lower strike.
+- **Bear call vertical**: short the lower call, long the higher call. Expiration payoff is highest below the lower strike and lowest above the higher strike.
 
-Iron condors read Neutral, reverse iron condors read as expecting a large move, and single options read Bullish or Bearish with what a short option obliges you to do. The direction is read from which leg is long and which is short; credit or debit follows from the strikes. It describes the structure at expiration, not your result: your actual entry prices and P/L are in the panel on the right.
+Iron condors read Neutral; reverse iron condors read as expecting a large move. Their descriptions show signed expiration values per share for each outer wing and the middle range; unequal wings have different values. Profit depends on cost basis. Legs may have been opened separately, so their directions and strikes do not prove a debit or credit. Entry prices and estimated P/L appear in the panel on the right. Single-option descriptions allow for share assignment or cash settlement, depending on the contract.
 
 - A card labelled **Suggested from holdings** is a vertical or iron condor inferred from contracts you hold with matching expiry, direction and strikes. The same contract can appear in more than one suggestion, so do not add card quantities together.
 - A card matched to a filled opening order shows that those legs were traded together. It does not prove today's lots still belong to that trade.

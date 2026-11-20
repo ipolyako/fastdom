@@ -1,5 +1,13 @@
 # Release notes
 
+## Beta 20261120-064540-a49117c0 — published November 20, 2026
+
+Futures Flatten now preserves an explicitly selected expiry, including equivalent contract names. Margin what-if calculations keep different futures expiries separate. Option-position descriptions better explain payoff structure and unequal condor wings. Includes the restored full-position POS P/L labels on chart limit orders.
+
+Unsigned free Beta. Clean Windows-machine acceptance and customer broker onboarding remain under verification. Futures execution changes have automated coverage; native paper-order/on-screen acceptance remains unverified. Install and recompile the supplied NinjaTrader bridge for its previously released rejection details. Strategy Center and Avatar voice are excluded from Beta.
+
+Installer SHA-256: `a467328303fc4c3368bab22220cb71d10353abe1ad5d353e0ac0d79da76d890a`
+
 ## Beta 20261119-162250-b2bec9eb — published November 19, 2026
 
 Chart targets and stops again show full-position P/L, marked POS, so chart and DOM amounts agree at the same price. Order quantities are unchanged. Hover DOM orders for their exact prices and remaining quantity; zoomed ladder rows may be rounded. This release also includes clearer balance and Financials displays, improved option-position labels, and a history-request retry correction.

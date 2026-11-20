@@ -76,9 +76,9 @@ This early Beta is **unsigned**. Windows may display an unknown-publisher warnin
 
 ## Current release
 
-**Beta 20261119-162250-b2bec9eb** — November 19, 2026.
+**Beta 20261120-064540-a49117c0** — November 20, 2026.
 
-Chart targets and stops again show full-position P/L, marked POS, so chart and DOM amounts agree at the same price. Order quantities are unchanged. Hover DOM orders for their exact prices and remaining quantity; zoomed ladder rows may be rounded. This release also includes clearer balance and Financials displays, improved option-position labels, and a history-request retry correction.
+Futures Flatten now preserves an explicitly selected expiry, including equivalent contract names. Margin what-if calculations keep different futures expiries separate. Option-position descriptions better explain payoff structure and unequal condor wings. Includes the restored full-position POS P/L labels on chart limit orders.
 
 See the [changelog](CHANGELOG.md), [official download](https://fastdom.decoglobal.us/download), [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/), and [disclaimer](https://fastdom.decoglobal.us/disclaimer).
 
