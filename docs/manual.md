@@ -340,6 +340,8 @@ The SQLite setup stores protected application profiles and tokens for the curren
 
 Open Configuration > Brokers > Reconnect to Schwab when authorization needs attention. **Login** uses the browser flow. **Try automatic sign-in** uses saved sign-in details when available. **Open connection setup** edits the developer application profiles. **Close** dismisses the recovery window; use **Cancel sign-in** for an in-progress attempt when offered.
 
+Schwab ends a sign-in after seven days. If that happens while FastDOM is running, a message says **Your Schwab sign-in has expired** at that moment (in the activity log, and as a notice repeated every two minutes until you sign in again); at the next start the "Schwab connection needs attention" window opens as before. The message is deliberately not a dialog, so it cannot take keys or clicks from the main window while you may still be managing a position. While the sign-in is refused, FastDOM asks Schwab again at most once a minute instead of on every request; signing in ends that at once. The log records the refusal once, with the HTTP status and Schwab's error code and nothing else of its answer.
+
 
 
 ## Why two logins appear
@@ -611,11 +613,15 @@ The top bar selects the trading broker, symbol, optional NINJA MD feed, and acco
 
 The position list shows account holdings; the DOM's position summary concerns the current symbol. Day P/L, realized P/L, and open/unrealized P/L are different measures. They can also differ from a broker's reporting convention or update cadence. A blank value is not necessarily zero.
 
+**AVG COST** in the position list is the broker's average price for the whole open position, blended across every add (per share; per share of premium for an option). Open P/L is measured from this price. Hover the value for the unrounded average and the total cost basis; for a futures position the hover gives the notional value at that price instead. A dash means the broker did not report an average. It is the broker's trade average, not a tax-lot basis: wash-sale and other tax adjustments are not included.
+
+AVG COST shows two decimal places for stocks and options (four under a dollar). A futures contract quoted more finely is shown to the places of its tick (a Treasury note at 1/64, copper at 0.0005), and a futures product FastDOM has no tick on file for, such as a currency future, is shown with up to six places.
+
 
 
 ## Navigation
 
-Chart opens a separate chart. Orders displays working orders. OPT opens the options chain. More contains Watch, Watchlists, L2 Heat, BookMap, FootPrint, Time & Sales, Movers, Options Trader, Partner, Desk, Performance, Margin, Pulse, Trade Copier, SpotGamma, Learn, Help, and About.
+Chart opens a separate chart. Orders displays working orders. OPT opens the options chain. More contains Watch, Watchlists, L2 Heat, BookMap, FootPrint, Time & Sales, Movers, Market, Scan, Options Trader, Partner, Desk, Performance, Margin, Pulse, Trade Copier, SpotGamma, Learn, Help, and About.
 
 
 
@@ -782,6 +788,8 @@ The Limit field is not a stop trigger. For a stop-limit order, the trigger and e
 ## Size controls
 
 The main Size field and preset buttons provide convenient quantities. The 1–10 presets are labeled for option contracts. Quantity is not dollar risk: ten shares, ten options contracts, and ten futures contracts have different economic exposure. Risk-based buttons use a different sizing path; read their topic.
+
+The row of rounded **10% / 15% / 30% / 50% / 100%** buttons under the numeric presets fills Size from the position you already hold in the DOM symbol on the selected account. Size is set in the click itself, to that percentage of the position FastDOM last read from the broker (a reading no more than 10 seconds old, the same age order actions rely on), rounded up to a whole share or contract (15% of 229 shares gives 35; 10% of 2 contracts gives 1). So an order sent straight after the click already carries the new Size. FastDOM then asks the broker to confirm: if the position has changed, Size is corrected and the activity line says "corrected from"; if the position is gone, Size is put back to what it was; if the broker does not answer, the early figure stays and the line says the broker did not confirm it. When FastDOM has no recent reading, the click waits for the broker before changing Size, as it did before 2026-11-21. A short position uses its size without the sign. These buttons never send, change or cancel an order: they only save typing, and the next action you press decides what happens with that quantity. When there is no position in that symbol, or there is no recent reading and the broker does not answer within 10 seconds, Size is left as it was and the activity line says so. A held option does not count as a position in its underlying stock, and a futures position in another expiry is not used. Changing the account, symbol or Size, or pressing a numeric preset, while the broker is still answering discards the pending result.
 
 
 
@@ -1199,7 +1207,7 @@ Use the available drawing tools for price levels, trend/structure annotations, a
 
 
 
-**Fibonacci Retracement** calculates reference fractions between chosen anchors. Reversing the anchors changes the direction of the measurement. **Percentage Measure** reports a price-range change over the chosen span; the result is a measurement, not realized account P/L.
+**Fibonacci Retracement** calculates reference fractions between chosen anchors. Reversing the anchors changes the direction of the measurement. **Percentage Measure** reports a price-range change over the chosen span; the result is a measurement, not realized account P/L. The move is read in time order, from the earlier bar to the later bar, whichever corner you drag from: a decline always shows as a negative percentage of the earlier (higher) price, in red. A fall from 241.72 to 134.76 reads -44.25% (106.96 / 241.72); the price that remains is 55.75% of the high, and regaining the high from the low would take +79.37%.
 
 
 
@@ -1951,7 +1959,9 @@ More > Movers presents the available mover/universe data and offers Refresh. Whi
 
 
 
-Top Gainers, Top Losers and Most Active try the selected broker's native ranked lists first, with configured discovery as fallback. Momentum Scan independently uses broad discovery: a configured Massive snapshot, the U.S. listed-symbol directory with bulk quotes, then configured FMP or Yahoo screens if needed. A nonempty native ranked list never bypasses Momentum Scan's broad discovery. The status identifies both sources and their symbol counts; directory scans may use a five-minute cache and partial coverage is disclosed. NINJA MD changes quote delivery, not the trading account or primary broker discovery source. Yahoo ranked screens have limited coverage. Optional external providers require their own configuration; FastDOM does not create subscriptions for you.
+**With Finviz Elite** (a token saved and tested under Configuration > Services > FINVIZ ELITE), Finviz comes first everywhere FastDOM looks across the market, and Finviz does the scanning: FastDOM asks for Finviz's own **Top Gainers**, **Top Losers** and **Most Active** lists, the momentum rule ($1 and up, up 5% or more, over 100,000 shares) and the busiest ETFs, and only the matching rows come back (a few hundred, not the whole market). Top Gainers, Top Losers, Most Active, Momentum Scan and the Market Desk's market picture all use these answers, shared until the next refresh. How often that is comes from Configuration > Services > SCANNER > **Refresh seconds** (at least 10 seconds with Elite, at most 5 minutes; a changed value applies the next time Movers is opened). Before a scan is sent, FastDOM checks every filter against Finviz's live list of choices, and an answer far longer than the scan should give is refused, because Finviz ignores a choice it does not know and returns everything. The Market Desk's advancing and declining percentages are Finviz's own count of stocks trading over 100,000 shares today that are up or down, read once a minute. Momentum Scan covers stocks priced $1 and up with Elite. Each ranked tab lists its top 200. Relative volume is against Finviz's three-month average volume. If Finviz does not answer, refuses the token or returns too little, the sources below are used, the status line says "Finviz Elite not used:" with the reason, and Finviz is asked again after a minute. Without Elite, nothing below changes. The opening-range (ORB) scan still measures its gap and premarket volume from your broker's bars; only the list of names it checks comes from this snapshot.
+
+Without Finviz Elite: Top Gainers, Top Losers and Most Active try the selected broker's native ranked lists first, with configured discovery as fallback. Momentum Scan independently uses broad discovery: a configured Massive snapshot, the U.S. listed-symbol directory with bulk quotes, then configured FMP or Yahoo screens if needed. A nonempty native ranked list never bypasses Momentum Scan's broad discovery. The status identifies both sources and their symbol counts; directory scans may use a five-minute cache and partial coverage is disclosed. NINJA MD changes quote delivery, not the trading account or primary broker discovery source. Yahoo ranked screens have limited coverage. Optional external providers require their own configuration; FastDOM does not create subscriptions for you.
 
 
 
@@ -1963,11 +1973,11 @@ Momentum Scan replaces FAST < $30. Enter Min price and Max price, then Apply; de
 
 
 
-ORB Scan is a separate tab for opening-range stock selection. It is a market-wide scan answered by one request to TradingView's public U.S. stock screener, which returns the prior close, premarket price and volume, today's open and the 14-day ATR for every listed stock and ETF at $5 or more that traded premarket and clears the range rule. FastDOM then applies four rules to each returned row. Screener data needs no key and is about 15 minutes delayed, so the gap and premarket total trail the live market by that much. With the default values these are: the gap from the prior close is at least 0.3 of the 14-day average true range (ATR), the ATR is at least 2% of the price, at least $100M traded premarket between 3:00 and 8:30 Central, and the price is at least $20. These defaults come from a review of real trading results in November 2026: stocks meeting the price, premarket and gap rules made money and the rest lost it, and a 3% range minimum would have excluded many of the good days. They describe past results, not a guarantee. A gap down counts the same as a gap up. Only symbols that meet all four rules are listed, ordered by premarket dollar volume, and only the top 10 by default (Show top); a symbol that fails any rule is not shown. A replay of these rules over about 2,900 stocks found that the day's top 10 by premarket dollar volume held most of the opening-range trades that worked; setting Min gap and Min ATR % to 0 turns the scan into exactly that list, with gap and ATR still shown on every row. Before 8:47 Central the gap is measured from the latest premarket price and marked pre; after that, once the delayed feed has caught up with the bell, it is measured from the regular-session open. Premarket dollar volume is a running total until the open, so a symbol can appear later in the morning once it has traded enough.
+ORB Scan is a separate tab for opening-range stock selection. It is a market-wide scan answered by one request to TradingView's public U.S. stock screener, which returns the prior close, premarket price and volume, today's open and the 14-day ATR for every listed stock and ETF at $5 or more that traded premarket and clears the range rule. FastDOM then applies four rules to each returned row. Screener data needs no key and is about 15 minutes delayed. To close that gap, while the screener still shows the delayed premarket picture (until 8:47 Central) FastDOM reads the 30 most active candidates again from your connected market-data broker, one request of today's one-minute extended-hours bars each, and ranks the list again. For a refreshed row the price and the gap are the broker's latest (the regular-session open once there is one), and the premarket dollars are the screener's total plus the broker's volume in the minutes since that total was taken; its Source reads Screener + broker bars and its Data reads Real-time. A stock that was just short of a rule a quarter of an hour ago can therefore make the list, and one that has faded can drop out. The line under the values says how many candidates were refreshed. Limits: only the 30 most active candidates are refreshed, so a name that came from nowhere in the last few minutes can still be missed; Schwab's stock bars start at 6:00 Central, so before about 6:15 there is nothing newer to add and the delayed figures stand; a candidate the broker cannot answer for keeps its delayed figures and says Delayed 15 min in its Data column; and the added volume assumes the screener's total ends exactly its stated delay ago, which can be off by a minute or so. With the default values these are: the gap from the prior close is at least 0.3 of the 14-day average true range (ATR), the ATR is at least 2% of the price, at least $100M traded premarket between 3:00 and 8:30 Central, and the price is at least $20. These defaults come from a review of real trading results in November 2026: stocks meeting the price, premarket and gap rules made money and the rest lost it, and a 3% range minimum would have excluded many of the good days. They describe past results, not a guarantee. A gap down counts the same as a gap up. Only symbols that meet all four rules are listed, ordered by premarket dollar volume, and only the top 10 by default (Show top); a symbol that fails any rule is not shown. A replay of these rules over about 2,900 stocks found that the day's top 10 by premarket dollar volume held most of the opening-range trades that worked; setting Min gap and Min ATR % to 0 turns the scan into exactly that list, with gap and ATR still shown on every row. Before 8:47 Central the gap is measured from the latest premarket price and marked pre; after that, once the delayed feed has caught up with the bell, it is measured from the regular-session open. Premarket dollar volume is a running total until the open, so a symbol can appear later in the morning once it has traded enough.
 
 
 
-The scan refreshes about every two minutes or when you press Refresh. Below the values, a source line states where the data came from (the TradingView screener, or broker price history when the fallback ran), how fresh it is as the source itself reports it (Real-time, Delayed 15 min, End of day), what the gap is measured from, and how many stocks were examined. Each row repeats this in its Source and Data columns, so a mixed result is visible row by row. From shows Watchlist for symbols that are also on your watchlist. If the screener cannot be reached, the scan falls back to daily and five-minute price history from your connected market-data broker for up to 80 symbols taken from the broad discovery snapshot and your watchlist, and the status line says so; that path is slower and can miss thinly traded gappers. The values are shown at the top of the tab as Min gap (ATR), Min ATR %, Min premarket $M, Min price $ and Show top. **Fill ORB UP / ORB DOWN each morning** (off by default; press Apply to save) makes FastDOM run the same scan once a minute from 8:20 to 8:29 Central on trading days, even with Movers closed, and replace the named watchlists ORB UP (top rows gapping up or flat) and ORB DOWN (top rows gapping down) with the result; an open list window updates in place, and the activity log records each fill. It places no orders.
+The scan refreshes about every two minutes or when you press Refresh. Below the values, a source line states where the data came from (the TradingView screener, or broker price history when the fallback ran), how fresh it is as the source itself reports it (Real-time, Delayed 15 min, End of day), what the gap is measured from, and how many stocks were examined. Each row repeats this in its Source and Data columns, so a mixed result is visible row by row. From shows Watchlist for symbols that are also on your watchlist. If the screener cannot be reached, the scan falls back to daily and five-minute price history from your connected market-data broker for up to 80 symbols taken from the broad discovery snapshot and your watchlist, and the status line says so; that path is slower and can miss thinly traded gappers. The values are shown at the top of the tab as Min gap (ATR), Min ATR %, Min premarket $M, Min price $ and Show top. **Fill ORB UP / ORB DOWN each morning** (off by default; press Apply to save) makes FastDOM run the same scan once a minute from 8:20 to 8:29 Central on trading days, even with Movers closed, and replace the named watchlists ORB UP (top rows gapping up or flat) and ORB DOWN (top rows gapping down) with the result; the saved lists take their new symbols in a single step (an armed run never follows a half-replaced list), an open list window then catches up in place, and the activity log records each fill (a pass that takes longer than 45 seconds, or ends in the last 15 seconds before 8:30, leaves the lists as they were and the activity log says so; when the broker is slow to answer, the lists are still filled, from the screener's figures). It places no orders.
 
 
 Change any of them and press Apply to save and rescan; Defaults restores 0.3, 2, 100, 20 and the top 10. The line below the boxes states the values in use. Input that is not a plain number, or is outside 0–20 ATR, 0–100% or $0–1,000,000M, is refused and nothing changes. After 8:40 Central the timer refresh slows to about every ten minutes, because the gap and premarket total no longer change. The scan is a screen for choosing what to watch, not an order signal. Because only the most active qualifying names are measured, a thinly traded gapper can be missed.
@@ -1978,6 +1988,138 @@ A fast percentage change can result from a small base price, sparse trading, or 
 
 
 
+# Analysis | Screener: find stocks by filter, with AI
+
+Open **More > Scan**. The Screener searches every US-listed stock or ETF with the free Finviz filters: about 78 filters for stocks and 37 for ETFs, grouped as on finviz.com. Set them by hand, or describe what you are looking for and let the AI choose them. A result is a list to look at. It is not a signal and nothing here places an order. (This window replaced the earlier Derby-only scanner under the same menu entry.)
+
+## Setting a screen by hand
+
+1. Choose **Stocks** or **ETFs**.
+2. Pick a filter group: **Descriptive** (exchange, index, sector, industry, country, market cap, price, volume, float, short interest, earnings date, theme), **Fundamental** (valuation, growth, margins, returns, debt, ownership), **Technical** (performance, moving averages, highs and lows, RSI, gap, volatility, chart patterns, candlesticks, beta, ATR), **News**, and for ETFs **ETF** (category, asset type, leverage, sponsor and so on). **All** shows every filter; **Set only** shows the ones you have given a value.
+3. Choose a value in each filter you care about. A filter with a value turns cyan and is listed after the group buttons. Different filters must all hold at once. Hover over a filter's name for what it means.
+4. Optional: **ORDER** (Finviz's own ordering, with **Desc** for largest first), **SIGNAL** (a Finviz list such as Top Gainers, Unusual Volume, Oversold or a chart pattern; stocks only, applied together with the filters) and **TICKERS** (limit the screen to tickers you type, separated by commas or spaces).
+5. Press **Run**. **Reset** clears everything.
+
+Only what Finviz offers free is listed. Elite-only filters and values (intraday performance, after-hours figures, custom ranges) are left out rather than shown and refused.
+
+## Asking the AI
+
+Type what you want under **ASK AI**, in your own words: "liquid stocks gapping up on heavy volume before earnings", "oversold large caps still above their 200-day average", "small caps with high short interest breaking out", "profitable semiconductor companies down more than 20% this month".
+
+- **Choose filters** sets the filters, order and signal that fit your description and explains them. Nothing runs until you press Run, so you can review and change them first.
+- **Choose and run** (or Enter) does the same and runs the screen.
+
+Under the box the AI's explanation shows the name it gave the screen, the assumptions it made (for example what it took "small cap" or "recent strength" to mean), the filters it set, and in yellow anything you asked for that no filter can express. When that yellow line appears the list is candidates only: the screen cannot check that part and you must.
+
+The AI chooses filter values from the Finviz catalog and nothing else. It does not pick stocks, search the web or see your account; Finviz decides which symbols match. If a description is not about finding stocks or ETFs, it says so and changes nothing. It usually answers in under a minute.
+
+## Reading the results
+
+- The line below the table says how many symbols Finviz reports and how many are shown. A screen shows at most 1,000 rows, in the chosen ORDER; when there are more, add filters or change the order to see the rest.
+- **Views** change the columns without running the screen again: Overview, Trading (gap, change from open, relative volume, float, short float, ATR, earnings date), Performance, Technical, Valuation, Financial, Ownership and News (the latest headline and Finviz's one-line digest of why the stock is moving).
+- Click a column header to sort: numbers largest first on the first click, text A to Z. Rows without a value stay at the bottom either way. An empty cell means Finviz supplied no value; it is never a zero. Percent columns are in percent; market cap, float and shares are abbreviated (M, B, T).
+- Click a row, or press Enter, to make that symbol the DOM symbol. A share class is sent in your trading broker's form: Finviz lists BRK-B, Schwab calls it BRK/B and Alpaca BRK.B. The same is done for a row clicked in the Market window.
+- **Save as new watchlist** creates a named watchlist from the rows shown, in the order shown (the first 200). It never replaces a list: if the name is already in use the Screener says so and saves nothing, so a list that an armed strategy follows (ORB UP, ORB DOWN) cannot be overwritten from here. Open the new list from More > Watchlists.
+- If you change a filter, the order, the signal or the tickers after a run, or a run fails, the count line turns yellow and says **FROM AN EARLIER SCREEN: press Run**. The rows on screen then answer the previous screen, and Save as new watchlist stays off until you run again.
+
+## Scan: run a screen on a timer and see what is new
+
+Finviz answers a search as of the moment you ask. **Scan** asks again on a timer and marks the names that were not in the list before, which is how a screen becomes a scanner.
+
+- Set or pick a screen, then press **Scan** (next to Run). Choose **every minute**, **every 2 minutes** or **every 5 minutes**.
+- **Several scans at once:** press **New window** (beside Sound) to open another Screener. Each window runs its own screen, its own Scan and interval, and keeps its own list, NEW marks and Sound chip; its title shows the screen's name and "SCANNING" while Scan is on, so you can tell which one found new names. Up to 6 can be open. More > Scan brings the most recent one forward. Each Scan run is one Finviz request, so six windows every 10 seconds stay far inside Finviz's limit.
+- The first run is the starting list: nothing in it is marked. From the second run on, a name that joins the list gets **NEW** and the time in the **New** column, moves to the top, and a short high double "ping-ping" plays, a sound FastDOM uses for nothing else: not the Windows notification sound and not any order, price-alert or signal sound (switch it off with **Sound**; it plays even when order sounds are muted). The status line names the new symbols.
+- NEW stays for 15 minutes, then only the time remains. A name that drops out and comes back within 15 minutes is not announced again, so a stock sitting on a threshold does not ring on every run.
+- Changing a filter or picking another screen while Scan is on starts over with a new starting list. Press Scan again to stop; closing the window stops it too.
+- Click a row to send it to the DOM, as always.
+
+What a scan is and is not: it is a search repeated on a timer. On Finviz's free pages that is every minute or more, with quotes delayed 1 minute and no premarket; it finds names that newly meet your filters within a minute or two, and cannot see halts. With Finviz Elite it is every 10 seconds on real-time data, with lists of the biggest movers of the last minutes and of halted stocks (see below). Neither is a feed of trades: the single trade that makes a new high is seen at the next run, not as it happens.
+
+## With Finviz Elite
+
+If you subscribe to Finviz Elite and have saved your token (Configuration > Services > FINVIZ ELITE, **Save**), the Screener reads Finviz's Elite export instead of the free pages. The window title then says "Finviz Elite: real-time". What changes:
+
+- **Real-time figures**, including pre-market (4:00 to 9:30 Eastern) and after-hours (4:00 to 8:00 PM), instead of quotes delayed by a minute.
+- **SIGNAL** gains the Elite lists: **Top Gainers** and **Top Losers** over the last 1, 2, 3, 5, 10, 15 and 30 minutes and 1, 2 and 4 hours, the after-hours lists, and **Halted**. These are Finviz's own lists, worked out on its side.
+- **ORDER** gains the same windows, so any screen can be ranked by how much each stock moved in the last minute or five.
+- An **Intraday** view shows the move over 1, 2, 5, 15 and 30 minutes and 1 hour, relative volume, volume, number of trades, and the after-hours price, change and volume.
+- **Scan** can run **every 10 seconds** or **every 30 seconds** (Finviz's own Elite auto-refresh is 10 seconds; its stated limit is 10 requests every 5 seconds). A run is a single request. The interval you pick beside Scan is remembered for the next time the Screener is opened (10 and 30 seconds are offered only with Elite; without it the Screener starts at 2 minutes).
+- **The AI uses it too.** ASK AI here, **Create with AI** in Watchlists and screening questions in the Market Desk go through the same Finviz planner. With Elite the AI is told about the real-time lists and may use them, so "which stocks are halted right now?", "what moved most in the last 5 minutes?" or "after-hours gainers over $10" become Finviz Elite screens, run on the real-time export (unless the AI gives a filter two values, which then runs on the free pages). The answer says "from Finviz Elite (real-time)" when it came from there. The Market Desk's market picture also comes from Finviz Elite (see Movers), and its answers name that source. Ask FastDOM (help) knows all of this from this manual.
+
+- **MOVE** (next to Scan) lists only the stocks that moved at least a chosen amount over a chosen time: up or down 0.5, 1, 2, 3, 5 or 10 percent, in the last 1, 2, 5, 15 or 30 minutes or the last hour. Finviz has no filter for this, so FastDOM applies it to the rows it has read; changing it needs no new request. "any move" switches it off.
+- **Ready-made Elite screens** lead the SAVED list: sudden up-moves and down-moves (2% in 5 minutes among stocks at $20 or more with $100M traded today), 1-minute bursts (1% up), halted stocks, and Finviz's own top gainers of the last 5 minutes.
+
+A sudden-move scan is therefore one pick: **Elite: sudden up-moves**, then Scan every 10 seconds. Every run reads your liquid universe ranked by its 5-minute move; a stock that crosses 2% joins the list, is marked NEW, moves to the top and rings. Change the two MOVE boxes to make it stricter or looser, and add filters (relative volume, float, news) to narrow it. Finviz's own Top Gainers 5M list is the top twenty of the whole market, mostly small stocks; within a $20 and $100M universe it is usually one or two names, which is why the ready-made screens use the MOVE rule instead.
+
+A halt watch is **Elite: halted stocks** with Scan on: a stock that is halted joins the list and is marked NEW. A resumption is seen only as the stock leaving the list.
+
+Things to know:
+
+- Finviz's export ignores a filter value it does not recognise and returns the whole market without saying so. FastDOM therefore checks every screen before sending it, confirms its filters once on Finviz's own page, and refuses the answer when a list that should be short comes back with most of the market.
+- The export takes one value per filter. A screen with two values in one filter (an AI-chosen screen can have them) is run on the free pages instead, and the status line says so.
+- It is still a search repeated every ten seconds or more, not a feed of trades. It will show a stock within seconds of it entering a list, not at the trade that put it there.
+- Your token is sent to Finviz only, over an encrypted connection, as part of each request. It is not in any address FastDOM shows, saves or logs.
+- If Finviz stops accepting the token (an expired subscription, or a new token generated on the site) or does not answer, nothing breaks: a failing token is treated exactly like a missing one. From that moment the Screener, Movers, the Market Desk and the AI screens all use the free version of Finviz and the other free sources, and say why. Finviz Elite stays OFF, also after FastDOM restarts, until you press **Save** under Configuration > Services > FINVIZ ELITE. There is no automatic retry. Save stores the token you pasted (or, with the box empty, keeps the one already saved) and checks it with Finviz: if Finviz accepts it, Elite is ON again for Movers, the Market Desk and the AI from their next search and for the Screener from the next time it is opened; if not, FastDOM stays on the free version. A Screener window that was opened with Elite keeps its Elite controls; ordinary screens in it run on the free pages, and a screen that needs Elite (Halted, the last minutes' movers, the move rule) is not run and says so. Configuration > Services shows whether Finviz Elite is ON or OFF and why.
+- **Every result says which Finviz it came from.** The Screener shows "Finviz Elite (real-time)" or "Finviz free (delayed)" beside the count; Movers has a Source column on every tab ("Finviz Elite (real-time)", "Finviz free (delayed)", your broker, TradingView, Stock Analysis); AI screens start with "Source: ..." and label each row.
+- **Without Finviz Elite** everything works as before on the free pages: the Screener (delayed 1 minute, no Elite lists, the Elite ready-made screens are not offered), Movers and the Market Desk on the broker's lists and the other discovery sources, and AI screens on the free filters.
+
+## Ready-made screens
+
+The **SAVED** list starts with screens built from the rule sets you work from. Picking one loads its filters and runs it; you can change any filter afterwards and save your version under another name. A ready-made screen cannot be deleted.
+
+- **W: momentum** (W for Warrior Trading) is Ross Cameron's selection in his own words: price $1 to $20, already up 10%, relative volume over 5, float under 20 million, biggest gainers first. **Warrior: momentum with news today** adds a headline today. He checks the catalyst by eye; so should you.
+- **A: gappers and movers** (A for Andrew Aziz; up 2% and down 2%) is the Gappers watch list from Andrew Aziz's scanner settings: $5 and up, 50k shares, ATR 0.5, 2% from the close. On the free pages it works from the open, not premarket.
+- **A: high volume trending** (up and down), **breaking out with volume** and **breaking down with volume** use his price, volume, relative volume, ATR and float filters with a 1% move from the open (Finviz has no 0.5% step, and its nearest float step to his 30 million is 20 million).
+- Every either-way rule is two screens, one up and one down: Finviz does not accept "up or down" as one choice for change, change from open or gap. If you set two values for one of those yourself, the run is refused with "Finviz did not apply" and no rows are shown.
+
+Not in these screens, because Finviz has no filter for them: a new intraday high or low as an event, volume in the last minute against normal, VWAP crosses, short-timeframe RSI and Bollinger bands, opening range breaks, and halts.
+
+The **Your test** column on every result shows your own test for that row: **liquid** means $20 or more and $100M traded today, **liquid + gap** adds a gap of 1% or more. Today's dollars are volume times price as Finviz reports them. Your test was measured on premarket volume, so after the open this is the easier of the two; treat it as a first cut, not as "in play".
+
+## Saved screens
+
+Type a name in **SAVED** and press **Save** to keep the filters, order, signal, tickers and view now set. Picking a saved screen loads and runs it. **Delete** removes the one named in the box. Saved screens are kept in screener-presets.json in user-data on this PC.
+
+## Limits
+
+- Data comes from public Finviz pages with no key or account. Finviz states that quotes on its free pages are delayed 1 minute, and its classifications and figures are not audited by FastDOM.
+- Each run is two page requests, paced with FastDOM's other Finviz reads, so it takes a few seconds. If Finviz cannot be reached the status line says so and the previous results stay.
+- Chart patterns and signals are Finviz's own classifications. "Wedge down" is a pattern label, not a completed breakout.
+- If the live filter list cannot be read when the window opens, the list shipped with FastDOM is shown so you can still set a screen; running it needs the live list.
+
+
+
+# Analysis | Market: breadth, rotation and trend
+
+Open **More > Market**. The window answers four questions about the whole market: is the move broad or narrow, which sectors and industries money is going to and leaving, which stocks lead and lag, and where your own positions sit among them. It describes what happened. It is not a signal and it places no orders.
+
+## Reading the window
+
+- **Breadth cards (top).** Cards starting with US are counts of all stocks listed on NYSE, Nasdaq and AMEX as Finviz publishes them: advancing against declining, new highs against new lows, and stocks above against below their 50-day and 200-day averages. The remaining cards are counted here from the stock table of the list you chose and start with its tag (S&P, NDX, DOW or R2K): members up against down in the latest session, above against at or below their 20-, 50- and 200-day averages, and members within 5% of their 52-week high against those within 5% of their low. A member with no figure (a recent listing has no 200-day average yet) is counted on neither side, and the card's tip says how many were left out. Green is the first number, red the second; the bar shows the proportion. An index that rises while most stocks sit below their 50-day average is being carried by few names.
+- **PERIOD.** 1D, 1W, 1M, 3M, 6M, YTD and 1Y choose the period that ranks everything below. 1M, 3M, 6M and 1Y are 4, 13, 26 and 52 weeks.
+- **Sectors / Industries (left).** Performance of the 11 sectors or about 145 industries over all seven periods, best first for the chosen period, with relative volume (today's volume against the group's average). These rows cover all US-listed stocks in the group, not only S&P 500 members. Click a row to filter the stock table to that group; the Sector or Industry button above the stock table removes the filter.
+- **BEST 25 and WORST 25 (right).** How many of the 25 best and 25 worst stocks of the chosen list and period fall in each sector, and the range of the list. Nine staples among the best and nineteen technology stocks among the worst is a rotation; a spread across sectors is not.
+- **YOUR POSITIONS (right).** One row per symbol you hold in the selected account. An option is listed under its underlying. Each row shows what the symbol is (sector and industry, or the fund's name), its 1D, 1W, 1M and 3M performance, its distance from the 50- and 200-day averages, its rank among the members of the chosen list for the chosen period (1 is the best) and how its sector did over that period. Funds and stocks outside the chosen list show their own figures and no rank; a stock can be ranked in one list and an outsider in another. Futures are not listed. Only the position's name is shown; no quantity, price or account value.
+- **STOCKS (bottom).** Four lists: **S&P 500**, **Nasdaq 100**, **Dow 30** and **Russell 2000** (the small-cap list, about 1,950 stocks). Choosing a list changes the table, the best and worst lists, the list's breadth cards and the rank of your positions; the US cards and the sector and industry tables are market-wide and do not change. A list is read the first time you choose it and then kept for five minutes like the rest. The table shows every member with sector, industry, market cap, price, the seven periods, distance from the 20-, 50- and 200-day averages, distance below the 52-week high, 14-day RSI and relative volume. All, Best 25 and Worst 25 choose the list; Best and Worst are taken within the sector or industry filter when one is set. Find filters by symbol or company. Held only keeps the members you hold. HELD marks a stock you hold; OPT marks one where you hold only options. Click a column header to sort. Click a row, or press Enter, to make that stock the DOM symbol.
+
+## Where the figures come from
+
+Everything is read from public Finviz pages without a key or an account: the home page (market-wide counts), the sector and industry performance pages, and the screener's list for the chosen index (one request; two for the Russell 2000). Finviz states that stock quotes on its free pages are delayed 1 minute. Figures are kept for five minutes; **Refresh** reads the pages again. The status line names each part, how much it returned and when it was read. If one page cannot be read, the others still show and the failed part says UNAVAILABLE; if a refresh fails, the earlier figures stay on screen and are marked as the earlier copy. A stock with no figure for a period (a recent listing has no 52-week figure) shows an empty cell and is left out of that period's ranking, never counted as zero. Sector names are Finviz's: Consumer Defensive is what index providers call Consumer Staples, and funds have no sector.
+
+Finviz's weekly figure can differ by a point or two from a table built on exact Friday-to-Friday closing prices.
+
+What leaves this PC: requests to finviz.com for the pages above. To describe a symbol you hold that is not a member of the chosen list (a fund, or a stock outside the index), FastDOM asks Finviz for that ticker by name, up to 60 of them. Only the ticker is sent, never a quantity, price, account or position size, but Finviz can see that those tickers were asked about from your internet address. Members of the chosen list are read with the whole list and are not singled out.
+
+## History
+
+Finviz publishes only the current figures, so FastDOM keeps its own record: one file per trading session and stock list in the **market-snapshots** folder inside user-data (the S&P 500 file also holds breadth, sectors and industries). Nothing in that folder is ever deleted for age; files of sessions more than two weeks old are kept compressed (the same name ending in .gz, about a quarter of the size) and are read exactly as before. A background job saves each session's close for all four lists about 30 minutes after the bell whether or not the window is open (Configuration > Background, **Market snapshot**), and opening or refreshing the window during the session saves an intraday copy of the list on screen that the close later replaces. Before the open, at weekends and on market holidays the figures are still the previous session's close and are filed under that session. The status line says what was saved and how many sessions are kept. History starts on the day this feature was installed; earlier days cannot be recovered from Finviz. The files stay on this PC.
+
+## Limits
+
+- The stock table shows one of the four lists at a time. A stock that is in none of them appears under Your positions when you hold it, and nowhere else. Membership is Finviz's and can lag an index change by a few days.
+- Breadth, sectors and industries are end-of-page snapshots, not a time series; the window does not yet chart the saved history.
+- Your positions shows where a symbol stands; it does not measure exposure. A 3x fund moves about three times its sector, and the window does not adjust for that.
+- Public pages can change format or become unavailable. A page FastDOM cannot read is reported, not guessed at.
 
 
 
@@ -2186,23 +2328,29 @@ The last check for each symbol is kept and shown again when you load the symbol,
 
 ## Ask a question
 
-The **Ask** box, below SEC filings, answers one question at a time about the company on screen. Type the question and press Enter or Ask. Examples: "Why did the gross margin change?", "How much of the at-the-market program has been used?", "How concentrated is revenue among customers?", "What debt comes due and when?". It usually answers in under half a minute.
+The **Ask** box, below SEC filings, is an open conversation with your AI provider about the company on screen. Type anything and press Enter or Ask: "What is the news behind this drop?", "What did they guide on the last earnings call?", "Why did the gross margin change?", "How much of the at-the-market program has been used?", "Is this a good buy here, and what would change your mind?". A question up to 2,000 characters is accepted.
 
-What happens when you ask:
+What the AI is given, and what it may do:
 
-1. FastDOM downloads the latest quarterly or annual report from sec.gov (once; it is reused for later questions) and picks the paragraphs that share the words of your question. It also matches the words a report would use for the same thing, so "fall" finds "decreased" and "lawsuit" finds "litigation".
-2. Your AI provider is given your question, those paragraphs, the figures loaded in the window, the key signals and the SEC filings rows, with no web access or tools.
-3. The answer is shown with the report's own words in quotation marks where it rests on them, and a link to the report. FastDOM looks up each quote in the paragraphs it sent; a quote that is not there is marked **unverified**. Numbers that are not in the figures or paragraphs are listed in yellow.
+1. **The window as context.** The figures loaded in the window, the key signals, the SEC filings rows with links to the filings, and the paragraphs of the latest quarterly or annual report that share the words of your question (FastDOM downloads the report from sec.gov once and reuses it; "fall" also finds "decreased", "lawsuit" finds "litigation"). For anything these cover, the window's figures are the reference.
+2. **The web.** It can search and read web pages for what the window cannot show: news, the reason for a move, earnings results and guidance, analyst actions, anything after the latest filing. The pages it used are listed as links under the answer; hover over a link to see the full address before opening it.
+3. **Its own knowledge and its own view.** It is asked to give an assessment when you want one, with its reasoning, how confident it is and what would change its mind.
+4. **The conversation.** Every earlier question and answer about this company in the window is sent along, so a follow-up such as "and compared with AMD?" is understood. Very long conversations drop their oldest exchanges.
+
+An answer that searches the web can take a few minutes; the status line says so while it works. A plain question about the figures is usually much faster.
 
 Reading the answer:
 
-- The line under each answer says how many paragraphs of which report were used. "From the loaded figures only" means no paragraph of the report matched your question, or the symbol has no report (most funds), so the answer rests on the cards and signals alone.
-- When the material does not answer the question, the answer says so and says what is missing. Reword the question with the terms a report would use, or open the report from the link.
-- Paragraphs are picked by matching words, not by understanding the question. The right paragraph can be missed when the report words it differently, and only the latest report is searched, not earlier reports, 8-Ks or exhibits.
-- It reports what the figures and the report state. It does not give a price target or a buy or sell opinion, and it is not advice.
-- A follow-up such as "and last year?" is understood from the question just before it. The last five answers for the company stay in the window until you load another symbol or close the window; they are not saved.
+- Words in quotation marks are the report's own. FastDOM looks up each quote in the paragraphs it sent; a quote that is not there is marked **unverified**.
+- **Web pages used** lists the pages the AI says it relied on. FastDOM does not check that a page says what the answer claims: open it when the point matters.
+- A small yellow line names the numbers in the answer that are not in this window's figures or the report paragraphs. They came from the web or from the AI itself. This is a label, not an error: it tells you which numbers to check against the pages listed.
+- The line under each answer says which report paragraphs were supplied and how many web pages the AI listed. FastDOM knows only what the AI lists: an answer with no pages listed may still have drawn on a search.
+- A web page is offered as a link only when its address is https on an ordinary named site. Anything else the AI returns (plain http, a numeric address, an address on your own network) is left out.
+- Loading another company while a question is being answered stops that question; ask again when you come back to the company.
+- An AI's opinion is an opinion. It can be wrong about news, can misread a page, and does not know your account, your position or your risk. It is not advice.
+- The last 30 answers for the company stay in the window, newest first, until you load another symbol or close the window; they are not saved.
 
-Nothing about your accounts, positions or orders is sent to the SEC or to the AI provider.
+Your question, the conversation and the public figures are sent to your AI provider, and its web searches run at that provider. When the provider is Claude Code, the pages it then reads are fetched by the Claude Code program on this PC, so those sites see your internet address just as they would if you opened the page yourself. Nothing about your accounts, positions or orders is sent to the SEC, to the AI provider or to any web page. The AI has no access to your files and cannot place, change or cancel an order.
 
 ## Where the figures come from
 
@@ -2417,9 +2565,11 @@ Services includes universe and refresh settings for Movers. Available features d
 
 
 
+**Finviz Elite (Services tab).** Optional. If you subscribe to Finviz Elite, paste your token into **Elite token** and press **Save**: it stores the token and checks it with Finviz in the same step. You find the token on finviz.com under your profile menu, **API and Exports**. FastDOM stores it with Windows protection for your Windows account (in user-data, not in a settings file), clears the box, and never shows it again or writes it to a log; it is sent only to Finviz. The test makes four small requests a second and a half apart, one for each way Finviz may want an export asked for, and lists what each returned: WORKS with the number of rows and the column titles, or the reason it did not. **Remove token** deletes it from this PC and the Screener goes back to Finviz's free pages. Once the test has succeeded, the Screener uses Elite the next time it is opened; see "With Finviz Elite" under the Screener.
+
 ## Background tab
 
-Configuration > Background lists everything FastDOM does without a window showing it: scheduled jobs (the ORB morning fill, workspace save, account sync, chart history prefetch, options collectors), recorders (order-book and footprint archives), broker polling and streams, per-chart indicator refreshes and the display refresh loops.
+Configuration > Background lists everything FastDOM does without a window showing it: scheduled jobs (the ORB morning fill, the market snapshot, workspace save, account sync, chart history prefetch, options collectors), recorders (order-book and footprint archives), broker polling and streams, per-chart indicator refreshes and the display refresh loops.
 
 Each row shows the job, its state (Has not run, Idle, Ran N s ago, Failed), the time and result of its last run, how many times it ran, skipped and failed since the app started, and its schedule. Select a row, or hover over its name, to read what the job does in plain words, when it last ran and how long it took, and why it last skipped. For example the ORB morning fill reads "Outside the fill window (08:20-08:29 Central on trading days)" for most of the day, or "Fill ORB UP / ORB DOWN is switched off on the ORB SCAN tab".
 
@@ -2492,6 +2642,20 @@ When reporting the problem, include the panel, symbol, timeframe/range, provider
 
 
 # Troubleshooting | AI errors, audio, slow windows, and shutdown
+
+
+## An error box from one window
+
+A box titled **FastDOM Error** followed by a window's name (a chart window, the BookMap window, the Pulse window and so on) means something failed inside that one window. FastDOM keeps running: the main window, your other windows, working orders and virtual stops are not affected by the box itself.
+
+- Read the first two lines; they name the error. Press OK.
+- If the window now looks or behaves wrongly, close it and open it again.
+- If you were placing or changing an order from that window when the box appeared, open Orders and check what the broker has before acting again.
+- A window shows one error box at a time. While a box is open, further errors in that window are written to the log and not shown, so a window left failing overnight cannot pile up boxes. After you press OK, a different error that happened meanwhile is shown next (up to three, one after another; any more are in the log), and an error you have read stays quiet for half a minute. If it comes back after reopening the window, use More > Report a problem.
+
+- A box that starts **FastDOM could not open** a window means the window failed while it was being created (for example a chart restored at startup). That window is not opened; FastDOM and every other window carry on. Try opening it again.
+
+A box titled **FastDOM Fatal Error** is different: it says the application will close. After restarting, check positions, working orders and virtual stops.
 
 ## AI
 

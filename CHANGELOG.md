@@ -1,5 +1,13 @@
 # Release notes
 
+## Beta 20261121-231545-b2d1ee78 — published November 21, 2026
+
+New Market window (More > Market): breadth, sector and industry rotation, the S&P 500, Nasdaq 100, Dow 30 and Russell 2000 stocks over seven periods, and where your positions sit among them. New Screener (More > Scan) over Finviz's filters for stocks and ETFs: describe what you want and the AI chooses the filters; Scan re-runs a screen on a timer and marks new tickers with a sound of their own; ready-made W: (Warrior Trading) and A: (Andrew Aziz) screens; several Screener windows can scan at once. Optional Finviz Elite: save your token under Configuration > Services and FastDOM uses real-time and pre-market Finviz data in the Screener (minute-by-minute gainers and losers, the Halted list, an Intraday view, scans every 10 seconds), in Movers and the Market Desk, where Finviz runs the Top Gainers, Top Losers, Most Active and momentum scans, and in AI screens. Without Elite everything uses the free version, and every result says which one it came from. Financials adds SEC filing activity, an AI brief, filing checks and open questions. Account positions show the average cost and percentage size presets.
+
+Unsigned free Beta. Clean Windows-machine acceptance and customer broker onboarding remain under verification. Finviz Elite features need your own Finviz Elite subscription. Strategy Center and Avatar voice are excluded from Beta.
+
+Installer SHA-256: `a6804ae1e4a70ecfcde665fe2f7e07a1c6be9936f29e65fa066b5ba1d6bbf901`
+
 ## Beta 20261120-064540-a49117c0 — published November 20, 2026
 
 Futures Flatten now preserves an explicitly selected expiry, including equivalent contract names. Margin what-if calculations keep different futures expiries separate. Option-position descriptions better explain payoff structure and unequal condor wings. Includes the restored full-position POS P/L labels on chart limit orders.

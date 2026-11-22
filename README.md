@@ -76,9 +76,9 @@ This early Beta is **unsigned**. Windows may display an unknown-publisher warnin
 
 ## Current release
 
-**Beta 20261120-064540-a49117c0** — November 20, 2026.
+**Beta 20261121-231545-b2d1ee78** — November 21, 2026.
 
-Futures Flatten now preserves an explicitly selected expiry, including equivalent contract names. Margin what-if calculations keep different futures expiries separate. Option-position descriptions better explain payoff structure and unequal condor wings. Includes the restored full-position POS P/L labels on chart limit orders.
+New Market window (More > Market): breadth, sector and industry rotation, the S&P 500, Nasdaq 100, Dow 30 and Russell 2000 stocks over seven periods, and where your positions sit among them. New Screener (More > Scan) over Finviz's filters for stocks and ETFs: describe what you want and the AI chooses the filters; Scan re-runs a screen on a timer and marks new tickers with a sound of their own; ready-made W: (Warrior Trading) and A: (Andrew Aziz) screens; several Screener windows can scan at once. Optional Finviz Elite: save your token under Configuration > Services and FastDOM uses real-time and pre-market Finviz data in the Screener (minute-by-minute gainers and losers, the Halted list, an Intraday view, scans every 10 seconds), in Movers and the Market Desk, where Finviz runs the Top Gainers, Top Losers, Most Active and momentum scans, and in AI screens. Without Elite everything uses the free version, and every result says which one it came from. Financials adds SEC filing activity, an AI brief, filing checks and open questions. Account positions show the average cost and percentage size presets.
 
 See the [changelog](CHANGELOG.md), [official download](https://fastdom.decoglobal.us/download), [SourceForge mirror](https://sourceforge.net/projects/fastdom/files/beta/), and [disclaimer](https://fastdom.decoglobal.us/disclaimer).
 
