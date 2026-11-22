@@ -473,6 +473,8 @@ FastDOM's AI features use a command-line tool installed on the same Windows envi
 
 2. Select Codex or Claude Code.
 
+**Model.** Under the provider choice, **Model** sets the model every AI feature of that provider uses: Claude Code and Codex each keep their own choice. "The CLI's own default" uses whatever the CLI itself is set to. A window with its own **MODEL** box (chart, Market Desk, Trading Partner, Trade Review) can choose another model for itself; the box's first entry, **Global default (…)**, follows the model chosen here. A chart remembers its own choice; the other windows start each time on the global model. Use this to move off a model whose usage limit you have reached.
+
 3. Use **Validate installation** to check that the selected tool is installed and signed in. It shows Ready or Not ready, the reason, and the tool's location. It sends no AI request.
 
 4. Select Save. From then on every AI feature uses that provider: Check Trend, Manage, Trading Partner, Market Desk, Learn, the Options Trader AI score and recommendations, and local Ask FastDOM help. There is no per-feature mix.
@@ -1203,7 +1205,13 @@ Use the available drawing tools for price levels, trend/structure annotations, a
 
 
 
-**Rectangle** marks a zone across time and price. **Ellipse** highlights a region. **Arrow** draws directional emphasis. **Freehand** follows your drawing gesture. These shapes do not create orders or change indicator calculations.
+**Rectangle** marks a zone across time and price. **Ellipse** highlights a region. **Arrow** draws a solid arrow pointing wherever you drag: press where the tail starts and release where the tip should be, at any angle. It is green when it points up the price scale, red when it points down and amber when it is nearly level. **Freehand** follows your drawing gesture. These shapes do not create orders or change indicator calculations.
+
+**Arrow Up** and **Arrow Down** (Symbols) place a solid arrow with one click: green pointing up or red pointing down, its tip at the bar and price you click. Use them to mark entries, exits or turns.
+
+**Drawing mode.** The ⚒ button beside the chart controls is a switch, like the link button. Click it: drawing mode turns on, the button stays pressed, the tool you used last is armed and the list of tools opens under the button. Pick a tool there, or just start drawing. The tool stays armed after each drawing, so you can place the same arrow, line or note again and again. While drawing mode is on, hovering over the button shows the tools again to pick another; while it is off, hovering shows nothing. Click the button again, or press **Esc**, to turn drawing mode off. While drawing mode is on, the chart shows "DRAWING: <tool> · click ⚒ or press Esc to stop".
+
+**Colours.** Drawings are yellow until you choose otherwise. Right-click a drawing and choose **Drawings > Change color**, then pick a colour from the palette (yellow, white, cyan, blue, green, red, orange, purple, pink, gray). The colour is saved with the drawing, so it keeps it on every chart of that symbol and after a restart. Arrow Up/Down and the drag Arrow are coloured by direction until you give them a colour; choosing **Yellow (default)** puts a drawing back to its normal colours.
 
 
 
@@ -1494,6 +1502,19 @@ The chart highlights concentrated resting depth as possible support/resistance c
 ## Volume Levels
 
 Volume Levels estimates high-volume price areas from the loaded candles by spreading each candle's volume evenly across its low-to-high price buckets. It is not an exact execution-by-price profile or native bid/ask classification. Distance filtering keeps nearby noise from dominating, and the visible price scale determines which nodes can appear. The bands are not pending orders. An old node may matter as context, but the chart does not know whether participants still hold those positions.
+
+
+
+## Volume Profile
+
+Chart > Indicators > **Volume Profile** draws the volume traded at each price as a histogram on the right of the price pane. Beside it, choose what it counts: **Bars on screen** (it follows scrolling and zoom) or **Today** (all of today's bars, wherever you have scrolled).
+
+- **POC** (yellow line): the point of control, the price row with the most volume. Price often returns to it, and it is where buyers and sellers agreed most.
+- **VAH / VAL** (dashed cyan lines): the top and bottom of the value area, the rows around the POC that hold 70% of the volume. It is built outward from the POC, adding the two rows above or the two rows below, whichever traded more. The rows inside it are drawn brighter.
+- **From trades**: when FastDOM has recorded the trades at each price for these bars (the same data as Footprint), the profile is exact and each row is split into buyer-initiated volume (green) and seller-initiated volume (red). This needs the symbol's trades to be streaming, so it covers the current session for symbols you have open.
+- **Estimated from candles**: otherwise each bar's volume is spread evenly over its high-to-low range, as Volume Levels does. The shape is close on one-minute bars and coarser on longer bars, and there is no buyer/seller split. The label at the bottom of the profile says which one you are looking at, and says when trade data covered only part of the bars.
+
+Row height is a whole number of ticks, about one row every five pixels of the price pane. It is a display: it places no orders and changes no levels elsewhere.
 
 
 
@@ -2035,9 +2056,13 @@ Finviz answers a search as of the moment you ask. **Scan** asks again on a timer
 
 What a scan is and is not: it is a search repeated on a timer. On Finviz's free pages that is every minute or more, with quotes delayed 1 minute and no premarket; it finds names that newly meet your filters within a minute or two, and cannot see halts. With Finviz Elite it is every 10 seconds on real-time data, with lists of the biggest movers of the last minutes and of halted stocks (see below). Neither is a feed of trades: the single trade that makes a new high is seen at the next run, not as it happens.
 
+## News view
+
+Choose **News** among the views above the results (Overview, Trading, ..., News): the table shows each stock's latest headline. Click a stock and all its headlines open in a panel under the table, as Finviz's own news view lists them: newest first, each with its date and time (US Eastern; the date is written on the first headline of each day), the headline as a link and the source. Click a headline to open it in your browser; click another stock to see its news; drag the bar above the panel to make it taller or shorter. With nothing selected the view is the table alone. Clicking a stock still sends it to the DOM, as in every view. With Finviz Elite the headlines come from Finviz Elite's news list (up to 100 a stock, the newest 50 shown, **More** shows the rest); without it, from Finviz's free quote page. Headlines are kept for five minutes per stock.
+
 ## With Finviz Elite
 
-If you subscribe to Finviz Elite and have saved your token (Configuration > Services > FINVIZ ELITE, **Save**), the Screener reads Finviz's Elite export instead of the free pages. The window title then says "Finviz Elite: real-time". What changes:
+If you subscribe to Finviz Elite and have saved your token (Configuration > Services > FINVIZ ELITE, **Validate**), the Screener reads Finviz's Elite export instead of the free pages. The window title then says "Finviz Elite: real-time". What changes:
 
 - **Real-time figures**, including pre-market (4:00 to 9:30 Eastern) and after-hours (4:00 to 8:00 PM), instead of quotes delayed by a minute.
 - **SIGNAL** gains the Elite lists: **Top Gainers** and **Top Losers** over the last 1, 2, 3, 5, 10, 15 and 30 minutes and 1, 2 and 4 hours, the after-hours lists, and **Halted**. These are Finviz's own lists, worked out on its side.
@@ -2059,7 +2084,7 @@ Things to know:
 - The export takes one value per filter. A screen with two values in one filter (an AI-chosen screen can have them) is run on the free pages instead, and the status line says so.
 - It is still a search repeated every ten seconds or more, not a feed of trades. It will show a stock within seconds of it entering a list, not at the trade that put it there.
 - Your token is sent to Finviz only, over an encrypted connection, as part of each request. It is not in any address FastDOM shows, saves or logs.
-- If Finviz stops accepting the token (an expired subscription, or a new token generated on the site) or does not answer, nothing breaks: a failing token is treated exactly like a missing one. From that moment the Screener, Movers, the Market Desk and the AI screens all use the free version of Finviz and the other free sources, and say why. Finviz Elite stays OFF, also after FastDOM restarts, until you press **Save** under Configuration > Services > FINVIZ ELITE. There is no automatic retry. Save stores the token you pasted (or, with the box empty, keeps the one already saved) and checks it with Finviz: if Finviz accepts it, Elite is ON again for Movers, the Market Desk and the AI from their next search and for the Screener from the next time it is opened; if not, FastDOM stays on the free version. A Screener window that was opened with Elite keeps its Elite controls; ordinary screens in it run on the free pages, and a screen that needs Elite (Halted, the last minutes' movers, the move rule) is not run and says so. Configuration > Services shows whether Finviz Elite is ON or OFF and why.
+- If Finviz stops accepting the token (an expired subscription, or a new token generated on the site) or does not answer, nothing breaks: a failing token is treated exactly like a missing one. From that moment the Screener, Movers, the Market Desk and the AI screens all use the free version of Finviz and the other free sources, and say why. Finviz Elite stays OFF, also after FastDOM restarts, until you press **Validate** under Configuration > Services > FINVIZ ELITE. There is no automatic retry. Validate stores the token you pasted (or, with the box empty, keeps the one already saved) and checks it with Finviz: if Finviz accepts it, Elite is ON again for Movers, the Market Desk and the AI from their next search and for the Screener from the next time it is opened; if not, FastDOM stays on the free version. A Screener window that was opened with Elite keeps its Elite controls; ordinary screens in it run on the free pages, and a screen that needs Elite (Halted, the last minutes' movers, the move rule) is not run and says so. Configuration > Services shows whether Finviz Elite is ON or OFF and why.
 - **Every result says which Finviz it came from.** The Screener shows "Finviz Elite (real-time)" or "Finviz free (delayed)" beside the count; Movers has a Source column on every tab ("Finviz Elite (real-time)", "Finviz free (delayed)", your broker, TradingView, Stock Analysis); AI screens start with "Source: ..." and label each row.
 - **Without Finviz Elite** everything works as before on the free pages: the Screener (delayed 1 minute, no Elite lists, the Elite ready-made screens are not offered), Movers and the Market Desk on the broker's lists and the other discovery sources, and AI screens on the free filters.
 
@@ -2078,7 +2103,7 @@ The **Your test** column on every result shows your own test for that row: **liq
 
 ## Saved screens
 
-Type a name in **SAVED** and press **Save** to keep the filters, order, signal, tickers and view now set. Picking a saved screen loads and runs it. **Delete** removes the one named in the box. Saved screens are kept in screener-presets.json in user-data on this PC.
+Press **Save** to keep the filters, order, signal, tickers, MOVE rule and view now set: a small window asks for the name (the screen picked in **SAVED** is suggested, so saving it again keeps its name). Picking a saved screen in **SAVED** loads and runs it. **Delete** removes the screen picked there. Saved screens are kept in screener-presets.json in user-data on this PC.
 
 ## Limits
 
@@ -2565,7 +2590,7 @@ Services includes universe and refresh settings for Movers. Available features d
 
 
 
-**Finviz Elite (Services tab).** Optional. If you subscribe to Finviz Elite, paste your token into **Elite token** and press **Save**: it stores the token and checks it with Finviz in the same step. You find the token on finviz.com under your profile menu, **API and Exports**. FastDOM stores it with Windows protection for your Windows account (in user-data, not in a settings file), clears the box, and never shows it again or writes it to a log; it is sent only to Finviz. The test makes four small requests a second and a half apart, one for each way Finviz may want an export asked for, and lists what each returned: WORKS with the number of rows and the column titles, or the reason it did not. **Remove token** deletes it from this PC and the Screener goes back to Finviz's free pages. Once the test has succeeded, the Screener uses Elite the next time it is opened; see "With Finviz Elite" under the Screener.
+**Finviz Elite (Services tab).** Optional. If you subscribe to Finviz Elite, paste your token into **Elite token** and press **Validate**: it stores the token and checks it with Finviz in the same step. The **Saved token** line then shows the stored token as eight dots and its last four characters, with "validated · Finviz Elite ON" or "not validated · Finviz Elite OFF", so you can tell which token **Remove token** would delete. You find the token on finviz.com under your profile menu, **API and Exports**. FastDOM stores it with Windows protection for your Windows account (in user-data, not in a settings file), clears the box, and never shows it again or writes it to a log; it is sent only to Finviz. The test makes four small requests a second and a half apart, one for each way Finviz may want an export asked for, and lists what each returned: WORKS with the number of rows and the column titles, or the reason it did not. **Remove token** deletes it from this PC and the Screener goes back to Finviz's free pages. Once the test has succeeded, the Screener uses Elite the next time it is opened; see "With Finviz Elite" under the Screener.
 
 ## Background tab
 
