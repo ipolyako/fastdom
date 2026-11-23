@@ -248,7 +248,7 @@ Automated regression covers second-key discovery, retry progress and status chan
 
 
 
-Select Schwab Live and confirm that an account is selected and positions and buying power load where provided by Schwab. Compare the selected account with the one you approved. This checks the trading connection.
+Select Schwab Live in the broker box at the top-left of the main window and confirm that an account is selected and positions and buying power load where provided by Schwab. Compare the selected account with the one you approved. This checks the trading connection. The broker box always names what FastDOM is running: a new installation starts on **Simulation** (a practice account with made-up prices), and connecting your Schwab applications does not switch it; you choose Schwab Live there yourself, and you can choose Simulation again to practise.
 
 
 
