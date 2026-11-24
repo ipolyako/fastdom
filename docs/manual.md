@@ -473,7 +473,7 @@ FastDOM's AI features use a command-line tool installed on the same Windows envi
 
 2. Select Codex or Claude Code.
 
-**Model.** Under the provider choice, **Model** sets the model every AI feature of that provider uses: Claude Code and Codex each keep their own choice. "The CLI's own default" uses whatever the CLI itself is set to. A window with its own **MODEL** box (chart, Market Desk, Trading Partner, Trade Review) can choose another model for itself; the box's first entry, **Global default (…)**, follows the model chosen here. A chart remembers its own choice; the other windows start each time on the global model. Use this to move off a model whose usage limit you have reached.
+**Model.** Under the provider choice, **Model** sets the model every AI feature of that provider uses: Claude Code and Codex each keep their own choice. "The CLI's own default" uses whatever the CLI itself is set to. A window with its own model box (chart, Market Desk, Trading Partner, Trade Review) can choose another model for itself. The chart's box shows the model in use and nothing else: the model chosen here, until you pick another one in the chart. Pick the Configuration model again in the chart and the chart follows Configuration again. A chart remembers its own choice; the other windows start each time on the global model. Use this to move off a model whose usage limit you have reached.
 
 3. Use **Validate installation** to check that the selected tool is installed and signed in. It shows Ready or Not ready, the reason, and the tool's location. It sends no AI request.
 
@@ -623,7 +623,7 @@ AVG COST shows two decimal places for stocks and options (four under a dollar). 
 
 ## Navigation
 
-Chart opens a separate chart. Orders displays working orders. OPT opens the options chain. More contains Watch, Watchlists, L2 Heat, BookMap, FootPrint, Time & Sales, Movers, Market, Scan, Quick scans, Options Trader, Partner, Desk, Performance, Margin, Pulse, Trade Copier, SpotGamma, Learn, Help, and About.
+Chart opens a separate chart. Orders displays working orders. OPT opens the options chain. More contains Watch, Watchlists, L2 Heat, BookMap, FootPrint, Time & Sales, News, Movers, Market, Scan, Quick scans, Options Trader, Partner, Desk, Performance, Margin, Pulse, Trade Copier, SpotGamma, Learn, Help, and About.
 
 
 
@@ -949,6 +949,10 @@ Open the hot-buttons gear to edit visible actions. Each button has a label, appe
 
 ## Configure buttons manually
 
+The built-in set has six percentage buttons: **Buy/Cover 10%**, **25%** and **50%**, and **Sell/Short 10%**, **25%** and **50%**. Each sizes its order from the position you hold in the symbol at that moment, not from the Size box. Buy/Cover buys that share of the position: it covers part of a short and adds to a long. Sell/Short sells that share: it sells part of a long and adds to a short. With no position neither sends anything.
+
+Until 24 November 2026 the built-in percentage buttons were one-way: **Cover %** acted only on a short and **Sell %** only on a long. A copy of FastDOM installed before then exchanges its untouched Cover and Sell buttons for the two-way ones the first time it starts, in the same places and with the same colours and shortcuts. A button you renamed or hid is left as it was, and so is one beside which you had already made the two-way button yourself. If you prefer a one-way button, add it as described below.
+
 Uncheck **On** and press **Save** to hide a button from the trading panel. Its definition remains in Trading Controls so you can enable it again. Remaining buttons close the gaps; Arrange uses only visible buttons.
 
 In Trading Controls, select a button to see its saved **Behavior**: **Built-in action** or **Script**. Built-in buttons show an explanation instead of an empty script box. The **Action** list contains the implemented actions; quantity controls appear for actions that use them. Price and order type follow the chosen built-in action, rather than a separate template picker. Click the background or text-color swatch to choose a palette color, adjust the color channels, or enter an exact hex value. Apply accepts the color; Cancel leaves it unchanged.
@@ -963,7 +967,7 @@ Changing a default button's behavior or quantity creates an editable identity so
 
 In the hot-button editor (Trading Controls), Configure with AI… opens a box where you describe a change in words, for example "add a button that takes 15% profit", "make Flatten red", or "move Sell 25% above Sell 10%". Press Apply or Enter. The selected AI provider proposes the changes, FastDOM checks each one and applies it to the list in the window, and the rows it added or changed are marked with a dot in the AI column. Below the box you see what was done and anything that was refused, with the reason.
 
-Nothing takes effect until you press Save; Cancel discards all of it, the same as for edits made by hand. The AI can add two kinds of button: a percentage sell or cover of the open position at market (the same kind as the built-in Sell 10% and Cover 10%), and any built-in template, unchanged. It can also rename, recolour, move, turn on or off, or remove buttons. It cannot write its own scripts, so a request that needs a new script is answered with an explanation instead of a button; use a template or type the script yourself. A request to take a percentage of profit adds both a Sell and a Cover button unless you name one side.
+Nothing takes effect until you press Save; Cancel discards all of it, the same as for edits made by hand. The AI can add two kinds of button: a percentage sell or cover of the open position at market (the one-way kind: Sell % acts only on a long position, Cover % only on a short), and any built-in template, unchanged. It can also rename, recolour, move, turn on or off, or remove buttons. It cannot write its own scripts, so a request that needs a new script is answered with an explanation instead of a button; use a template or type the script yourself. A request to take a percentage of profit adds both a Sell and a Cover button unless you name one side.
 
 The AI sets a shortcut only when you ask for one, and a shortcut already used by another button or a keyboard-only action is refused. It edits this list only: it cannot press a button, place an order, or change brokers, accounts or risk limits. It uses your own Codex or Claude Code sign-in (Configuration > General > AI PROVIDER); each request is one AI request. Read every marked row before saving, and try a new button in Simulation first.
 
@@ -2114,9 +2118,30 @@ Press **Save** to keep the filters, order, signal, tickers, MOVE rule and view n
 
 
 
+# Analysis | News: a symbol's headlines
+
+Open **More > News** for the symbol on the DOM, press **News** in a chart (after the model box) for the chart's symbol, or choose **News** from a position's right-click menu, a watchlist or Movers. The window lists the stock's headlines as Finviz does, newest first: the date on the first headline of each day, the time on every line, the headline, then the source in brackets. Above the list is the stock's own line: symbol, company, price and change today.
+
+- Click a headline to open the article in your browser.
+- Times are US Eastern.
+- The first 50 headlines are drawn; **More** at the bottom shows the older ones.
+- Opened from More, the window follows the symbol you select in the main window. Opened from a chart, a position, a watchlist or Movers, it stays on that symbol. The line at the top left says which.
+- Headlines are kept for 5 minutes per symbol. **Refresh** reads them again now.
+- **Search Google News** opens a wider search in your browser.
+- Esc closes the window.
+
+## Where the headlines come from
+
+- With Finviz Elite (Configuration > Services > FINVIZ ELITE): Finviz Elite's news list for the stock, up to 100 headlines reaching back weeks. The price and change on the stock's line are real-time.
+- Without Finviz Elite: the news list of Finviz's free stock page. The price and change are marked **delayed**.
+- Finviz lists stocks and funds only. For a future, an option or an index, or when Finviz cannot be read or has no headline for the symbol, the window shows headlines from your broker's feed, Yahoo and Google News, and the line above the list says so in amber. Those sources match on the symbol's letters, so some headlines may be about something else.
+- This is the same list as the Screener's **News** view shows for a selected stock.
+
+A headline is not a verified catalyst. Read the article before you trade on it.
+
 # Analysis | Quick scans: small scan windows
 
-Open **More > Quick scans**. A small window opens, about 290 by 240 pixels, with one narrow row of controls and a table: the scan, how often it runs, a sound chip (**♪**) and a start chip (**▶**). Choose More > Quick scans again and another window opens, so many scans sit side by side in the space one Screener takes. Drag a window's edge to make it smaller or larger; the columns share whatever width it has. Up to 8 can be open, and each new window starts on the next scan of the list. The scans are already set up; there are no filters to set here. Nothing in these windows places an order. Clicking a row sends its symbol to the DOM.
+Open **More > Quick scans**. A small window opens, about 290 by 240 pixels, with one narrow row of controls and a table: the scan, how often it runs, a price filter chip (**$**), a sound chip (**♪**) and a start chip (**▶**). Choose More > Quick scans again and another window opens, so many scans sit side by side in the space one Screener takes. Drag a window's edge to make it smaller or larger; the columns share whatever width it has. Up to 8 can be open, and each new window starts on the next scan of the list. The scans are already set up; the one thing you can set here is a price range. Click a column heading to order the rows. Nothing in these windows places an order. Clicking a row sends its symbol to the DOM.
 
 ## Start a scan
 
@@ -2130,6 +2155,23 @@ Open **More > Quick scans**. A small window opens, about 290 by 240 pixels, with
 - There is no status line, to keep the window small. Point at the scan box to read the number of rows, the run number, the time the rows were read, which Finviz they came from and the names the last run found new. Only when a run fails does a red line appear under the table saying why; the rows stay as last read and the next run tries again.
 - **♪** (on when highlighted) plays the Screener's "ping-ping" when a run finds names that were not in the list before. The first run never rings.
 - Figures are shortened so the columns can be narrow: 51.5M for 51,540,000, +118 for +117.86%, 222.1 for a price of 222.12. The Screener shows the full figures.
+
+## Order the rows
+
+- Click a column heading. The first click puts the largest figure on top (the latest time in **Time**; A to Z in **Symbol**). The second click turns the order round. The third click returns to the scan's own order.
+- A small cyan arrow above the heading shows the column and the direction: down for largest first.
+- The order stays while the scan runs, and when you pick another scan that has the same column.
+- Ordering only rearranges the rows shown. It does not change which stocks the scan finds.
+
+## Filter by price
+
+- Click **$**. A small box opens with two fields: the lowest and the highest price. Fill one or both, then press Enter or click outside the box. Both prices are included: 2 to 20 shows a $2.00 stock and a $20.00 stock.
+- Leave the first field empty for "up to a price", or the second for "from a price". **✕** removes the filter. Esc closes the box without changing it.
+- While a filter is set the **$** chip is lit and the window title shows it: **$2-20**, **$20+** or **≤$5**.
+- Each window has its own filter. It applies to whichever scan you pick in that window, and to logs as well: a log then writes only the names inside the range.
+- A running scan starts over when the filter changes, so the list is the first 50 matches inside the price range, not the stocks of the old list that happen to fit. A log starts a new log.
+- A stock whose price Finviz does not give is left out while a filter is set.
+- The filter is not saved. A new window opens without one.
 
 ## The two kinds of scan
 
