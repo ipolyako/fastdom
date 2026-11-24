@@ -1,5 +1,13 @@
 # Release notes
 
+## Beta 20261124-063257-0cc7505a — published November 24, 2026
+
+New Quick scans (More > Quick scans): small scan windows made to sit side by side. Every time you choose it another window opens (up to eight). Pick a scan, pick an interval and start it. The list holds ready-made scans (Top Gainers, Top Losers, Low Float Top Gainers, Small Cap - 5 Pillars, high-of-day momentum, gap lists for liquid stocks) followed by everything in the Screener's SAVED list, including the screens you saved yourself. Each window shows at most six narrow columns with cells coloured by the size of the move; names that just joined are marked and can play a sound; a click on a row puts the symbol on the DOM. Running Up, Running Down, Halts and the other minute-by-minute scans need Finviz Elite. Stability: a rare failure while a text box was getting its cursor as another window took focus, which could close FastDOM at startup, is now prevented at its cause.
+
+Unsigned free Beta. Clean Windows-machine acceptance and customer broker onboarding remain under verification. Finviz Elite features need your own Finviz Elite subscription. Strategy Center and Avatar voice are excluded from Beta.
+
+Installer SHA-256: `16c630a3ff6164e1fb4f131c5bff2a0380b76b4cb286fd1e1321c523cf6743bd`
+
 ## Beta 20261122-180023-0a4cfdb3 — published November 22, 2026
 
 Fixes for new installations: the broker box now shows Simulation while Simulation is running (it showed Schwab Live, so choosing Schwab Live did nothing) and lets you return to Simulation; Configuration can be saved while running Simulation (Save answered that Simulation could not be disabled); the AI provider check names the right button. New Volume Profile on the chart: volume at each price with the point of control and the 70% value area, built from trades when they cover the range, otherwise estimated from candles. Chart drawing mode: click the drawing button to turn it on, hover it to pick a tool, and keep drawing the same tool until you click it again; new Arrow tools (up and down symbols, and an arrow you drag in any direction); right-click a drawing to change its colour. Screener: a News view that shows the selected stock's full headline timeline with dates, times and sources; Save asks for the screen's name; Reset starts a clean screen; Enter in TICKERS runs it. Configuration: one AI model per provider (Claude Code or Codex) that every AI window uses unless you choose another model there; the Finviz Elite box has a Validate button and shows the saved token masked to its last four characters. Movers and the Market Desk ask Finviz to run their scans instead of downloading the market.

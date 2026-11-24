@@ -623,7 +623,7 @@ AVG COST shows two decimal places for stocks and options (four under a dollar). 
 
 ## Navigation
 
-Chart opens a separate chart. Orders displays working orders. OPT opens the options chain. More contains Watch, Watchlists, L2 Heat, BookMap, FootPrint, Time & Sales, Movers, Market, Scan, Options Trader, Partner, Desk, Performance, Margin, Pulse, Trade Copier, SpotGamma, Learn, Help, and About.
+Chart opens a separate chart. Orders displays working orders. OPT opens the options chain. More contains Watch, Watchlists, L2 Heat, BookMap, FootPrint, Time & Sales, Movers, Market, Scan, Quick scans, Options Trader, Partner, Desk, Performance, Margin, Pulse, Trade Copier, SpotGamma, Learn, Help, and About.
 
 
 
@@ -2113,6 +2113,52 @@ Press **Save** to keep the filters, order, signal, tickers, MOVE rule and view n
 - If the live filter list cannot be read when the window opens, the list shipped with FastDOM is shown so you can still set a screen; running it needs the live list.
 
 
+
+# Analysis | Quick scans: small scan windows
+
+Open **More > Quick scans**. A small window opens, about 290 by 240 pixels, with one narrow row of controls and a table: the scan, how often it runs, a sound chip (**♪**) and a start chip (**▶**). Choose More > Quick scans again and another window opens, so many scans sit side by side in the space one Screener takes. Drag a window's edge to make it smaller or larger; the columns share whatever width it has. Up to 8 can be open, and each new window starts on the next scan of the list. The scans are already set up; there are no filters to set here. Nothing in these windows places an order. Clicking a row sends its symbol to the DOM.
+
+## Start a scan
+
+1. Pick the scan in the list on the left. The list shows short names; point at the box to read the scan's full name and what it looks for.
+2. Pick how often it runs, in the box beside it (**10s** is ten seconds, **1m** one minute).
+3. Press **▶**. The scan runs at once and then again at that interval. The chip now shows **■** and the window title shows the scan and the time its rows were read, which moves on with every run.
+
+- Press **■** to stop; the rows stay as last read and the title says "stopped". Closing the window stops the scan too.
+- Picking another scan while one is running starts over on the new scan.
+- The interval you pick is remembered for the next window (it is the same setting as the Screener's Scan interval).
+- There is no status line, to keep the window small. Point at the scan box to read the number of rows, the run number, the time the rows were read, which Finviz they came from and the names the last run found new. Only when a run fails does a red line appear under the table saying why; the rows stay as last read and the next run tries again.
+- **♪** (on when highlighted) plays the Screener's "ping-ping" when a run finds names that were not in the list before. The first run never rings.
+- Figures are shortened so the columns can be narrow: 51.5M for 51,540,000, +118 for +117.86%, 222.1 for a price of 222.12. The Screener shows the full figures.
+
+## The two kinds of scan
+
+- A **list** shows the stocks that match now, in the scan's order, up to 50 rows. A name that joins after the first run has its symbol in amber for 2 minutes.
+- A **log** has a **Time** column. Each name is written with the time when it joins, newest on top, and the line stays with the figures of that moment after the stock leaves. The names found by the first run are listed under the start time and do not ring. A name that leaves and comes back within 5 minutes is not logged again. The last 200 lines are kept.
+
+## The ready-made scans
+
+- **Top Gainers** and **Top Losers**: Finviz's own lists, biggest move from yesterday's close first. Lists.
+- **Low Float Top Gainers**: $1 and over, float under 10 million shares, up today. List.
+- **Small Cap - 5 Pillars**: Ross Cameron's selection: $1 to $20, up 10% or more, 5 times normal volume, float under 20 million. The news is not checked here. List.
+- **Small Cap - HOD** (high of day momentum): the 5 Pillars stocks that are within 1% of the day's high. Log. Finviz has no "new high of the day" event, so a stock is logged when a run finds it there; a high made and lost between two runs is not seen.
+- **Liquid - Gap Up** and **Liquid - Gap Down**: $20 and over with $100 million traded today, gapping 1% or more. Lists. **$ Vol** is volume times price.
+- No scan shows more than six columns.
+- With Finviz Elite only: **Running Up** and **Running Down** (Finviz's top gainers and losers of the last 5 minutes across the whole market that moved 2% or more in those minutes), **Liquid - Running Up** and **Liquid - Running Down** ($20 and over, $100 million traded, 2% or more in the last 5 minutes) and **Halts** (stocks Finviz lists as halted; a resumption is not reported). All logs.
+- **Everything in the Screener's SAVED list** follows: first the screens you saved yourself (More > Scan, **Save**), then the Screener's ready-made ones (the **W:** and **A:** screens, and with Finviz Elite the **Elite:** ones). Their names are shortened here ("W: momentum", "A: gappers up"); a name of yours loses anything in brackets and is cut at 21 characters, which is what the box shows at the window's opening width. A screen with a MOVE rule is a log of the stocks that cross it; any other screen is a list. To make a quick scan of your own, set it up once in the Screener and save it; it is in the list of the next Quick scan window you open.
+
+## Colours
+
+- **Chg %**, **Gap %** and the minute columns: green for up, red for down, in three strengths. Day moves: under 2%, 2% to 10%, 10% and over. Moves of the last minutes: under 1%, 1% to 3%, 3% and over.
+- **RVol** (volume against normal): teal from 2 times, stronger at 5 and 10 times.
+- **Float**: blue under 20 million shares, stronger under 5 million.
+
+## What a quick scan is and is not
+
+- It is a search repeated on a timer, as the Screener's Scan is. It is not a stream of trades.
+- Without Finviz Elite the intervals are 1, 2 and 5 minutes, quotes are delayed 1 minute, there is no premarket data and the Elite scans are not offered. With Finviz Elite (Configuration > Services > FINVIZ ELITE) the intervals also include 10 and 30 seconds, the data is real-time, and a run is one small request for only the columns shown.
+- If Finviz stops accepting the Elite token, a scan that needs Elite stops and says so; the other scans carry on with the free pages.
+- The windows are not saved with the workspace. Open them again after FastDOM restarts.
 
 # Analysis | Market: breadth, rotation and trend
 
