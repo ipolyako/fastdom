@@ -739,6 +739,10 @@ The DOM is the price ladder for the selected instrument. BID and ASK display quo
 
 
 
+## Cancelling from the ladder
+
+Right-click a ladder row for the cancel commands. **Cancel Orders at this Price** cancels the orders shown on that row and no others, also on the best bid or ask row. **Cancel All Buy Orders** and **Cancel All Sell Orders** cancel that side's working orders for the symbol, stops included. During a broker switch the symbol box can already name the new symbol while the ladder still shows the previous one; a click on the ladder is refused with a message until the ladder has changed.
+
 ## Navigation controls
 
 The − and + controls change the number of displayed levels. Z− increases the price step so more range fits; Z+ reduces the step for finer detail. The reset control returns to the original tick step and recenters. Center returns the ladder to current price. Lock/follow changes how the viewport follows price; inspect its state before interpreting movement on screen.
@@ -757,7 +761,7 @@ A buy limit at or above the ask can execute immediately; a sell limit at or belo
 
 ## Reading depth honestly
 
-Dragging a working-order marker moves the orders at the grabbed row. Hold Shift through release when dragging a stop to include the other stops for the same account, symbol and side. A DOM drag is admitted as a group: while its broker replacements are pending, another DOM drag on that account/symbol is blocked in full. Wait for the completion message before dragging again. Broker replacements are separate operations; an incomplete result lists how many orders were confirmed and requires checking the remaining orders. The app does not automatically retry or roll back a partial move.
+Dragging a working-order marker moves the orders at the grabbed row. Pressing a marker without dragging it changes nothing: the drag begins once the pointer has moved about four pixels, and only the leg you grabbed follows it (a bracket's target and stop are two markers of one order). Where markers overlap, a click takes the one drawn on top. Hold Shift through release when dragging a stop to include the other stops for the same account, symbol and side. A DOM drag is admitted as a group: while its broker replacements are pending, another DOM drag on that account/symbol is blocked in full. Wait for the completion message before dragging again. Broker replacements are separate operations; an incomplete result lists how many orders were confirmed and requires checking the remaining orders. The app does not automatically retry or roll back a partial move.
 
 An exit order's marker on the chart shows its remaining order quantity followed by **POS**, the estimated profit or loss for the entire current position at that exact price, before fees. The DOM's **POS P/L** column uses the same full-position calculation at each ladder row price. Zoomed DOM rows can round an order to a nearby price; hover its marker to see the exact limit/stop price and remaining quantity. The POS amount is hypothetical position P/L, not a claim that a partial target or undersized stop closes or protects the whole position.
 
@@ -831,6 +835,12 @@ For example, a sell limit below the current bid allows execution at that limit o
 
 A reverse action can close one side and establish the opposite side. It is not merely a protective exit. The needed order quantity can exceed the existing position because it must both close and reopen. Review the configured script, confirmation settings, account permissions, and resulting position.
 
+The built-in Reverse button cancels the symbol's working orders and then sends one order for twice the position. In regular hours, and for futures, that is a market order. For a stock outside regular hours it is a limit 10 cents through the quote, as for Flatten. Whether the order can be sent is checked first: with no quote outside regular hours the button says REVERSE NOT SENT and cancels nothing.
+
+## Stop BE
+
+Stop BE (Move Stop to Breakeven) moves the working stop of the symbol to your average cost. With no stop order working, as after hours on a stock, it arms a virtual stop there instead. When the position is at a loss, break-even lies on the wrong side of the market and a stop there would trigger at once: the button then says STOP BE blocked and changes nothing.
+
 
 
 ## Take 1
@@ -859,7 +869,7 @@ Outside regular trading hours a script's market entry (`MKT`) on a stock is sent
 
 The built-in market buttons follow the same rule: Buy Mkt, Sell Mkt and the percentage buttons (Buy/Cover %, Sell/Short %, Cover %, Sell %) send that 10-cent limit on a stock outside regular hours. In the pre-market and after-hours sessions it is a Day extended-hours limit; overnight and at weekends it is queued as a GTC limit for the next regular session at the price computed when you clicked.
 
-When a percentage button closes part of a stock position that already has targets or a stop working (Sell/Short % or Sell % on a long, Buy/Cover % or Cover % on a short), FastDOM first reduces those exit orders by the same number of shares, taking them from the farthest target, and then sends the closing order. Without this the broker sees every share already committed to an exit order and cancels them all to fill the new one. The reduction takes about a second per order changed. If it cannot be done the closing order is still sent and a message tells you to check your targets and stop. It follows the Protection Reconciler setting and does not apply to futures.
+When a percentage button closes part of a stock position that already has targets or a stop working (Sell/Short % or Sell % on a long, Buy/Cover % or Cover % on a short), FastDOM first reduces those exit orders by the same number of shares, taking them from the farthest target, and then sends the closing order. Without this the broker sees every share already committed to an exit order and cancels them all to fill the new one. The reduction takes about a second per order changed. If it cannot be done the closing order is still sent and a message tells you to check your targets and stop. A close that takes one target whole and part of the next cancels the first and reduces the second. The exit orders are left alone when the closing order itself cannot be sent (outside regular hours with no quote). It follows the Protection Reconciler setting and does not apply to futures.
 
 
 
@@ -880,6 +890,8 @@ The basic sizing relationship is risk budget divided by loss per unit between en
 
 
 A chart context command places a Risk Buy/Sell entry at the selected chart price. A buy above the current ask or a sell below the current bid uses a stop-limit entry, with trigger and limit at the selected price; the other side uses a limit entry. The menu identifies the intended entry type, and submission rechecks the current executable quote. A stop-limit may trigger without filling if the market moves past its limit. A staged protective stop is an input to the workflow; it is not by itself a live protective order.
+
+A Risk limit entry that is resting is watched by the chart that placed it: that chart attaches the stop and the targets when the entry fills. Changing that chart to another symbol, clearing the staged line, or closing the chart (closing FastDOM closes it too) requests the cancel of the entry, and the activity log says so. Loading the same symbol again leaves the entry and the staged line as they are.
 
 
 
@@ -985,6 +997,8 @@ These examples explain the notation, not recommended live orders. Use the templa
 
 Use Keyboard-only shortcuts from the hot-button editor or the hotkey settings dialog. Add a binding, choose the action, capture a key gesture with the capture button, set its enabled and double-press options, then Save. Escape cancels key capture. Reset Defaults replaces your custom bindings; review before saving.
 
+The built-in binding **Emergency: Flatten+Cancel** (Ctrl+Shift+E, pressed twice within half a second) does for the keyboard what Flatten does: it cancels the working orders of the symbol in the DOM (from a chart: of that chart's symbol), then closes the position. A built-in binding you delete stays deleted. Combinations with Alt can be assigned. Holding a shortcut key down runs its button or action once, not again and again. Two groups of built-in bindings have no effect: Share Size Preset 1 to 3 (Ctrl+1, Ctrl+2, Ctrl+3) and Increase or Decrease Order Price (Ctrl+Up, Ctrl+Down).
+
 
 
 FastDOM has focus and typing protections, but do not rely on remembered factory shortcuts after customizing them. Read the actual assigned gesture. Double-press requirements and confirmation settings are action-specific. A keyboard binding can target a chart-context action; focus the intended chart and verify its symbol/account before pressing it.
@@ -1014,12 +1028,14 @@ Size, one of:
 - `SIZE`: the number in the Size box. This is also what is used when no size is written.
 - A number, such as `100`: that many shares or contracts.
 - `$500`: as many shares as $500 buys at the order's price.
-- `$AMOUNT`: the dollar amount in the Amount box.
+- `$AMOUNT`: the dollar amount in the Amount box. With an empty Amount box the Size box is used. A dollar size needs a price: with no quote for the symbol yet, nothing is sent and the button says so.
 - `HALF`: half of the open position.
 - `POS`: the whole open position.
 - `PCT:25`: 25% of the open position, rounded up to a whole share.
 - `RISK:$100`: as many shares as lose $100 if the stop on the same line is hit. Shares = risk dollars divided by the distance between entry and stop.
 - `RISK:$RISK`: the same, using the amount in the Risk box. With an empty Risk box nothing is sent.
+
+Numbers in a script are written with a decimal point (`ASK+0.10`, `101.25`) and are read that way on any Windows regional format.
 
 HALF, POS and PCT are sized from the open position. With no open position they fall back to the Size box, so `SELL PCT:25 MKT` pressed while flat sells the Size box quantity and opens a short. Keep those buttons for managing a position.
 
@@ -1253,7 +1269,7 @@ Developer retains personal SMTP setup and Send test email. Those sending credent
 
 
 
-Right-click a working stop order on the chart. Convert to trailing stop asks for a distance in points and then walks the stop behind the best price on every quote. Convert to AI trailing stop asks for nothing: it starts trailing at the gap the stop has at that moment, and about every 45 seconds the selected AI provider reviews recent 1-minute and 5-minute bars, ATR, the fast and slow averages, VWAP, the day's range, your entry and the current stop, and sets how tight to trail. It can also name a structure level, such as the last swing low, for the stop to sit beyond. FastDOM applies that setting on every quote, so the stop reacts between reviews. While the AI is managing a stop, its marker on the chart reads AI STP (or AI SL) instead of STP, and returns to the plain label when AI trailing ends. The reason for each setting appears on the chart's status line. Stop AI trailing in the same menu ends it and leaves the stop where it is.
+Right-click a working stop order on the chart. Convert to trailing stop asks for a distance in points and then walks the stop behind the best price on every quote. Convert to AI trailing stop asks for nothing: it starts trailing at the gap the stop has at that moment, and about every 45 seconds the selected AI provider reviews recent 1-minute and 5-minute bars, ATR, the fast and slow averages, VWAP, the day's range, your entry and the current stop, and sets how tight to trail. It can also name a structure level, such as the last swing low, for the stop to sit beyond. The level is checked against the price at the moment the AI answers, which can be a minute after it was asked: a level the market has reached in the meantime is ignored. FastDOM applies that setting on every quote, so the stop reacts between reviews. While the AI is managing a stop, its marker on the chart reads AI STP (or AI SL) instead of STP, and returns to the plain label when AI trailing ends. The reason for each setting appears on the chart's status line. Stop AI trailing in the same menu ends it and leaves the stop where it is.
 
 The AI is told which session it is (regular, pre-market or after-hours) and the current spread. Outside regular hours it is asked to give more room, and FastDOM enforces a wider minimum: the distance is never less than two spreads or half a 5-minute ATR, against one spread or a quarter of an ATR in the regular session.
 
@@ -1321,7 +1337,7 @@ Prior-session open, high, low, and close provide historical reference prices. Pr
 
 ## ORB 15/30/60
 
-Opening-range boxes begin at 08:30 Central Time and cover 15, 30, or 60 minutes for the supported regular-session convention. Until a range completes, its developing high/low can change. A later break of the range is a price event, not proof of a profitable breakout. Futures overnight ranges and equity regular-session ranges are different concepts.
+Opening-range boxes begin at the regular-session open, 9:30 New York time (08:30 Central), and cover 15, 30, or 60 minutes. The hours follow New York time whatever time zone the PC is set to; so do the shading of extended hours (everything outside 9:30 to 16:00 New York time) and the premarket high and low (4:00 to 9:30 New York time). Until a range completes, its developing high/low can change. A later break of the range is a price event, not proof of a profitable breakout. Futures overnight ranges and equity regular-session ranges are different concepts.
 
 
 
@@ -2043,7 +2059,7 @@ The AI chooses filter values from the Finviz catalog and nothing else. It does n
 - The line below the table says how many symbols Finviz reports and how many are shown. A screen shows at most 1,000 rows, in the chosen ORDER; when there are more, add filters or change the order to see the rest.
 - **Views** change the columns without running the screen again: Overview, Trading (gap, change from open, relative volume, float, short float, ATR, earnings date), Performance, Technical, Valuation, Financial, Ownership and News (the latest headline and Finviz's one-line digest of why the stock is moving).
 - Click a column header to sort: numbers largest first on the first click, text A to Z. Rows without a value stay at the bottom either way. An empty cell means Finviz supplied no value; it is never a zero. Percent columns are in percent; market cap, float and shares are abbreviated (M, B, T).
-- Click a row, or press Enter, to make that symbol the DOM symbol. A share class is sent in your trading broker's form: Finviz lists BRK-B, Schwab calls it BRK/B and Alpaca BRK.B. The same is done for a row clicked in the Market window.
+- Click a row, or press Enter, to make that symbol the DOM symbol. The click means the row you pressed, also when a run re-orders the list at that moment. The order you choose by clicking a column heading, and the selected stock, stay from run to run. A share class is sent in your trading broker's form: Finviz lists BRK-B, Schwab calls it BRK/B and Alpaca BRK.B. The same is done for a row clicked in the Market window.
 - **Save as new watchlist** creates a named watchlist from the rows shown, in the order shown (the first 200). It never replaces a list: if the name is already in use the Screener says so and saves nothing, so a list that an armed strategy follows (ORB UP, ORB DOWN) cannot be overwritten from here. Open the new list from More > Watchlists.
 - If you change a filter, the order, the signal or the tickers after a run, or a run fails, the count line turns yellow and says **FROM AN EARLIER SCREEN: press Run**. The rows on screen then answer the previous screen, and Save as new watchlist stays off until you run again.
 
@@ -2072,7 +2088,7 @@ If you subscribe to Finviz Elite and have saved your token (Configuration > Serv
 - **SIGNAL** gains the Elite lists: **Top Gainers** and **Top Losers** over the last 1, 2, 3, 5, 10, 15 and 30 minutes and 1, 2 and 4 hours, the after-hours lists, and **Halted**. These are Finviz's own lists, worked out on its side.
 - **ORDER** gains the same windows, so any screen can be ranked by how much each stock moved in the last minute or five.
 - An **Intraday** view shows the move over 1, 2, 5, 15 and 30 minutes and 1 hour, relative volume, volume, number of trades, and the after-hours price, change and volume.
-- **Scan** can run **every 10 seconds** or **every 30 seconds** (Finviz's own Elite auto-refresh is 10 seconds; its stated limit is 10 requests every 5 seconds). A run is a single request. The interval you pick beside Scan is remembered for the next time the Screener is opened (10 and 30 seconds are offered only with Elite; without it the Screener starts at 2 minutes).
+- **Scan** can run **every 10 seconds** or **every 30 seconds** (Finviz's own Elite auto-refresh is 10 seconds; its stated limit is 10 requests every 5 seconds). A run is a single request. The interval you pick beside Scan is remembered for the next time the Screener is opened (10 and 30 seconds are offered only with Elite; without it the Screener starts at 2 minutes). While Finviz Elite is not answering, a window's runs go to the free pages and wait a minute between runs until Elite answers again. A scan does not start a run while **Choose filters** or a change of the list is still working.
 - **The AI uses it too.** ASK AI here, **Create with AI** in Watchlists and screening questions in the Market Desk go through the same Finviz planner. With Elite the AI is told about the real-time lists and may use them, so "which stocks are halted right now?", "what moved most in the last 5 minutes?" or "after-hours gainers over $10" become Finviz Elite screens, run on the real-time export (unless the AI gives a filter two values, which then runs on the free pages). The answer says "from Finviz Elite (real-time)" when it came from there. The Market Desk's market picture also comes from Finviz Elite (see Movers), and its answers name that source. Ask FastDOM (help) knows all of this from this manual.
 
 - **MOVE** (next to Scan) lists only the stocks that moved at least a chosen amount over a chosen time: up or down 0.5, 1, 2, 3, 5 or 10 percent, in the last 1, 2, 5, 15 or 30 minutes or the last hour. Finviz has no filter for this, so FastDOM applies it to the rows it has read; changing it needs no new request. "any move" switches it off.
@@ -2151,6 +2167,8 @@ Open **More > Quick scans**. A small window opens, about 290 by 240 pixels, with
 
 - Press **■** to stop; the rows stay as last read and the title says "stopped". Closing the window stops the scan too.
 - Picking another scan while one is running starts over on the new scan.
+- Click a row to send it to the DOM. The click means the row you pressed, also when a run re-orders the list at that moment.
+- With Finviz Elite a window can run every 10 or 30 seconds. While Elite is not answering, its runs go to the free pages and wait a minute between runs until Elite answers again.
 - The interval you pick is remembered for the next window (it is the same setting as the Screener's Scan interval).
 - There is no status line, to keep the window small. Point at the scan box to read the number of rows, the run number, the time the rows were read, which Finviz they came from and the names the last run found new. Only when a run fails does a red line appear under the table saying why; the rows stay as last read and the next run tries again.
 - **♪** (on when highlighted) plays the Screener's "ping-ping" when a run finds names that were not in the list before. The first run never rings.
@@ -2605,6 +2623,8 @@ Squawk is not a news service, does not identify institutions, and never places o
 
 More > Trade Copier configures replication of supported FastDOM master actions to follower accounts. It starts **COPY OFF** at application startup. This is execution-capable: enabling it can cause one action to generate orders on more than one account.
 
+Entries are copied with each follower's quantity multiplier and skipped on a follower where that gives zero. Flatten, Reverse, the cancel actions, Stop BE and the percentage buttons are not multiplied: they run on every enabled follower and take their size from that follower's own position.
+
 
 
 ## Setup
@@ -2767,6 +2787,8 @@ A box titled **FastDOM Error** followed by a window's name (a chart window, the 
 - A window shows one error box at a time. While a box is open, further errors in that window are written to the log and not shown, so a window left failing overnight cannot pile up boxes. After you press OK, a different error that happened meanwhile is shown next (up to three, one after another; any more are in the log), and an error you have read stays quiet for half a minute. If it comes back after reopening the window, use More > Report a problem.
 
 - A box that starts **FastDOM could not open** a window means the window failed while it was being created (for example a chart restored at startup). That window is not opened; FastDOM and every other window carry on. Try opening it again.
+
+If FastDOM cannot start at all (a configuration file that cannot be read, for example), one box titled **FastDOM** says "FastDOM could not start" with the reason, and the program exits; nothing is left running in the background. Start it again, and send the message with the log files to support if it repeats.
 
 A box titled **FastDOM Fatal Error** is different: it says the application will close. After restarting, check positions, working orders and virtual stops.
 
